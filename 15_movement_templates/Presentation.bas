@@ -1,0 +1,7846 @@
+'******** RoboNova-1 Mugen Template Plogram**********
+
+DIM tilt_value AS INTEGER
+DIM I AS BYTE
+DIM RC1 AS BYTE
+DIM RC2 AS BYTE
+DIM RC3 AS BYTE
+DIM RC4 AS BYTE
+DIM RCDT AS BYTE
+DIM RCDT1 AS BYTE
+DIM RCDT2 AS BYTE
+DIM A16 AS BYTE
+DIM A26 AS BYTE
+
+DIM MODE AS BYTE
+DIM A AS BYTE
+
+DIM J1 AS BYTE
+DIM J1L AS BYTE
+DIM J1R AS BYTE
+DIM J2 AS BYTE
+DIM J2R AS BYTE
+DIM J2L AS BYTE
+DIM rvalue AS BYTE
+
+I = 1
+
+DIM B AS BYTE
+DIM C AS BYTE
+DIM 보행속도 AS BYTE
+DIM 좌우속도 AS BYTE
+DIM 보행순서 AS BYTE
+
+DIM 앞 AS BYTE
+DIM 뒤 AS BYTE
+DIM GYRO_AD AS BYTE
+
+CONST min = 30
+CONST max = 200
+CONST COUNT_MAX = 10
+
+DIM IR_ID_CODE AS BYTE
+
+	IR_ID_CODE = 0
+
+DIM Gp2d12_val AS INTEGER
+DIM NewVal AS INTEGER
+DIM x AS BYTE
+DIM y AS BYTE
+DIM z AS BYTE
+DIM end_value AS BYTE
+DIM send_value AS BYTE
+
+보행순서 = 0
+
+DIM RR AS BYTE
+
+CONST ID = 0     ' 1:0, 2:32, 3:64, 4:96,
+
+'== Action command check (50 - 82)
+IF RR > 50 AND RR < 83 THEN GOTO action_proc 
+
+RR = 0
+
+PTP SETON 				
+PTP ALLON				
+
+LCDINIT
+CLS 
+CSOFF 
+
+	'Motor 18-23 Set
+
+'**No.1 ZERO*********************************
+'Proto Blueframe
+'ZERO G6A,  97,103, 98,100,100,100
+'ZERO G6B, 100,100,100,100,100,100
+'ZERO G6C, 100,100,100,100,100,100
+'ZERO G6D,  99, 106,100,101,101,100
+
+'HMJ DemoFrame #1
+'ZERO G6A,  96,103, 99,101,102,100
+'ZERO G6B, 100, 100, 98,100,100,100
+'ZERO G6C, 100, 97, 98,100,100,100
+'ZERO G6D,  97,102,105,101,102,100
+
+
+'DeA NormalFrame #4
+'ZERO G6A,  98,108, 98, 96,102,100
+'ZERO G6B, 100, 99, 98,100,100,100
+'ZERO G6C, 100, 97, 98,100,100,100
+'ZERO G6D,  99,109,100, 95,103,100
+
+'DeA ColoredFrame #1
+'ZERO G6A,  98,101, 98, 97,102,100
+'ZERO G6B, 100,100,100,100,100,100
+'ZERO G6C, 100, 98,102,100,100,100
+'ZERO G6D,  99,109,100, 95,104,100
+
+'************************************************
+'Proto BlueFrame
+'DIR G6A,1,0,0,1,0,0		' Dir 0-5 Motor
+'DIR G6B,1,1,0,1,1,1		' Dir 6-11 Motor
+'DIR G6C,0,0,0,0,0,0		' Dir 12-17 Motor
+'DIR G6D,0,1,1,0,1,0	
+
+'DeA ColoredFrame
+DIR G6A,1,0,0,1,0,0		' Dir 0-5 Motor
+DIR G6B,1,1,1,1,1,1		' Dir 6-11 Motor
+DIR G6C,0,0,0,0,0,0		' Dir 12-17 Motor
+DIR G6D,0,1,1,0,1,0	
+
+'GYRODIR G6A,0,1,1,0,1,1		' Dir 0-5 Motor
+'GYRODIR G6D,1,0,0,1,0,1	
+
+'GYROSENSE G6A,100,100,100,100,100,100
+'GYROSENSE G6D,100,100,100,100,100,100
+
+SPEED 15
+HIGHSPEED SETON
+GOSUB MOTOR_CALL
+HIGHSPEED SETOFF
+DELAY 1000
+SPEED 5
+GOSUB MOTOR_ON
+
+GOSUB STDUP
+
+'GOTO INIT_CONECT
+GOTO MAIN
+
+'************************************************
+'************************************************
+MOTOR_CALL:
+
+A= MOTORIN(0)
+SERVO 0,A
+
+A= MOTORIN(1)
+SERVO 1,A
+
+A= MOTORIN(2)
+SERVO 2,A
+
+A= MOTORIN(3)
+SERVO 3,A
+
+A= MOTORIN(4)
+SERVO 4,A
+'**********
+A= MOTORIN(6)
+SERVO 6,A
+
+A= MOTORIN(7)
+SERVO 7,A
+
+A= MOTORIN(8)
+SERVO 8,A
+
+A= MOTORIN(12)
+SERVO 12,A
+
+A= MOTORIN(13)
+SERVO 13,A
+
+A= MOTORIN(14)
+SERVO 14,A
+'**********
+A= MOTORIN(18)
+SERVO 18,A
+
+A= MOTORIN(19)
+SERVO 19,A
+
+A= MOTORIN(20)
+SERVO 20,A
+
+A= MOTORIN(21)
+SERVO 21,A
+
+A= MOTORIN(22)
+SERVO 22,A
+
+RETURN
+
+'************************************************
+MOTOR_ON:
+MOTOR G6A				' No.0~7 Motors
+MOTOR G6B				' No.8~15 Motors
+MOTOR G6C				' No.16~23 Motors
+MOTOR G6D				' No.24~31 Motors
+RETURN
+'************************************************
+
+
+MAIN:
+
+DELAY 3000
+'GOSUB robot_tilt
+GOTO key0
+'
+
+'IF RR = 0 THEN GOTO MAIN1
+'
+'ON RR GOTO MAIN,key0,K2,K3,K4,K5,K6,K7,K8,K9,K10,K11,K12,K13,K14,K15,K16,K17,K18,K19,K20,K21,K22,K23,K24,K25,K26,K27,K28,K29,K30,K31,K32
+'GOTO main
+''-----------------------------
+'MAIN1:
+'A = REMOCON(1)  
+'A = A - ID	
+'ON A GOTO MAIN,key0,K3,K4,K5,K6,K7,K8,K9,K10,K11,K12,K13,K14,K15,K16,K17,K18,K19,K20,K21,K22,K23,K24,K25,K26,K27,K28,K29,K30,K31,K32
+GOTO MAIN
+'-------------------------------------------------
+action_proc:
+'A = RR - 50
+'ON A GOTO MAIN,key0,K2,K3,K4,K5,K6,K7,K8,K9,K10,K11,K12,K13,K14,K15,K16,K17,K18,K19,K20,K21,K22,K23,K24,K25,K26,K27,K28,K29,K30,K31,K32
+'RETURN
+'-----------------------------
+main_exit:
+	IF RR > 50 THEN RETURN
+	RR = 0
+	GOTO MAIN
+	
+	
+	
+
+'
+'************************************************
+STDUP:
+
+' GYROSET G6A,5,4,0,0,0,0
+' GYROSET G6D,5,4,0,0,0,0
+
+	MOVE G6A,100,75,145,93,100,100
+	MOVE G6D,100,75,145,93,100,100
+	MOVE G6B,100,45,70,100,100,100
+	MOVE G6C,100,45,70,100,100,100
+	WAIT
+
+' GYROSET G6A,0,0,0,0,0,0
+' GYROSET G6D,0,0,0,0,0,0	
+	
+	mode = 0
+
+DELAY 500	
+GOSUB robot_tilt
+	RETURN
+	
+'*************************************************
+
+'
+'***************************************************************************
+'***************************************************************************
+key0:
+
+
+
+SPEED 6
+GOSUB STDUP
+
+'***************************************************************************
+'key1:
+
+GOSUB Greeting
+'***************************************************************************
+
+SPEED 6
+GOSUB STDUP2
+GOSUB robot_tilt
+'GOTO MAIN
+ 
+'***************************************************************************
+'key3:
+
+'Right Arm Bye
+SPEED 5
+
+GOSUB STDUP
+
+'	MOVE G6A,100,75,145,93,100,100
+'	MOVE G6D,100,75,145,93,100,100
+	MOVE G6B,100,45,70,100,100,100
+	MOVE G6C,100,150,160,100,100,100
+	WAIT
+
+FOR i = 0 TO 1
+
+	SPEED 6
+	MOVE G6B,100,45,70,100,100,100
+	MOVE G6C,100,150,100,100,100,100
+	WAIT
+
+	MOVE G6B,100,45,70,100,100,100
+	MOVE G6C,100,150,160,100,100,100
+	WAIT
+
+NEXT i
+
+GOSUB STDUP
+GOSUB robot_tilt
+'GOTO MAIN
+
+'***************************************************************************
+'key4:
+
+'Left Arm Bye
+SPEED 5
+	
+'	MOVE G6B,100,45,70,100,100,100
+'	MOVE G6C,100,45,70,100,100,100
+'	WAIT
+
+GOSUB STDUP
+
+'	MOVE G6A,100,75,145,93,100,100
+'	MOVE G6D,100,75,145,93,100,100
+	MOVE G6B,100,150,160,100,100,100
+	MOVE G6C,100,45,70,100,100,100
+	WAIT
+
+FOR i = 0 TO 1
+
+	SPEED 6
+	MOVE G6B,100,150,100,100,100,100
+	MOVE G6C,100,45,70,100,100,100
+	WAIT
+
+	MOVE G6B,100,150,160,100,100,100
+	MOVE G6C,100,45,70,100,100,100
+	WAIT
+
+NEXT i
+
+GOSUB STDUP
+
+'GOTO MAIN
+'key2:
+
+GOSUB a번동작
+GOSUB robot_tilt
+GOSUB 기본자세 	
+GOSUB robot_tilt
+'''GOTO MAIN
+GOSUB  b번동작
+GOSUB robot_tilt
+GOSUB 기본자세 	
+
+ 
+'***************************************************************************
+'key5:
+
+SPEED 4
+MOVE G6A, 95,106,145, 69,109,100
+MOVE G6D, 105, 56,130,135, 94,100
+MOVE G6B,150, 39, 88,100,100,100
+MOVE G6C,151, 33, 94,100,100,100
+WAIT
+
+DELAY 1000
+
+FOR i= 0 TO 2
+
+HIGHSPEED SETON
+SPEED 6
+'MOVE G6B,150, 39, 88,100,100,100
+'MOVE G6C,151, 33, 94,100,100,100
+'WAIT
+
+MOVE G6B,150, 59, 18,100,100,100
+MOVE G6C,151, 53, 24,100,100,100
+WAIT
+
+MOVE G6B,150, 39, 88,100,100,100
+MOVE G6C,151, 33, 94,100,100,100
+WAIT
+
+NEXT i
+
+HIGHSPEED SETOFF
+
+DELAY 300
+
+SPEED 4
+
+GOSUB STDUP
+
+
+'GOTO MAIN
+
+'***************************************************************************
+'key6:
+
+'GOTO MAIN
+ 
+'***************************************************************************
+'key7:
+
+SPEED 4
+MOVE G6A, 105, 56,130,135, 94,100
+MOVE G6B,150, 39, 88,100,100,100
+MOVE G6C,151, 33, 94,100,100,100
+MOVE G6D, 95,106,145, 69,109,100
+WAIT
+
+DELAY 1000
+
+FOR i= 0 TO 2
+
+HIGHSPEED SETON
+SPEED 6
+'MOVE G6B,150, 39, 88,100,100,100
+'MOVE G6C,151, 33, 94,100,100,100
+'WAIT
+
+MOVE G6B,150, 59, 18,100,100,100
+MOVE G6C,151, 53, 24,100,100,100
+WAIT
+
+MOVE G6B,150, 39, 88,100,100,100
+MOVE G6C,151, 33, 94,100,100,100
+WAIT
+
+NEXT i
+
+HIGHSPEED SETOFF
+
+DELAY 300
+
+SPEED 4
+
+GOSUB STDUP
+
+
+
+'GOTO MAIN
+
+DELAY 1000
+
+GOSUB  b번동작2	
+GOSUB robot_tilt
+GOSUB 기본자세 	
+''GOTO MAIN
+'''KEY3: 
+GOSUB  b번동작1	
+GOSUB robot_tilt
+GOSUB 기본자세 	
+GOSUB  데모시작모션
+GOSUB robot_tilt
+'''GOTO MAIN
+
+
+'***************************************************************************
+'key8:
+
+'GOTO MAIN
+ 
+'***************************************************************************
+'key9:
+
+'GOTO MAIN
+
+'***************************************************************************
+'key10:
+
+'GOTO MAIN
+ 
+'***************************************************************************
+'key11:
+
+GOSUB Go_Front1
+GOSUB robot_tilt
+'GOTO MAIN
+
+'***************************************************************************
+'key12:
+
+GOSUB back1
+GOSUB robot_tilt
+'GOTO MAIN
+ 
+'***************************************************************************
+'key13:
+
+right_side:
+
+SPEED 5
+GOSUB left_inclination2
+SPEED 8
+	GOSUB R_Wait5_3
+GOSUB action_1
+
+	GOSUB action_L3_R
+GOSUB action_L3
+GOSUB action_2
+
+	GOSUB L_Wait5_3
+GOSUB right_inclination2
+SPEED 6
+GOSUB STDUP
+GOSUB robot_tilt
+
+'GOTO MAIN
+
+'***************************************************************************
+'key14:
+
+left_side:
+
+SPEED 5
+GOSUB right_inclination2
+SPEED 8
+	GOSUB L_Wait5_3
+	
+GOSUB action_2
+
+	GOSUB action_L3_L
+GOSUB action_L3
+GOSUB action_1
+
+	GOSUB R_Wait5_3
+GOSUB left_inclination2
+SPEED 6
+GOSUB STDUP
+GOSUB robot_tilt
+'GOTO MAIN
+
+
+
+GOSUB  c번동작
+GOSUB 기본자세 	
+GOSUB robot_tilt
+'
+'
+'GOSUB 기본자세 	
+'
+GOSUB 춤1번동작
+GOSUB 기본자세 	
+GOSUB robot_tilt
+'
+'
+GOSUB 춤2번동작
+GOSUB 기본자세 
+GOSUB robot_tilt
+'
+'	
+GOSUB 춤3번동작
+GOSUB 기본자세 	
+GOSUB robot_tilt
+'
+'
+GOSUB 춤4번동작
+GOSUB 기본자세 	
+GOSUB robot_tilt
+'
+GOSUB 춤5번동작
+GOSUB 기본자세 	
+GOSUB robot_tilt
+
+
+GOSUB body_move
+GOSUB 기본자세 	
+GOSUB robot_tilt
+ 
+DELAY 1000 
+ 
+'***************************************************************************
+'key15:
+
+'GOTO MAIN
+
+'***************************************************************************
+'key16:
+
+GOSUB Turn2
+GOSUB robot_tilt
+
+
+GOSUB Turn1
+GOSUB robot_tilt
+
+
+GOSUB Front_pumch
+GOSUB robot_tilt
+
+
+GOSUB Front_pumch2
+GOSUB robot_tilt
+
+
+GOSUB Right_s_at1
+GOSUB robot_tilt
+
+
+SPEED 15
+MOVE G6D, 83, 121,  76, 130, 121, 100
+MOVE G6C,150,  63,  38, 100, 100, 100
+MOVE G6B,146,  80,  30, 100, 100, 100
+MOVE G6A, 80,  98,  76, 150, 120, 100
+WAIT
+
+HIGHSPEED SETON
+
+MOVE G6D, 73, 135, 107,  77, 123, 100
+MOVE G6C,182,  11,  93, 100, 100, 100
+MOVE G6A, 96, 105,  46, 161, 108, 100
+WAIT
+
+DELAY 1000
+
+HIGHSPEED SETOFF
+
+SPEED 5
+MOVE G6D, 95, 140,  63, 111, 111, 100
+MOVE G6C,181,  33,  49, 100, 100, 100
+MOVE G6B,157,  76,  27, 100, 100, 100
+MOVE G6A, 70,  80, 103, 130, 127, 100
+WAIT
+
+'MUSIC "c1"
+ 
+GOSUB STDUP
+GOSUB robot_tilt
+'GOSUB 기본자세 
+'GOTO MAIN
+'***************************************************************************
+
+'key26:  'spagat
+
+SPEED 5
+GOSUB left_inclination2
+
+MOVE G6A,116,  76, 145,  93,  93,  70
+MOVE G6C,100,  50,  70, 100, 100, 100
+WAIT
+
+HIGHSPEED SETON
+
+MOVE G6A,111,  76, 145,  93, 183,  70
+WAIT
+
+MOVE G6A, 59,  76, 145,  93, 183,  70
+MOVE G6B,100, 104,  89, 100, 100, 100
+MOVE G6C,100, 100,  92, 100, 100, 100
+MOVE G6D, 53,  66, 167,  82, 184,  70
+WAIT
+
+HIGHSPEED SETOFF
+
+DELAY 500
+
+SPEED 6
+GOSUB STDUP2
+
+GOSUB STDUP
+GOSUB robot_tilt
+'***************************************************************************
+'key26:
+'MUSIC "c1"
+GOSUB Side_at1
+GOSUB robot_tilt
+'GOSUB 기본자세 
+'
+'
+GOSUB Side_at2
+GOSUB robot_tilt
+'MUSIC "c1"
+
+
+GOSUB Down_Front
+GOSUB robot_tilt
+
+GOSUB Up_Front
+GOSUB robot_tilt
+
+
+GOSUB Up_Back  ' fall back and stand up 
+GOSUB robot_tilt
+
+'
+GOSUB Arm_act1
+GOSUB robot_tilt
+
+GOSUB STDUP
+
+SPEED 5
+	MOVE G6A,90,75,145,93,110,100
+	MOVE G6D,90,75,145,93,110,100
+	MOVE G6B,70,165,150,100,100,100
+	MOVE G6C,70,165,150,100,100,100
+	WAIT
+
+FOR i = 0 TO 1
+
+	MOVE G6A,90,85,125,103,110,100
+	MOVE G6D,90,85,125,103,110,100
+	MOVE G6B,70,145,190,100,100,100
+	MOVE G6C,70,145,190,100,100,100
+	WAIT
+
+	MOVE G6B,70,165,150,100,100,100
+	MOVE G6C,70,165,150,100,100,100
+	WAIT
+
+NEXT i
+
+GOSUB STDUP
+GOSUB robot_tilt
+'GOTO MAIN
+ 
+'***************************************************************************
+'key53:
+'rught kick
+
+SPEED 6
+
+GOSUB left_inclination2
+
+GOSUB R_Wait5_3
+
+DELAY 200
+
+MOVE G6B,146, 48, 41,100,100,100
+WAIT
+
+MOVE G6A,116, 76,125,131,120,100
+WAIT
+
+MOVE G6C,100,128, 70,101,100,100
+MOVE G6D,100, 75, 83, 93,109,100
+WAIT
+
+HIGHSPEED SETON
+
+MOVE G6A,119, 76,125,126,108,100
+MOVE G6D,100, 75, 83,153,109,100
+WAIT
+
+MOVE G6A,119, 76,120,126,108,100
+MOVE G6D,100, 45,163,153,109,100
+WAIT
+
+HIGHSPEED SETOFF
+
+MOVE G6A,119, 76,125,121,108,100
+MOVE G6D,100, 60,150,120, 99,100
+WAIT
+
+GOSUB STDUP
+GOSUB robot_tilt
+'GOTO MAIN
+
+'***************************************************************************
+'key54:
+'Left Pass
+SPEED 6
+
+GOSUB right_inclination2
+
+GOSUB L_Wait5_3
+
+MOVE G6A, 87, 45,150,118,113, 70
+MOVE G6B, 90, 50, 70,100,100,100
+MOVE G6C,110, 60, 70,100,100,100
+MOVE G6D,112, 75,145, 93, 93, 70
+WAIT
+
+GOSUB right_inclination2
+
+SPEED 5
+
+GOSUB STDUP
+GOSUB robot_tilt
+'GOTO MAIN
+ 
+'***************************************************************************
+'key55:
+
+'GOSUB swimming
+GOSUB 비상
+GOSUB robot_tilt
+
+GOSUB 춤6번동작
+GOSUB 기본자세 
+GOSUB robot_tilt
+
+GOSUB 좌우로몸풀기 
+GOSUB 기본자세 
+GOSUB robot_tilt
+
+'
+GOSUB 매트릭스피하기
+GOSUB 기본자세 
+GOSUB robot_tilt
+DELAY 2000 
+
+
+GOSUB 물구나무서기
+GOSUB 기본자세 
+GOSUB robot_tilt
+GOSUB 뒤로일어나기2
+GOSUB 기본자세 
+GOSUB robot_tilt
+
+GOSUB 왼발슛
+GOSUB 기본자세 
+GOSUB robot_tilt
+
+GOSUB 세레모니1
+DELAY 1000
+GOSUB robot_tilt
+
+
+
+
+
+'***************************************************************************
+'key56:
+
+haod:
+
+SPEED 5
+GOSUB left_inclination2
+
+
+GOSUB action_1
+
+	MOVE G6A, 91,  77, 135, 103, 109, 100
+	MOVE G6D, 91,  77, 135, 103, 109, 100
+	MOVE G6B,100, 100, 120, 100, 100, 100
+	MOVE G6C,100, 100, 120, 100, 100, 100
+	WAIT
+SPEED 10
+
+FOR I = 0 TO 1
+MOVE G6B,100, 145, 130, 100, 100, 100
+MOVE G6C,100,  65,  70, 100, 100, 100
+WAIT
+
+MOVE G6B,100,  65,  70, 100, 100, 100
+MOVE G6C,100, 145, 130, 100, 100, 100
+WAIT
+NEXT I
+
+MOVE G6B,100, 100, 120, 100, 100, 100
+MOVE G6C,100, 100, 120, 100, 100, 100
+WAIT
+DELAY 500
+SPEED 7
+
+FOR I = 0 TO 1
+MOVE G6A,101, 100, 100, 111,  95, 100
+MOVE G6D, 80,  86, 121, 107, 125, 100
+MOVE G6B,100, 100, 120, 100, 100, 100
+MOVE G6C,100, 100, 120, 100, 100, 100
+WAIT
+
+MOVE G6A,108, 158,  22, 135,  89, 100
+MOVE G6D, 66, 133,  50, 137, 140, 100
+MOVE G6B,100, 100, 120, 100, 100, 100
+MOVE G6C,100, 100, 120, 100, 100, 100
+WAIT
+
+'Centor
+MOVE G6A, 89, 158,  22, 135, 110, 100
+MOVE G6D, 80, 148,  31, 138, 122, 100
+MOVE G6B,100, 100, 120, 100, 100, 100
+MOVE G6C,100, 100, 120, 100, 100, 100
+WAIT
+
+
+MOVE G6A, 66, 133,  50, 137, 140, 100
+MOVE G6D,108, 158,  22, 135,  89, 100
+MOVE G6B,100, 100, 120, 100, 100, 100
+MOVE G6C,100, 100, 120, 100, 100, 100
+WAIT
+
+
+MOVE G6A, 80,  86, 121, 107, 125, 100
+MOVE G6D,101, 100, 100, 111,  95, 100
+MOVE G6B,100, 100, 120, 100, 100, 100
+MOVE G6C,100, 100, 120, 100, 100, 100
+WAIT
+
+MOVE G6A, 91,  77, 135, 103, 109, 100
+MOVE G6D, 91,  77, 135, 103, 109, 100
+MOVE G6B,100, 100, 120, 100, 100, 100
+MOVE G6C,100, 100, 120, 100, 100, 100
+WAIT
+
+NEXT I
+
+DELAY 500
+SPEED 9
+
+GOSUB action_2
+
+SPEED 5
+GOSUB right_inclination2
+GOSUB robot_tilt
+GOSUB STDUP
+'
+GOSUB Roll_Front
+GOSUB robot_tilt
+'GOTO MAIN
+
+'***************************************************************************
+'key72:
+
+GOSUB Roll_Back
+GOSUB robot_tilt
+'GOTO MAIN
+ 
+'***************************************************************************
+'key73:
+
+GOSUB Roll_Side1
+GOSUB robot_tilt
+'GOTO MAIN
+
+'***************************************************************************
+'key74:
+
+GOSUB Roll_Side2
+GOSUB robot_tilt
+'GOTO MAIN
+ 
+
+Udetatefuse:
+
+GOSUB Down_Front
+
+DELAY 160
+
+SPEED 6
+	MOVE G6A,100,75,145,93,100,100
+	MOVE G6D,100,75,145,93,100,100
+	MOVE G6B,100,150,20,100,100,100
+	MOVE G6C,100,150,20,100,100,100
+	WAIT
+	
+	MOVE G6B,180,150,20,100,100,100
+	MOVE G6C,180,150,20,100,100,100
+	WAIT
+
+SPEED 5
+
+	MOVE G6B,180,50,20,100,100,100
+	MOVE G6C,180,50,20,100,100,100
+	WAIT
+	
+FOR i=0 TO 1
+
+	MOVE G6B,180,60,10,100,100,100
+	MOVE G6C,180,60,10,100,100,100
+	WAIT
+
+	MOVE G6B,180,25,70,100,100,100
+	MOVE G6C,180,25,70,100,100,100
+	WAIT
+
+NEXT i
+
+	MOVE G6B,180,60,10,100,100,100
+	MOVE G6C,180,60,10,100,100,100
+	WAIT
+
+	MOVE G6B,180,50,20,100,100,100
+	MOVE G6C,180,50,20,100,100,100
+	WAIT
+
+GOSUB STDUP
+
+GOSUB Up_Front
+
+GOSUB Down_Front
+'GOSUB robot_tilt
+DELAY 160
+
+SPEED 6
+	MOVE G6A,100,75,145,93,100,100
+	MOVE G6D,100,75,145,93,100,100
+	MOVE G6B,100,150,20,100,100,100
+	MOVE G6C,100,150,20,100,100,100
+	WAIT
+	
+	MOVE G6B,180,150,20,100,100,100
+	MOVE G6C,180,150,20,100,100,100
+	WAIT
+
+	MOVE G6A,100,75,145,93,100,100
+	MOVE G6D,100,75,145,93,100,100
+	WAIT
+
+SPEED 5
+
+	MOVE G6B,180,50,20,100,100,100
+	MOVE G6C,180,50,20,100,100,100
+	WAIT
+
+	MOVE G6A,100,75,145,113,145,100
+	MOVE G6D,100,75,145,93,100,100
+	WAIT
+
+	MOVE G6B,180,120,10,100,100,100
+	MOVE G6C,180,50,20,100,100,100
+	WAIT
+
+	
+FOR i=0 TO 1
+
+	MOVE G6B,180,60,10,100,100,100
+	MOVE G6C,180,60,10,100,100,100
+	WAIT
+
+	MOVE G6B,180,25,70,100,100,100
+	MOVE G6C,180,25,70,100,100,100
+	WAIT
+
+NEXT i
+
+	MOVE G6B,180,60,10,100,100,100
+	MOVE G6C,180,60,10,100,100,100
+	WAIT
+
+	MOVE G6B,180,50,20,100,100,100
+	MOVE G6C,180,50,20,100,100,100
+	WAIT
+
+GOSUB STDUP
+
+GOSUB Up_Front
+
+GOSUB STDUP
+'
+GOSUB Greeting
+GOSUB robot_tilt
+DELAY 90000
+'
+GOTO MAIN
+'' 
+'
+Greeting:
+SPEED 8
+MOVE G6A,100,  48, 135, 160, 100, 100
+MOVE G6D,100,  48, 135, 160, 100, 100
+MOVE G6B,145,  40,  70, 100, 100, 100
+MOVE G6C,145,  40,  70, 100, 100, 100
+WAIT
+DELAY 1500
+SPEED 6
+
+GOSUB STDUP
+
+RETURN
+
+'*********************************************
+STDUP2:		'Sittig straight
+
+MOVE G6A,100, 150, 22, 140, 100, 100
+MOVE G6D,100, 150, 22, 140, 100, 100
+MOVE G6B,120, 45, 70, 100, 100, 100
+MOVE G6C,120, 45, 70, 100, 100, 100
+WAIT
+mode = 1
+DELAY 500
+RETURN
+
+'** ATTACK Data*******************************************
+Right_s_at1:
+	SPEED 6
+	GOSUB left_inclination2
+	
+	SPEED 15
+	HIGHSPEED SETON
+	MOVE G6A, 57,  71, 142, 105, 142, 100
+	MOVE G6D,106, 157,  26, 134, 100, 100
+	MOVE G6B,155, 72,  69, 100, 100, 100
+	MOVE G6C,107, 125, 108, 100, 100, 100
+	
+	DELAY 1000
+	HIGHSPEED SETOFF
+	SPEED 8
+	GOSUB STDUP2
+RETURN
+
+'*********************************************
+Left_s_at1:
+	SPEED 6
+	GOSUB right_inclination2
+	
+	SPEED 15
+	HIGHSPEED SETON
+	MOVE G6A,106, 157,  26, 134, 100, 100
+	MOVE G6D, 57,  71, 142, 105, 144, 100
+	MOVE G6B,107, 125, 108, 100, 100, 100
+	MOVE G6C,112,  92,  99, 100, 100, 100
+	
+	DELAY 1000
+	HIGHSPEED SETOFF
+	SPEED 8
+	GOSUB STDUP2
+	RETURN
+'*********************************************
+Front_pumch:
+	SPEED 15
+	MOVE G6A, 92, 100, 110, 100, 107, 100
+	MOVE G6D, 92, 100, 110, 100, 107, 100
+	MOVE G6B,190, 149,  10, 100, 100, 100
+	MOVE G6C,190, 150,  10, 100, 100, 100
+	WAIT
+	SPEED 15
+	HIGHSPEED SETON
+	FOR I = 0 TO 2
+		MOVE G6B,190,  10, 75, 100, 100, 100
+		MOVE G6C,190, 140,  10, 100, 100, 100
+		WAIT
+		DELAY 150
+		MOVE G6B,190, 140,  10, 100, 100, 100
+		MOVE G6C,190,  10, 75, 100, 100, 100
+		WAIT
+		DELAY 150
+	
+	NEXT I
+	HIGHSPEED SETOFF
+	SPEED 15
+	MOVE G6A, 92, 100, 110, 100, 107, 100
+	MOVE G6D, 92, 100, 110, 100, 107, 100
+	MOVE G6B,190, 149,  10, 100, 100, 100
+	MOVE G6C,190, 150,  10, 100, 100, 100
+	WAIT
+	GOSUB STDUP
+
+RETURN
+'**********************************************
+Front_pumch2:
+	SPEED 15
+
+	GOSUB STDUP2
+
+	HIGHSPEED SETON
+	FOR I = 0 TO 2
+		MOVE G6B,190,  10, 75, 100, 100, 100
+		MOVE G6C,190, 140,  10, 100, 100, 100
+		WAIT
+		DELAY 150
+		MOVE G6B,190, 140,  10, 100, 100, 100
+		MOVE G6C,190,  10, 75, 100, 100, 100
+		WAIT
+		DELAY 150
+	
+	NEXT I
+	HIGHSPEED SETOFF
+	SPEED 15
+
+	GOSUB STDUP2
+SPEED 10
+RETURN
+'*********************************************
+Side_at1:
+	SPEED 10
+	MOVE G6A, 92, 109,  95, 115, 107, 100
+	MOVE G6D, 92, 105,  95, 115, 107, 100
+	MOVE G6B, 10,  20,  70, 100, 100, 100
+	MOVE G6C, 10,  20,  70, 100, 100, 100
+	WAIT
+	SPEED 15
+	MOVE G6A, 92, 109,  95, 105, 107, 100
+	MOVE G6D, 92, 105,  95, 105, 107, 100
+	MOVE G6B, 10, 182, 121, 100, 100, 100
+	MOVE G6C, 10, 190, 119, 100, 100, 100
+	WAIT
+	DELAY 500
+	SPEED 10
+	GOSUB STDUP
+
+RETURN
+
+'**********************************************
+Side_at2:
+	SPEED 15
+	MOVE G6A, 92, 100, 110, 100, 107, 100
+	MOVE G6D, 92, 100, 110, 100, 107, 100
+	MOVE G6B,100,  45,  70, 100, 100, 100
+	MOVE G6C,100,  45,  70, 100, 100, 100
+	WAIT
+		
+	MOVE G6B,100, 175,  100, 100, 100, 100
+	MOVE G6C,100, 175,  100, 100, 100, 100
+	WAIT
+	DELAY 500
+	
+	MOVE G6B,170, 175, 160, 100, 100, 100
+	MOVE G6C,170, 175, 160, 100, 100, 100
+	WAIT
+	MOVE G6B,100,  45,  70, 100, 100, 100
+	MOVE G6C,100,  45,  70, 100, 100, 100
+	WAIT
+	SPEED 10
+	GOSUB STDUP
+
+RETURN
+
+'***********************************************
+
+
+
+
+'****Move Action******************************************
+
+Go_Front1d:
+
+'HIGHSPEED SETON
+
+'	MOVE G6A,100,75,145,93,100,100
+'	MOVE G6D,100,75,145,93,100,100
+'	MOVE G6B,100,45,70,100,100,100
+'	MOVE G6C,100,45,70,100,100,100
+'	WAIT
+	
+	J1 = RCIN(4)
+	J2 = RCIN(5)
+	
+'	J1 = J1 - 101
+'	J2 = J2 - 100
+'	
+'	J1L = 75 - J1
+'	J1R = 75 - J1
+'	
+'	J2L = 100 + J2
+'	J2R = 100 + J2
+'	
+'	SERVO 0,J2L
+'	SERVO 1,J1L
+
+	MOVE G6B,125,45,70,100,100,100
+	MOVE G6C,125,45,70,100,100,100
+	WAIT
+
+SPEED 10
+
+'Shagami
+	MOVE G6A,100,105, 85,127,100,100
+	MOVE G6D,100,105, 85,127,100,100
+	WAIT
+
+'Migi Yose
+	MOVE G6A, 95,105, 85,127,105,100
+	MOVE G6D,105,105, 85,127, 95,100
+	WAIT
+
+FOR i = 0 TO 2
+
+'Hidari-Up
+	MOVE G6A, 95,110, 75,132,105,100
+	MOVE G6D,108,105, 85,127, 95,100
+	WAIT
+	
+	J1 = RCIN(4)
+	J2 = RCIN(5)
+	
+	J1 = J1 - 101
+	J2 = J2 - 100
+	
+	J1L = 110 - J1
+	J1R = 105 - J1
+	
+	J2L =  95 + J2
+	J2R = 108 + J2
+	
+	SERVO 0,J2L
+	SERVO 1,J1L
+	SERVO 18,J2R
+	SERVO 19,J1R
+	
+
+	MOVE G6A, 95, 92, 70,150,105,100
+	MOVE G6D,108,105, 85,127, 95,100
+	WAIT
+
+'Hidari-Front
+	MOVE G6A, 95, 75,105,142,105,100
+	MOVE G6D,108,108, 85,127, 95,100
+	WAIT
+
+SPEED 7
+'======================================
+
+	MOVE G6A,103, 92, 93,134, 99,100
+	MOVE G6D,100,115, 85,117,101,100
+	WAIT
+
+'======================================
+
+SPEED 12
+'Migi-Ushiro
+	MOVE G6A,108,105, 85,127, 92,100
+	MOVE G6D, 93,125, 85,107,108,100
+	WAIT
+
+	J1 = RCIN(4)
+	J2 = RCIN(5)
+	
+	J1 = J1 - 101
+	J2 = J2 - 100
+	
+	J1L = 105 - J1
+	J1R = 125 - J1
+	
+	J2L = 108 + J2
+	J2R =  93 + J2
+	
+	SERVO 0,J2L
+	SERVO 1,J1L
+	SERVO 18,J2R
+	SERVO 19,J1R
+
+
+
+'Migi-Up
+	MOVE G6D, 95,110, 75,132,105,100
+	MOVE G6A,110,108, 85,127, 95,100
+	WAIT
+
+	J1 = RCIN(4)
+	J2 = RCIN(5)
+	
+	J1 = J1 - 101
+	J2 = J2 - 100
+	
+	J1L = 108 - J1
+	J1R = 110 - J1
+	
+	J2L = 110 + J2
+	J2R =  95 + J2
+	
+	SERVO 0,J2L
+	SERVO 1,J1L
+	SERVO 18,J2R
+	SERVO 19,J1R
+
+
+	MOVE G6D, 95, 95, 75,150,107,100
+	MOVE G6A,115,108, 85,127, 95,100
+	WAIT
+
+'Migi-Front
+	MOVE G6D, 90, 68,105,143,105,100
+	MOVE G6A,112,105, 85,128, 95,100
+	WAIT
+
+SPEED 7
+'======================================
+
+	MOVE G6D, 99, 97, 88,134, 99,100
+	MOVE G6A,106,119, 85,117,101,100
+	WAIT
+
+'======================================
+
+SPEED 12
+'Hidari-Ushiro
+	MOVE G6A, 95,125, 85,107,108,100
+	MOVE G6D,108,110, 80,127, 92,100
+	WAIT
+
+	J1 = RCIN(4)
+	J2 = RCIN(5)
+	
+	J1 = J1 - 101
+	J2 = J2 - 100
+	
+	J1L = 125 - J1
+	J1R = 110 - J1
+	
+	J2L =  95 + J2
+	J2R = 108 + J2
+	
+	SERVO 0,J2L
+	SERVO 1,J1L
+	SERVO 18,J2R
+	SERVO 19,J1R
+
+NEXT i
+
+'Hidari-Up
+	MOVE G6A, 95,110, 75,132,105,100
+	MOVE G6D,108,105, 85,127, 95,100
+	WAIT
+	
+'Migi Yose
+	MOVE G6A, 95,105, 85,127,105,100
+	MOVE G6D,105,105, 85,127, 95,100
+	WAIT
+
+'Shagami
+	MOVE G6A,100,105, 85,127,100,100
+	MOVE G6D,100,105, 85,127,100,100
+	WAIT
+
+
+SPEED 5
+GOSUB STDUP
+RETURN
+
+'GOTO Main
+
+'*********************************************************
+
+Go_Front1:'(Original
+
+SPEED 6
+GOSUB right_inclination2
+SPEED 9
+
+FOR i=0 TO 2
+
+GOSUB L_Wait5_3
+SPEED 10
+GOSUB mova_act21
+GOSUB l_c1
+GOSUB l_c_move1
+
+SPEED 9
+GOSUB R_Wait5_3
+
+SPEED 8
+GOSUB move_act11
+GOSUB r_c1
+GOSUB r_c_move1
+
+HIGHSPEED SETOFF
+
+NEXT I
+
+SPEED 8
+GOSUB L_Wait5_3
+
+GOSUB right_inclination2
+SPEED 5
+GOSUB STDUP
+RETURN
+
+'*********************************************************
+
+back1:
+
+SPEED 5
+GOSUB right_inclination2
+SPEED 8
+GOSUB L_Wait10
+SPEED 10
+FOR i=0 TO 1
+
+GOSUB r_c_move1
+GOSUB r_c1
+GOSUB move_act11
+GOSUB R_Wait10
+
+GOSUB l_c_move1
+GOSUB l_c1
+GOSUB mova_act21
+GOSUB L_Wait10
+
+NEXT i
+
+GOSUB right_inclination2
+SPEED 4
+GOSUB STDUP
+RETURN
+
+'********************************************
+Turn1:
+SPEED 6
+GOSUB right_inclination2
+SPEED 9
+GOSUB L_Wait5_3
+GOSUB Lf_Wait10
+GOSUB Turn_Act2
+GOSUB STDUP
+
+RETURN
+
+'********************************************
+Turn2:
+SPEED 6
+GOSUB left_inclination2
+SPEED 9
+GOSUB R_Wait5_3
+GOSUB Rf_Wait10
+GOSUB Turn_act1
+GOSUB STDUP
+
+RETURN
+
+'***************************************
+Down_Front:
+
+SPEED 8
+GOSUB STDUP
+MOVE G6A,100, 155,  20, 140, 100, 100
+MOVE G6D,100, 155,  20, 140, 100, 100
+MOVE G6B,130,  50,  85, 100, 100, 100
+MOVE G6C,130,  50,  85, 100, 100, 100
+WAIT
+
+MOVE G6A, 60, 165,  30, 165, 155, 100
+MOVE G6D, 60, 165,  30, 165, 155, 100
+MOVE G6B,170,  10, 100, 100, 100, 100
+MOVE G6C,170,  10, 100, 100, 100, 100
+WAIT
+
+
+MOVE G6A, 75, 165,  55, 165, 155, 100
+MOVE G6D, 75, 165,  55, 165, 155, 100
+MOVE G6B,185,  10, 100, 100, 100, 100
+MOVE G6C,185,  10, 100, 100, 100, 100
+WAIT
+
+MOVE G6A, 80, 155,  85, 150, 150, 100
+MOVE G6D, 80, 155,  85, 150, 150, 100
+MOVE G6B,185,  40, 60,  100, 100, 100
+MOVE G6C,185,  40, 60,  100, 100, 100
+WAIT
+
+
+MOVE G6A,100, 130, 120,  80, 110, 100
+MOVE G6D,100, 130, 120,  80, 110, 100
+MOVE G6B,150, 160,  10, 100, 100, 100
+MOVE G6C,150, 160,  10, 100, 100, 100
+WAIT
+
+GOSUB STDUP
+
+RETURN
+
+'******************************************
+Down_Back:
+SPEED 10
+GOSUB STDUP
+MOVE G6A,100, 165,  40, 100, 100, 100
+MOVE G6D,100, 165,  40, 100, 100, 100
+MOVE G6B,110,  70,  50, 100, 100, 100
+MOVE G6C,110,  70,  50, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 165,  70, 15, 100, 100
+MOVE G6D,100, 165,  70, 15, 100, 100
+MOVE G6B,30,  20,  95, 100, 100, 100
+MOVE G6C,30,  20,  95, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 126,  60, 50, 100, 100
+MOVE G6D,100, 126,  60, 50, 100, 100
+MOVE G6B,20,  30,  90, 100, 100, 100
+MOVE G6C,20,  30,  90, 100, 100, 100
+WAIT
+
+
+MOVE G6A,100, 10,  83, 140, 100, 100
+MOVE G6D,100, 10,  83, 140, 100, 100
+MOVE G6B,20,  130,  10, 100, 100, 100
+MOVE G6C,20,  130,  10, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 10,  100, 115, 100, 100
+MOVE G6D,100, 10,  100, 115, 100, 100
+MOVE G6B,100,  130,  10, 100, 100, 100
+MOVE G6C,100,  130,  10, 100, 100, 100
+WAIT
+
+GOSUB STDUP
+
+RETURN
+'*********************************************
+Up_Front:
+
+SPEED 10
+'GOSUB STDUP
+
+MOVE G6A,100, 130, 120,  80, 110, 100
+MOVE G6D,100, 130, 120,  80, 110, 100
+MOVE G6B,150, 160,  10, 100, 100, 100
+MOVE G6C,150, 160,  10, 100, 100, 100
+WAIT
+
+MOVE G6A, 80, 155,  85, 150, 150, 100
+MOVE G6D, 80, 155,  85, 150, 150, 100
+MOVE G6B,185,  40, 60,  100, 100, 100
+MOVE G6C,185,  40, 60,  100, 100, 100
+WAIT
+
+MOVE G6A, 75, 165,  55, 165, 155, 100
+MOVE G6D, 75, 165,  55, 165, 155, 100
+MOVE G6B,185,  10, 100, 100, 100, 100
+MOVE G6C,185,  10, 100, 100, 100, 100
+WAIT
+
+MOVE G6A, 60, 165,  30, 165, 155, 100
+MOVE G6D, 60, 165,  30, 165, 155, 100
+MOVE G6B,170,  10, 100, 100, 100, 100
+MOVE G6C,170,  10, 100, 100, 100, 100
+WAIT
+
+MOVE G6A, 60, 165,  20, 160, 145, 100
+MOVE G6D, 60, 165,  20, 160, 145, 100
+MOVE G6B,150,  60,  90, 100, 100, 100
+MOVE G6C,150,  60,  90, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 155,  20, 140, 100, 100
+MOVE G6D,100, 155,  20, 140, 100, 100
+MOVE G6B,130,  50,  85, 100, 100, 100
+MOVE G6C,130,  50,  85, 100, 100, 100
+WAIT
+'DELAY 100
+
+GOSUB STDUP
+
+RETURN
+'**********************************************
+
+Up_Back:
+SPEED 10
+GOSUB STDUP
+
+MOVE G6A,100, 10,  100, 115, 100, 100
+MOVE G6D,100, 10,  100, 115, 100, 100
+MOVE G6B,100,  130,  10, 100, 100, 100
+MOVE G6C,100,  130,  10, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 10,  83, 140, 100, 100
+MOVE G6D,100, 10,  83, 140, 100, 100
+MOVE G6B,20,  130,  10, 100, 100, 100
+MOVE G6C,20,  130,  10, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 126,  60, 50, 100, 100
+MOVE G6D,100, 126,  60, 50, 100, 100
+MOVE G6B,20,  30,  90, 100, 100, 100
+MOVE G6C,20,  30,  90, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 165,  70, 15, 100, 100
+MOVE G6D,100, 165,  70, 15, 100, 100
+MOVE G6B,30,  20,  95, 100, 100, 100
+MOVE G6C,30,  20,  95, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 165,  40, 100, 100, 100
+MOVE G6D,100, 165,  40, 100, 100, 100
+MOVE G6B,110,  70,  50, 100, 100, 100
+MOVE G6C,110,  70,  50, 100, 100, 100
+WAIT
+
+GOSUB STDUP
+
+RETURN
+
+'****************************************************
+Roll_Front:
+
+SPEED 8
+GOSUB STDUP
+MOVE G6A,100, 155,  20, 140, 100, 100
+MOVE G6D,100, 155,  20, 140, 100, 100
+MOVE G6B,130,  50,  85, 100, 100, 100
+MOVE G6C,130,  50,  85, 100, 100, 100
+WAIT
+
+MOVE G6A, 60, 165,  30, 165, 155, 100
+MOVE G6D, 60, 165,  30, 165, 155, 100
+MOVE G6B,170,  10, 100, 100, 100, 100
+MOVE G6C,170,  10, 100, 100, 100, 100
+WAIT
+
+
+MOVE G6A, 75, 165,  55, 165, 155, 100
+MOVE G6D, 75, 165,  55, 165, 155, 100
+MOVE G6B,185,  10, 100, 100, 100, 100
+MOVE G6C,185,  10, 100, 100, 100, 100
+WAIT
+
+MOVE G6A, 80, 155,  85, 150, 150, 100
+MOVE G6D, 80, 155,  85, 150, 150, 100
+MOVE G6B,185,  40, 60,  100, 100, 100
+MOVE G6C,185,  40, 60,  100, 100, 100
+WAIT
+
+
+MOVE G6A,100, 130, 120,  80, 110, 100
+MOVE G6D,100, 130, 120,  80, 110, 100
+MOVE G6B,150, 160,  10, 100, 100, 100
+MOVE G6C,150, 160,  10, 100, 100, 100
+WAIT
+
+
+MOVE G6A,100, 160, 110, 140, 100, 100
+MOVE G6D,100, 160, 110, 140, 100, 100
+MOVE G6B,140,  70,  20, 100, 100, 100
+MOVE G6C,140,  70,  20, 100, 100, 100
+WAIT
+
+SPEED 14
+MOVE G6A,100,  56, 110,  26, 100, 100
+MOVE G6D,100,  71, 177, 162, 100, 100
+MOVE G6B,170,  40,  50, 100, 100, 100
+MOVE G6C,170,  40,  50, 100, 100, 100
+WAIT
+MOVE G6A,100,  62, 110,  15, 100, 100
+MOVE G6D,100,  71, 128, 113, 100, 100
+MOVE G6B,190,  40,  50, 100, 100, 100
+MOVE G6C,190,  40,  50, 100, 100, 100
+WAIT
+
+SPEED 14
+MOVE G6A,100,  62, 110,  15, 100, 100
+MOVE G6D,100,  62, 110,  15, 100, 100
+WAIT
+SPEED 10
+
+MOVE G6A,100, 110, 100,  15, 100, 100
+MOVE G6D,100, 110, 100,  15, 100, 100
+MOVE G6B,190, 160, 115, 100, 100, 100
+MOVE G6C,190, 160, 115, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 170,  70,  15, 100, 100
+MOVE G6D,100, 170,  70,  15, 100, 100
+MOVE G6B,190, 170, 120, 100, 100, 100
+MOVE G6C,190, 170, 119, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 170,  70,  50, 100, 100
+MOVE G6D,100, 170,  70,  50, 100, 100
+MOVE G6B,190,  80,  60, 100, 100, 100
+MOVE G6C,190,  80,  60, 100, 100, 100
+WAIT
+
+GOSUB STDUP2
+
+GOSUB STDUP
+
+RETURN
+'***********************************************
+
+Roll_Back:
+SPEED 8
+'GOSUB STDUP
+MOVE G6A,100, 170,  71,  23, 100, 100
+MOVE G6D,100, 170,  71,  23, 100, 100
+MOVE G6B, 80,  50,  70, 100, 100, 100
+MOVE G6C, 80,  50,  70, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 133,  71,  23, 100, 100
+MOVE G6D,100, 133,  71,  23, 100, 100
+MOVE G6B, 10,  96,  15, 100, 100, 100
+MOVE G6C, 10,  96,  14, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 133,  49,  23, 100, 100
+MOVE G6D,100, 133,  49,  23, 100, 100
+MOVE G6B, 45, 116,  15, 100, 100, 100
+MOVE G6C, 45, 116,  14, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 133,  49,  23, 100, 100
+MOVE G6D,100,  70, 180, 160, 100, 100
+MOVE G6B, 45,  50,  70, 100, 100, 100
+MOVE G6C, 45,  50,  70, 100, 100, 100
+WAIT
+SPEED 14
+MOVE G6A,100,  70, 180, 160, 100, 100
+MOVE G6D,100,  70, 180, 160, 100, 100
+MOVE G6B, 10,  50,  70, 100, 100, 100
+MOVE G6C, 10,  50,  70, 100, 100, 100
+WAIT
+SPEED 14
+HIGHSPEED SETON
+MOVE G6A,100, 105, 180, 160, 100, 100
+MOVE G6D,100, 105, 180, 160, 100, 100
+MOVE G6B,185,  60,  50, 100, 100, 100
+MOVE G6C,185,  60,  50, 100, 100, 100
+WAIT
+DELAY 80
+HIGHSPEED SETOFF
+'************
+GOSUB Up_Front
+RETURN
+
+'**********************************************************
+Roll_Side2:
+'GOSUB STDUP2
+SPEED 8
+MOVE G6A,100, 128,  60, 123, 100, 100
+MOVE G6D,100, 128,  60, 123, 100, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+DELAY 250
+
+SPEED 4
+MOVE G6A, 84, 104,  91, 116, 100, 100
+MOVE G6D,114, 130,  60, 123, 105, 100
+WAIT
+
+MOVE G6A,89,  133,  60, 123, 100, 100
+MOVE G6D,114, 129,  60, 123, 105, 100
+WAIT
+
+MOVE G6A, 89, 133,  60, 123, 130, 100
+MOVE G6D,120, 129,  60, 123, 110, 100
+WAIT
+
+SPEED 4
+MOVE G6A,89,  133,  60, 123, 158, 100
+MOVE G6D,120, 129,  60, 123, 120, 100
+MOVE G6B,100, 165, 185, 100, 100, 100
+MOVE G6C,100, 165, 185, 100, 100, 100
+WAIT
+
+SPEED 8
+MOVE G6A,120, 131,  60, 123, 183, 100
+MOVE G6D,120, 129,  60, 123, 185, 100
+WAIT
+
+DELAY 200
+
+SPEED 5
+MOVE G6B,100, 120, 145, 100, 100, 100
+MOVE G6C,100, 120, 145, 100, 100, 100
+WAIT
+
+SPEED 6
+MOVE G6A,105, 129,  60, 123, 183, 100
+MOVE G6D, 86, 112,  73, 127, 101, 100
+
+WAIT
+
+SPEED 4
+MOVE G6A,112, 129,  62, 126, 133, 100
+MOVE G6D, 86, 112,  73, 127, 101, 100
+MOVE G6B,100, 80, 80, 100, 100, 100
+MOVE G6C,100, 80, 80, 100, 100, 100
+WAIT
+
+SPEED 3
+MOVE G6A,107, 128,  62, 126, 113, 100
+MOVE G6D, 88, 111,  86, 115,  90, 100
+WAIT
+
+SPEED 4
+MOVE G6A,100, 128,  60, 126, 100, 100
+MOVE G6D,100, 128,  60, 126, 100, 100
+WAIT
+
+SPEED 10
+GOSUB STDUP
+
+RETURN
+'*******************************************
+Roll_Side1:
+'GOSUB STDUP2
+
+SPEED 8
+MOVE G6A,100, 128,  60, 126, 100, 100
+MOVE G6D,100, 128,  60, 126, 100, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+
+DELAY 300
+SPEED 3
+MOVE G6A,114, 133,  60, 123, 105, 100
+MOVE G6D, 80, 109,  91, 116, 100, 100
+WAIT
+
+MOVE G6A,114, 133,  60, 123, 105, 100
+MOVE G6D,89,  133,  60, 123, 100, 100
+WAIT
+
+MOVE G6A,120, 133,  60, 123, 110, 100
+MOVE G6D, 89, 133,  60, 123, 130, 100
+WAIT
+
+
+SPEED 4
+MOVE G6A,120, 132,  60, 123, 120, 100
+MOVE G6D,89,  133,  60, 123, 158, 100
+MOVE G6B,100, 165, 185, 100, 100, 100
+MOVE G6C,100, 165, 185, 100, 100, 100
+WAIT
+
+SPEED 8
+MOVE G6A,120, 131,  60, 123, 185, 100
+MOVE G6D,120, 131,  60, 123, 183, 100
+
+WAIT
+
+DELAY 200
+
+SPEED 5
+MOVE G6B,100, 120, 145, 100, 100, 100
+MOVE G6C,100, 120, 145, 100, 100, 100
+WAIT
+
+SPEED 6
+
+MOVE G6A, 86, 112,  73, 127, 101, 100
+MOVE G6D,105, 129,  60, 123, 183, 100
+WAIT
+
+SPEED 4
+MOVE G6A, 86, 112,  73, 127, 101, 100
+MOVE G6D,112, 128,  62, 123, 133, 100
+MOVE G6B,100, 80, 80, 100, 100, 100
+MOVE G6C,100, 80, 80, 100, 100, 100
+WAIT
+
+SPEED 3
+MOVE G6A, 88, 112,  86, 115,  90, 100
+MOVE G6D,107, 128,  62, 123, 113, 100
+WAIT
+
+SPEED 4
+MOVE G6A,100, 128,  60, 123, 100, 100
+MOVE G6D,100, 128,  60, 123, 100, 100
+WAIT
+
+SPEED 10
+GOSUB STDUP
+
+RETURN
+
+
+
+
+
+'*****Move Sub Action *************************************
+Turn_act1:
+
+MOVE G6A,108, 79, 145, 98, 93, 60
+MOVE G6D, 95, 40, 169, 110, 110, 60
+MOVE G6B,140, 50, 70, 100, 100, 100
+MOVE G6C, 60, 50, 70, 100, 100, 100
+WAIT
+RETURN
+'*********************************************
+Turn_Act2:
+
+MOVE G6A, 95, 40, 169, 110, 110, 60
+MOVE G6D,108, 79, 145, 98, 93, 60
+MOVE G6B, 60, 50, 70, 100, 100, 100
+MOVE G6C,140, 50, 70, 100, 100, 100
+WAIT
+RETURN
+
+'*********************************************
+L_Wait5_3:
+	MOVE G6A, 87,  86, 130,  98, 113,  70
+	MOVE G6D,112,  75, 145,  93,  93,  70
+	MOVE G6B,90,  50,  70, 100, 100, 100
+	MOVE G6C,110,  60,  70, 100, 100, 100
+	WAIT
+	RETURN
+'*********************************************
+L_Wait10:
+	MOVE G6A, 90,  98, 105,  115, 115, 70
+	MOVE G6D,114,  75, 145,  93,  93, 70
+	MOVE G6B,90,  50,  70, 100, 100, 100
+	MOVE G6C,110,  60,  70, 100, 100, 100
+	WAIT
+	RETURN
+'*********************************************	
+Lf_Wait10:
+MOVE G6A, 90,  50, 157, 115, 112,  60
+MOVE G6D,112,  76, 145,  97,  93,  60
+MOVE G6B, 80,  50,  70, 100, 100, 100
+MOVE G6C,120,  50,  70, 100, 100, 100
+WAIT
+RETURN
+	
+'*********************************************
+R_Wait5_3:
+	MOVE G6A,117,  75, 145,  93,  93,  70
+	MOVE G6D, 87,  81, 134,  98, 113,  70
+
+	MOVE G6B,110,  60,  70, 100, 100, 100
+	MOVE G6C,90,  50,  70, 100, 100, 100
+	WAIT
+	RETURN
+'*********************************************
+Rf_Wait10:
+MOVE G6A,112,  76, 145,  97,  93,  60
+MOVE G6D, 90,  50, 147, 125, 112,  60
+WAIT
+
+
+MOVE G6A,112,  76, 145,  97,  93,  60
+MOVE G6D, 90,  50, 157, 115, 112,  60
+MOVE G6B,120,  50,  70, 100, 100, 100
+MOVE G6C, 80,  50,  70, 100, 100, 100
+WAIT
+RETURN
+
+
+'*********************************************
+r_c_move1:
+	MOVE G6A, 90,  91, 145,  81, 115,  60
+	MOVE G6D,112,  74, 140, 106,  93,  60
+	MOVE G6B,100,  50,  70, 100, 100, 100
+	MOVE G6C,100,  50,  70, 100, 100, 100
+	WAIT
+	RETURN
+'*********************************************
+r_c1:
+	MOVE G6A,100,  81, 146,  92, 100, 100
+	MOVE G6D,100,  49, 158, 112, 100, 100
+	MOVE G6B,120,  50,  70, 100, 100, 100
+	MOVE G6C, 90,  50,  70, 100, 100, 100
+	WAIT
+	RETURN
+'*********************************************
+move_act11:
+MOVE G6A,112, 86, 130, 93, 93, 60
+MOVE G6D, 86, 38, 163, 112, 114, 60
+MOVE G6B,140, 50, 70, 100, 100, 100
+MOVE G6C, 80, 50, 70, 100, 100, 100
+WAIT
+RETURN
+'*********************************************
+R_Wait10:
+MOVE G6A,114, 75, 145, 93, 93, 70
+MOVE G6D, 90, 98, 105, 115, 115, 70
+MOVE G6B,110, 60, 70, 100, 100, 100
+MOVE G6C,90, 50, 70, 100, 100, 100
+WAIT
+RETURN
+'*********************************************
+l_c_move1:
+MOVE G6A,112, 74, 140, 106, 93, 60
+MOVE G6D, 90, 91, 145, 81, 115, 60
+MOVE G6B,100, 50, 70, 100, 100, 100
+MOVE G6C,100, 50, 70, 100, 100, 100
+WAIT
+RETURN
+'*********************************************
+l_c1:
+MOVE G6A,100, 49, 158, 112, 100, 100
+MOVE G6D,100, 81, 146, 92, 100, 100
+MOVE G6B, 90, 50, 70, 100, 100, 100
+MOVE G6C,120, 50, 70, 100, 100, 100
+WAIT
+RETURN
+'*********************************************
+mova_act21:
+	MOVE G6A, 86,  41, 163, 112, 115,  60
+	MOVE G6D,112,  86, 130,  93,  93,  60
+	MOVE G6B, 80,  50,  70, 100, 100, 100
+	MOVE G6C,140,  50,  70, 100, 100, 100
+	WAIT
+	RETURN
+'*********************************************
+
+
+
+
+
+
+'*********************************************
+
+action_1:
+MOVE G6A,110, 87, 120, 115, 93, 70
+MOVE G6D, 76, 69, 160, 95, 128, 70
+MOVE G6B,100, 70, 70, 100, 100, 100
+MOVE G6C,100, 50, 70, 100, 100, 100
+WAIT
+RETURN
+
+'*********************************************
+
+action_2:
+	MOVE G6D,110,  82, 120, 115,  93,  70
+	MOVE G6A, 80,  67, 160,  95, 128,  70
+	MOVE G6B,100,  50,  70, 100, 100, 100
+	MOVE G6C,100,  70,  70, 100, 100, 100
+	WAIT
+	RETURN
+'**********************************************
+
+action_L3_L:
+MOVE G6A, 98, 80, 135, 103, 109, 100
+MOVE G6D, 93, 80, 135, 103, 109, 100
+MOVE G6B,100, 60, 70, 100, 100, 100
+MOVE G6C,100, 60, 70, 100, 100, 100
+WAIT
+RETURN
+'**********************************************
+
+action_L3_R:
+MOVE G6A, 95, 80, 135, 103, 109, 100
+MOVE G6D, 96, 80, 135, 103, 109, 100
+MOVE G6B,100, 60, 70, 100, 100, 100
+MOVE G6C,100, 60, 70, 100, 100, 100
+WAIT
+RETURN
+'**********************************************
+
+action_L3:
+MOVE G6A, 95, 80, 135, 103, 109, 100
+MOVE G6D, 93, 80, 135, 103, 109, 100
+MOVE G6B,100, 60, 70, 100, 100, 100
+MOVE G6C,100, 60, 70, 100, 100, 100
+WAIT
+RETURN
+
+
+'**********************************************
+
+left_inclination2:
+MOVE G6A,108, 75, 145, 93, 93, 70
+MOVE G6D, 90, 73, 148, 93, 110, 70
+MOVE G6B,100, 60, 70, 100, 100, 100
+MOVE G6C,100, 50, 70, 100, 100, 100
+WAIT
+RETURN
+
+'**********************************************
+
+right_inclination2:
+	MOVE G6A, 90,  73, 148,  93, 110,  70
+	MOVE G6D,108,  75, 145,  93,  93,  70
+	MOVE G6B,100,  50,  70, 100, 100, 100
+	MOVE G6C,100,  60,  70, 100, 100, 100
+	WAIT
+	RETURN
+
+'**********************************************
+
+Arm_act1:
+GOSUB STDUP
+
+	MOVE G6A,100,69,145,93,100,100
+	MOVE G6D,100,69,145,93,100,100
+	WAIT
+
+SPEED 7
+MOVE G6B,190,  45,  70, 100, 100, 100
+MOVE G6C,190,  45,  70, 100, 100, 100
+WAIT
+
+SPEED 10
+MOVE G6B,190,  100,  100, 100, 100, 100
+MOVE G6C,190,  100,  100, 100, 100, 100
+WAIT
+
+SPEED 13
+MOVE G6B,100, 100, 100, 100, 100, 100
+MOVE G6C,100, 100, 100, 100, 100, 100
+WAIT
+
+
+SPEED 8
+MOVE G6B,100, 150, 130, 100, 100, 100
+MOVE G6C,100, 150, 130, 100, 100, 100
+WAIT
+
+SPEED 10
+FOR i = 0 TO 2
+	MOVE G6B,100, 180, 150, 100, 100, 100
+	MOVE G6C,100, 180, 150, 100, 100, 100
+	WAIT
+	
+	MOVE G6B,100, 70, 60, 100, 100, 100
+	MOVE G6C,100, 70, 60, 100, 100, 100
+	WAIT
+
+NEXT i
+
+SPEED 6
+'GOSUB STDUP
+
+MOVE G6B,190,  100,  100, 100, 100, 100
+MOVE G6C,190,  100,  100, 100, 100, 100
+WAIT
+
+SPEED 8
+FOR i = 0 TO 1
+	MOVE G6B,190, 100, 100, 100, 100, 100
+	MOVE G6C,190,  15,  15, 100, 100, 100
+	WAIT
+	
+	MOVE G6B,190, 15, 15, 100, 100, 100
+	MOVE G6C,190,  15,  15, 100, 100, 100
+	WAIT
+	
+	MOVE G6B,190, 100, 100, 100, 100, 100
+	MOVE G6C,190,  15,  15, 100, 100, 100
+	WAIT
+	
+	MOVE G6B,190,  100,  100, 100, 100, 100
+	MOVE G6C,190,  100,  100, 100, 100, 100
+	WAIT
+	
+	MOVE G6B,190, 15, 15, 100, 100, 100
+	MOVE G6C,190,  15,  15, 100, 100, 100
+	WAIT
+	MOVE G6B,190,  100,  100, 100, 100, 100
+	MOVE G6C,190,  100,  100, 100, 100, 100
+	WAIT
+
+NEXT i
+
+SPEED 6
+GOSUB STDUP
+
+
+RETURN
+
+'****************************************************************
+swimming:
+SPEED 5
+GOSUB right_inclination2
+	MOVE G6A, 90,  96, 105,  115, 115, 60
+	MOVE G6D,116,  70, 145,  98,  93, 60
+	MOVE G6B,100,  150,  150, 100, 100, 100
+	MOVE G6C,100,  150,  150, 100, 100, 100
+	WAIT
+	SPEED 3
+MOVE G6A, 90,  98, 105,  64, 115,  60
+MOVE G6D,116,  33, 170, 167,  93,  60
+MOVE G6B,100, 160, 180, 100, 100, 100
+MOVE G6C,100, 160, 180, 100, 100, 100
+WAIT
+
+SPEED 10
+MOVE G6A, 90, 117,  41, 113, 115,  60
+MOVE G6D,116,  30, 176, 167,  93,  60
+MOVE G6B,100, 160, 180, 100, 100, 100
+MOVE G6C,100, 160, 180, 100, 100, 100
+WAIT
+
+
+FOR i = 0 TO 1 
+	MOVE G6A, 90, 117,  41, 113, 115,  60
+	MOVE G6D,116,  30, 176, 167,  93,  60
+	MOVE G6B,100, 180, 130, 100, 100, 100
+	MOVE G6C,100, 180, 130, 100, 100, 100
+	WAIT
+	SPEED 14
+	MOVE G6A, 90,  63, 165,  47, 115,  60
+	MOVE G6D,116,  36, 176, 167,  93,  60
+	MOVE G6B,100,  70,  50, 100, 100, 100
+	MOVE G6C,100,  70,  50, 100, 100, 100
+	WAIT
+	SPEED 7
+NEXT i
+
+ 
+
+FOR i = 0 TO 2 
+	SPEED 6
+	MOVE G6A, 90,  74, 176,  32, 115,  60
+	MOVE G6D,116,  33, 176, 167,  93,  60
+	MOVE G6B,170, 169, 117, 100, 100, 100
+	MOVE G6C,170, 169, 117, 100, 100, 100
+	WAIT
+	
+	SPEED 15
+	HIGHSPEED SETON
+	MOVE G6A, 90,  36, 154,  32, 115,  60
+	MOVE G6D,116,  34, 176, 167,  93,  60
+	MOVE G6B,170,  40,  70, 100, 100, 100
+	MOVE G6C,170,  40,  70, 100, 100, 100
+	WAIT
+	DELAY 100
+	HIGHSPEED SETOFF
+NEXT i
+
+SPEED 6
+
+MOVE G6A, 90,  98, 105,  64, 115,  60
+MOVE G6D,116,  37, 170, 167,  93,  60
+MOVE G6B,100, 160, 180, 100, 100, 100
+MOVE G6C,100, 160, 180, 100, 100, 100
+WAIT
+
+SPEED 4
+
+MOVE G6A, 90,  98, 105,  115, 115, 60
+WAIT
+
+MOVE G6D,116,  37, 170,  145,  93, 60
+WAIT
+
+
+MOVE G6D,116,  73, 145,  98,  93, 60
+MOVE G6B,100,  150,  150, 100, 100, 100
+MOVE G6C,100,  150,  150, 100, 100, 100
+WAIT
+	
+GOSUB right_inclination2
+GOSUB STDUP	
+
+RETURN
+
+GOTO MAIN
+
+자세100:
+	MOVE G6A,100,  100,  100, 100, 100, 100
+	MOVE G6D,100,  100,  100, 100, 100, 100
+	MOVE G6B,100,  100,  100, 100, 100, 100
+	MOVE G6C,100,  100,  100, 100, 100, 100
+	WAIT
+	RETURN
+
+차렷자세:
+	MOVE G6A,100,  56, 182,  76, 100, 100
+	MOVE G6D,100,  56, 182,  76, 100, 100
+	MOVE G6B,100,  20,  90, 100, 100, 100
+	MOVE G6C,100,  20,  90, 100, 100, 100
+	WAIT
+	mode = 2
+	RETURN
+
+기본자세:
+	MOVE G6A,100,  76, 145,  93, 100, 100
+	MOVE G6D,100,  76, 145,  93, 100, 100
+	MOVE G6B,100,  30,  80, 100, 100, 100
+	MOVE G6C,100,  30,  80, 100, 100, 100
+	WAIT
+	mode = 0
+	DELAY 500
+	RETURN
+
+앉은자세:
+	SPEED 10
+	MOVE G6A,100, 151,  27, 140, 100, 100
+	MOVE G6D,100, 151,  27, 140, 100, 100
+	MOVE G6B,100,  30,  80, , , 
+	MOVE G6C,100,  30,  80, , , 
+	WAIT
+	
+	MOVE G6A,100, 151,  23, 140, 101, 100
+	MOVE G6D,100, 151,  23, 140, 101, 100
+	MOVE G6B,100,  30,  80, , , 
+	MOVE G6C,100,  30,  80, , , 
+	WAIT
+	mode = 1
+
+	RETURN
+
+기본100:
+	MOVE G6A,100, 100, 100, 100, 100, 100
+	MOVE G6B,100, 100, 100, 100, 100, 100
+	MOVE G6C,100, 100, 100, 100, 100, 100
+	MOVE G6D,100, 100, 100, 100, 100, 100
+	WAIT
+	RETURN
+
+'**********************************************
+첫왼발들기10:
+	MOVE G6A, 90, 107, 105, 105, 114, 60
+	MOVE G6D,114,  76, 145,  93, 90, 60
+	MOVE G6B, 90,  40,  80, , , 
+	MOVE G6C,100,  40,  80, , , 
+	WAIT
+	RETURN
+
+오른쪽기울기2:
+	MOVE G6A, 85,  75, 152,  88, 114, 60
+	MOVE G6D,112,  76, 145,  93, 90, 60
+	MOVE G6B,100,  40,  80, , , 
+	MOVE G6C,100,  40,  80, , , 
+	WAIT
+	RETURN
+왼발들기5:
+	MOVE G6A, 86,  83, 135,  97, 114,  60
+	MOVE G6D,113,  78, 145,  93,  93,  60
+	MOVE G6B, 90,  40,  80, , , 
+	MOVE G6C,100,  40,  80, , , 
+	WAIT
+	RETURN
+
+왼발들기10:
+	MOVE G6A, 90, 107, 105, 105, 114, 60
+	MOVE G6D,113,  76, 145,  93, 90, 60
+	MOVE G6B, 90,  40,  80, , , 
+	MOVE G6C,100,  40,  80, , , 
+	WAIT
+	RETURN
+왼발들기10_2:
+	MOVE G6A, 90, 107, 105, 105, 114, 60
+	MOVE G6D,113,  78, 145,  93, 90, 60
+	MOVE G6B, 90,  40,  80, , , 
+	MOVE G6C,100,  40,  80, , , 
+	WAIT
+	RETURN
+	
+왼발뻣어착지전:
+	MOVE G6A, 90,  56, 143, 122, 114,  60
+	MOVE G6D,113,  80, 145,  90,  90,  60
+	MOVE G6B, 80,  40,  80, , , 
+	MOVE G6C,105,  40,  80, , , 
+	WAIT
+	RETURN
+
+왼발뻣어착지:
+	MOVE G6A, 90,  46, 163, 112, 114,  60
+	MOVE G6D,112,  80, 145,  90,  90,  60
+	MOVE G6B, 80,  40,  80, , , 
+	MOVE G6C,105,  40,  80, , , 
+	WAIT
+	RETURN
+
+왼발중립:
+	MOVE G6A,100,  66, 141, 113, 100, 100
+	MOVE G6D,100,  83, 156,  80, 100, 100
+	MOVE G6B, 90,  40,  80, , , 
+	MOVE G6C,100,  40,  80, , , 
+	WAIT
+	RETURN
+
+왼발중립_2:
+	MOVE G6A,100,  62, 146, 108, 100, 100
+	MOVE G6D,100,  88, 140,  86, 100, 100
+	MOVE G6B, 90,  40,  80, , , 
+	MOVE G6C,100,  40,  80, , , 
+	WAIT
+	RETURN
+	
+왼발중심이동:
+	MOVE G6A,113,  78, 142, 105,  90, 60
+	MOVE G6D, 90, 102, 136,  85, 114, 60
+	MOVE G6B,100,  40,  80, , , 
+	MOVE G6C,100,  40,  80, , , 
+	WAIT
+	RETURN
+	
+왼발중심이동_2:
+	MOVE G6A,113,  76, 142, 105,  90, 60	
+	MOVE G6D, 90, 96, 136,  85, 114, 60
+	MOVE G6B,100,  40,  80, , , 
+	MOVE G6C,100,  40,  80, , , 
+	WAIT
+	RETURN
+
+'**********************************************
+첫오른발들기10:
+	MOVE G6A,114,  76, 145,  93, 90, 60
+	MOVE G6D, 90, 107, 105, 105, 114, 60
+	MOVE G6B,100,  40,  80, , , 
+	MOVE G6C, 90,  40,  80, , , 
+	WAIT
+	RETURN
+왼쪽기울기2:
+	MOVE G6A,112,  76, 145,  93, 90, 60
+	MOVE G6D, 85,  75, 152,  88, 114, 60
+	MOVE G6B,100,  40,  80, , , 
+	MOVE G6C,100,  40,  80, , , 
+	WAIT
+	RETURN
+오른발들기5:
+	MOVE G6A,113,  78, 145,  93,  93,  60
+	MOVE G6D, 86,  83, 135,  97, 114,  60
+	MOVE G6B,100,  40,  80, , , 
+	MOVE G6C, 90,  40,  80, , , 
+	WAIT
+	RETURN
+오른발들기10:
+	MOVE G6A,113,  76, 145,  93, 90, 60
+	MOVE G6D, 90, 107, 105, 105, 114, 60
+	MOVE G6B,100,  40,  80, , , 
+	MOVE G6C, 90,  40,  80, , , 
+	WAIT
+	RETURN
+
+오른발들기10_2:
+	MOVE G6A,113,  78, 145,  93, 90, 60
+	MOVE G6D, 90, 107, 105, 105, 114, 60
+	MOVE G6B,100,  40,  80, , , 
+	MOVE G6C, 90,  40,  80, , , 
+	WAIT
+	RETURN
+	
+오른발뻣어착지전:
+	MOVE G6A,113,  80, 145,  90,  90,  60
+	MOVE G6D, 90,  56, 143, 122, 114,  60
+	MOVE G6B,105,  40,  80, , , 
+	MOVE G6C, 80,  40,  80, , , 
+	WAIT
+	RETURN
+
+오른발뻣어착지:
+	MOVE G6A,112,  80, 145,  90,  90,  60
+	MOVE G6D, 90,  46, 163, 112, 114,  60
+	MOVE G6B,105,  40,  80, , , 
+	MOVE G6C, 80,  40,  80, , , 
+	WAIT
+	RETURN
+
+오른발중립:
+	MOVE G6A,100,  83, 156,  80, 100, 100
+	MOVE G6D,100,  66, 141, 113, 100, 100
+	MOVE G6B,100,  40,  80, , , 
+	MOVE G6C, 90,  40,  80, , , 
+	WAIT
+	RETURN
+
+오른발중립_2:
+	MOVE G6A,100,  88, 140,  86, 100, 100
+	MOVE G6D,100,  62, 146, 108, 100, 100
+	MOVE G6B,100,  40,  80, , , 
+	MOVE G6C, 90,  40,  80, , , 
+	WAIT
+	RETURN
+	
+오른발중심이동:
+	MOVE G6A, 90, 102, 136,  85, 114, 60
+	MOVE G6D,113,  78, 142, 105,  90, 60
+	MOVE G6B,100,  40,  80, , , 
+	MOVE G6C,100,  40,  80, , , 
+	WAIT
+	RETURN
+
+오른발중심이동_2:
+	MOVE G6A, 90, 96, 136,  85, 114, 60
+	MOVE G6D,113,  76, 142, 105,  90, 60
+	MOVE G6B,100,  40,  80, , , 
+	MOVE G6C,100,  40,  80, , , 
+	WAIT
+	RETURN
+	
+'**********************************************
+전진2: '보폭이 짧게
+SPEED 5
+
+MOVE G6B,100,  30,  90, 100, 100, 100
+MOVE G6C,100,  30,  90, 100, 100, 100
+WAIT
+
+
+SPEED 6
+'오른쪽기울기2:
+	MOVE G6A, 90,  72, 148,  93, 110,  70
+	MOVE G6D,108,  75, 145,  93,  95,  70
+	WAIT
+SPEED 8
+''GOSUB 왼발들기10_2'5_3
+	MOVE G6A, 90,  95, 105,  115, 110, 70
+	MOVE G6D,112,  75, 145,  93,  95, 70
+	MOVE G6B, 90,  30,  90, 100, 100, 100
+	MOVE G6C,110,  30,  90, 100, 100, 100
+	WAIT
+
+SPEED 10
+HIGHSPEED SETON
+FOR i=0 TO 3
+
+
+'왼발들기10:
+	MOVE G6A,100,  80, 119, 118, 106, 100
+	MOVE G6D,105,  75, 145,  93,  97, 100
+	MOVE G6B, 80,  30,  90, 100, 100, 100
+	MOVE G6C,120,  30,  90, 100, 100, 100
+	WAIT
+
+'왼발중심이동1:
+	MOVE G6A,105,  74, 140, 106,  97,  100
+	MOVE G6D, 95, 105, 124,  93, 106,  100
+	MOVE G6B,100,  30,  90, 100, 100, 100
+	MOVE G6C,100,  30,  90, 100, 100, 100
+	WAIT
+
+'오른발들기10:
+	MOVE G6A,105,  75, 145,  93,  97, 100
+	MOVE G6D,100,  80, 119, 118, 106, 100
+	MOVE G6B,120,  30,  90, 100, 100, 100
+	MOVE G6C, 80,  30,  90, 100, 100, 100
+	WAIT
+
+'오른발중심이동1:
+	MOVE G6A, 95, 105, 124,  93, 106,  100
+	MOVE G6D,105,  74, 140, 106,  97,  100
+	MOVE G6B,100,  30,  90, 100, 100, 100
+	MOVE G6C,100,  30,  90, 100, 100, 100
+	WAIT
+
+NEXT i
+HIGHSPEED SETOFF
+SPEED 5
+
+'오른쪽기울기2:
+	MOVE G6A, 90,  72, 148,  93, 110,  70
+	MOVE G6D,108,  75, 145,  93,  93,  70
+	WAIT
+SPEED 5
+MOVE G6A,100,  80, 145,  88, 100, 100
+MOVE G6D,100,  80, 145,  88, 100, 100
+WAIT
+
+SPEED 3
+GOSUB 기본자세
+RETURN
+'*********************************************
+전진3:'미끄러운 바닥에서 보폭이 넓게 
+SPEED 10
+
+MOVE G6B,100,  30,  90, 100, 100, 100
+MOVE G6C,100,  30,  90, 100, 100, 100
+WAIT
+
+
+SPEED 7
+'오른쪽기울기2:
+	MOVE G6A, 90,  72, 148,  93, 110,  70
+	MOVE G6D,108,  75, 145,  93,  95,  70
+	WAIT
+SPEED 10
+''GOSUB 왼발들기10_2'5_3
+	MOVE G6A, 90,  95, 105,  115, 110, 70
+	MOVE G6D,112,  75, 145,  95,  95, 70
+	MOVE G6B, 90,  30,  90, 100, 100, 100
+	MOVE G6C,110,  30,  90, 100, 100, 100
+	WAIT
+
+SPEED 12
+HIGHSPEED SETON
+FOR i=0 TO 18
+
+
+'왼발들기10:
+	MOVE G6A,100,  83, 119, 118, 106, 100
+	MOVE G6D,105,  80, 145,  93,  97, 100
+	MOVE G6B, 80,  30,  90, 100, 100, 100
+	MOVE G6C,120,  30,  90, 100, 100, 100
+	WAIT
+	
+	GYRO_AD = AD(6)
+	IF GYRO_AD > min AND GYRO_AD < max THEN	GOTO 55
+	HIGHSPEED SETOFF
+	SPEED 10
+	GOTO GYRO_RUN_일어나기_GOTO
+	55:
+	
+'왼발중심이동1:
+	MOVE G6A,105,  62, 145, 115,  97,  100
+	MOVE G6D, 95, 110, 124,  88, 106,  100
+	MOVE G6B,100,  30,  90, 100, 100, 100
+	MOVE G6C,100,  30,  90, 100, 100, 100
+	WAIT
+
+	GYRO_AD = AD(6)
+	IF GYRO_AD > min AND GYRO_AD < max THEN	GOTO 66
+	HIGHSPEED SETOFF
+	SPEED 10
+	GOTO GYRO_RUN_일어나기_GOTO
+	66:
+	
+	
+'오른발들기10:
+	MOVE G6A,105,  80, 145,  93,  97, 100
+	MOVE G6D,100,  83, 119, 118, 106, 100
+	MOVE G6B,120,  30,  90, 100, 100, 100
+	MOVE G6C, 80,  30,  90, 100, 100, 100
+	WAIT
+	
+	GYRO_AD = AD(6)
+	IF GYRO_AD > min AND GYRO_AD < max THEN	GOTO 77
+	HIGHSPEED SETOFF
+	SPEED 10
+	GOTO GYRO_RUN_일어나기_GOTO
+	77:
+	
+'오른발중심이동1:
+	MOVE G6A, 95, 110, 124,  88, 106,  100
+	MOVE G6D,105,  62, 145, 115,  97,  100
+	MOVE G6B,100,  30,  90, 100, 100, 100
+	MOVE G6C,100,  30,  90, 100, 100, 100
+	WAIT
+
+	GYRO_AD = AD(6)
+	IF GYRO_AD > min AND GYRO_AD < max THEN	GOTO 88
+	HIGHSPEED SETOFF
+	SPEED 10
+	GOTO GYRO_RUN_일어나기_GOTO
+	88:
+
+NEXT i
+HIGHSPEED SETOFF
+SPEED 8
+
+'오른쪽기울기2:
+	MOVE G6A, 90,  72, 148,  93, 110,  70
+	MOVE G6D,108,  75, 145,  93,  93,  70
+	WAIT
+SPEED 6
+MOVE G6A,100,  80, 145,  88, 100, 100
+MOVE G6D,100,  80, 145,  88, 100, 100
+WAIT
+
+SPEED 10
+GOSUB 기본자세
+RETURN
+'*********************************************
+
+body_move:
+	SPEED 6
+	GOSUB body_move1
+	GOSUB body_move2
+	GOSUB body_move3
+	
+	MOVE G6A, 93,  76, 145,  94, 109, 100
+	MOVE G6D, 93,  76, 145,  94, 109, 100
+	MOVE G6B,100,  105, 100, , , ,
+	MOVE G6C,100,  105, 100, , , ,
+	WAIT
+	
+	
+	MOVE G6A, 104, 112,  92, 116, 107
+	MOVE G6D,  79,  81, 145,  95, 108
+	MOVE G6B, 100, 105, 100
+	MOVE G6C, 100, 105, 100
+	WAIT
+	
+	MOVE G6A, 93,  76, 145,  94, 109, 100
+	MOVE G6D, 93,  76, 145,  94, 109, 100
+	MOVE G6B,100,  105, 100, , , ,
+	MOVE G6C,100,  105, 100, , , ,
+	WAIT
+	
+	MOVE G6D, 104, 112,  92, 116, 107
+	MOVE G6A,  79,  81, 145,  95, 108
+	MOVE G6B, 100, 105, 100
+	MOVE G6C, 100, 105, 100
+	WAIT
+	
+	MOVE G6A, 93,  76, 145,  94, 109, 100
+	MOVE G6D, 93,  76, 145,  94, 109, 100
+	MOVE G6B,100,  105, 100, , , ,
+	MOVE G6C,100,  105, 100, , , ,
+	WAIT
+	
+	GOSUB body_move3
+	GOSUB body_move2
+	GOSUB body_move1
+	
+RETURN
+'================================================
+body_move3:
+	MOVE G6A, 93,  76, 145,  94, 109, 100
+	MOVE G6D, 93,  76, 145,  94, 109, 100
+	MOVE G6B,100,  35,  90, , , ,
+	MOVE G6C,100,  35,  90, , , ,
+	WAIT
+	RETURN
+'================================================
+
+body_move2:
+	MOVE G6D,110,  92, 124,  97,  93,  70
+	MOVE G6A, 76,  72, 160,  82, 128,  70
+	MOVE G6B,100,  35,  90, , , ,
+	MOVE G6C,100,  35,  90, , , ,
+	WAIT
+	RETURN
+	
+'================================================
+body_move1:
+	MOVE G6A, 85,  71, 152,  91, 112, 60
+	MOVE G6D,112,  76, 145,  93,  92, 60
+	MOVE G6B,100,  40,  80, , , ,
+	MOVE G6C,100,  40,  80, , , ,	
+	WAIT
+	RETURN
+	
+'================================================
+
+standard_pose:
+
+	MOVE G6A,100,  76, 145,  93, 100, 100 
+	MOVE G6D,100,  76, 145,  93, 100, 100  
+	MOVE G6B,100,  30,  80, 100, 100, 100
+	MOVE G6C,100,  30,  80, 100, 100, 100
+	WAIT
+	
+	RETURN
+
+
+
+연속전진:
+
+	보행속도 = 14'12
+	좌우속도 = 10'6
+	SPEED 5
+	GOSUB 오른쪽기울기2
+	
+	SPEED 보행속도 
+	GOSUB 첫왼발들기10
+	
+	'*******************************
+	FOR i=0 TO 2
+		
+ 	
+		GOSUB 왼발뻣어착지전
+		
+		GOSUB 왼발뻣어착지
+		SPEED 좌우속도
+		GOSUB 왼발중립
+		GOSUB 왼발중심이동
+
+		SPEED 보행속도
+		GOSUB 오른발들기10
+		
+	
+		
+		GOSUB 오른발뻣어착지전
+		GOSUB 오른발뻣어착지
+		
+		SPEED 좌우속도
+		GOSUB 오른발중립
+		GOSUB 오른발중심이동
+		
+		SPEED 보행속도
+		GOSUB 왼발들기10
+
+		
+	NEXT i
+	'*******************************
+	AA:
+	SPEED 5
+	
+	GOSUB 오른쪽기울기2
+	SPEED 4
+	GOSUB 기본자세
+	
+	RETURN
+
+'************************************************
+연속후진:
+	보행속도 = 8
+	좌우속도 = 8
+	SPEED 5
+	GOSUB 오른쪽기울기2
+	SPEED 보행속도
+	GOSUB 왼발들기10
+	
+	FOR i=0 TO 10
+		SPEED 좌우속도
+		GOSUB 오른발중심이동_2
+			
+		GOSUB 오른발중립_2
+		GOSUB 오른발뻣어착지
+
+			SPEED 보행속도
+		GOSUB 오른발들기10
+			SPEED 좌우속도
+		GOSUB 왼발중심이동_2
+			
+		GOSUB 왼발중립_2
+		GOSUB 왼발뻣어착지
+
+			SPEED 보행속도
+		GOSUB 왼발들기10
+
+	NEXT i
+	
+	SPEED 5
+	GOSUB 오른쪽기울기2
+	SPEED 4
+	GOSUB 기본자세
+	RETURN
+
+
+'**********************************************
+
+반보전진:
+
+	보행속도 = 14
+	좌우속도 = 10
+	SPEED 5
+	
+	IF 보행순서 = 0 THEN
+		보행순서 = 1
+		GOSUB 오른쪽기울기2
+		
+		SPEED 보행속도 
+		GOSUB 첫왼발들기10
+		GOSUB 왼발뻣어착지전
+		
+		SPEED 좌우속도
+		GOSUB 왼발뻣어착지
+		
+		GOSUB 왼발중립
+		GOSUB 왼발중심이동
+		
+		SPEED 보행속도
+		GOSUB 오른발들기10
+		
+		SPEED 5
+		GOSUB 왼쪽기울기2
+		SPEED 4
+		GOSUB 기본자세
+		
+	ELSE
+		보행순서 = 0
+		GOSUB 왼쪽기울기2
+		
+		SPEED 보행속도 
+		GOSUB 첫오른발들기10
+		GOSUB 오른발뻣어착지전
+		
+		SPEED 좌우속도
+		GOSUB 오른발뻣어착지
+		
+		GOSUB 오른발중립
+		GOSUB 오른발중심이동
+		
+		SPEED 보행속도
+		GOSUB 왼발들기10
+		
+		SPEED 5
+		GOSUB 오른쪽기울기2
+		SPEED 4
+		GOSUB 기본자세
+	
+	ENDIF
+	RETURN
+	
+'**********************************************
+
+한보전진:
+
+	보행속도 = 14
+	좌우속도 = 10
+	SPEED 5
+	GOSUB 오른쪽기울기2
+	
+	SPEED 보행속도 
+	GOSUB 첫왼발들기10
+	
+	'*******************************
+	FOR i=0 TO 0
+	
+		GOSUB 왼발뻣어착지전
+			SPEED 좌우속도
+		GOSUB 왼발뻣어착지
+		
+		GOSUB 왼발중립
+		GOSUB 왼발중심이동
+			SPEED 보행속도
+		GOSUB 오른발들기10
+		
+		
+		GOSUB 오른발뻣어착지전
+			SPEED 좌우속도
+		GOSUB 오른발뻣어착지
+		
+		GOSUB 오른발중립
+		GOSUB 오른발중심이동
+			SPEED 보행속도
+		GOSUB 왼발들기10
+	
+	NEXT i
+	'*******************************
+	SPEED 5
+	
+	GOSUB 오른쪽기울기2
+	SPEED 4
+	GOSUB 기본자세
+	
+	RETURN
+'**********************************************
+
+한보반전진:
+
+	보행속도 = 14
+	좌우속도 = 10
+	SPEED 5
+	GOSUB 오른쪽기울기2
+	
+	SPEED 보행속도 
+	GOSUB 첫왼발들기10
+	
+	'*******************************
+	FOR i=0 TO 1
+	
+		GOSUB 왼발뻣어착지전
+			SPEED 좌우속도
+		GOSUB 왼발뻣어착지
+		
+		GOSUB 왼발중립
+		GOSUB 왼발중심이동
+			SPEED 보행속도
+		GOSUB 오른발들기10
+		
+		IF I = 1 THEN
+			SPEED 5
+			GOSUB 왼쪽기울기2
+			SPEED 4
+			GOSUB 기본자세	
+			GOTO MAIN
+		ENDIF
+		
+		GOSUB 오른발뻣어착지전
+			SPEED 좌우속도
+		GOSUB 오른발뻣어착지
+		
+		GOSUB 오른발중립
+		GOSUB 오른발중심이동
+			SPEED 보행속도
+		GOSUB 왼발들기10
+	
+	NEXT i
+	'*******************************
+	SPEED 5
+	
+	GOSUB 오른쪽기울기2
+	SPEED 4
+	GOSUB 기본자세
+	
+	RETURN
+'**********************************************
+
+이보전진:
+
+	보행속도 = 14
+	좌우속도 = 10
+	SPEED 5
+	GOSUB 오른쪽기울기2
+	
+	SPEED 보행속도 
+	GOSUB 첫왼발들기10
+	
+	'*******************************
+	FOR i=0 TO 1
+	
+		GOSUB 왼발뻣어착지전
+			SPEED 좌우속도
+		GOSUB 왼발뻣어착지
+		
+		GOSUB 왼발중립
+		GOSUB 왼발중심이동
+			SPEED 보행속도
+		GOSUB 오른발들기10
+		
+		
+		GOSUB 오른발뻣어착지전
+			SPEED 좌우속도
+		GOSUB 오른발뻣어착지
+		
+		GOSUB 오른발중립
+		GOSUB 오른발중심이동
+			SPEED 보행속도
+		GOSUB 왼발들기10
+	
+	NEXT i
+	'*******************************
+	SPEED 5
+	
+	GOSUB 오른쪽기울기2
+	SPEED 4
+	GOSUB 기본자세
+	
+	RETURN
+'**********************************************
+
+반보후진:
+
+	보행속도 = 13
+	좌우속도 = 7
+	SPEED 5
+	IF 보행순서 = 0 THEN
+		GOSUB 오른쪽기울기2
+		SPEED 보행속도
+		GOSUB 왼발들기10_2
+		
+		GOSUB 오른발중심이동_2
+			SPEED 좌우속도
+		GOSUB 오른발중립_2
+		GOSUB 오른발뻣어착지
+			SPEED 보행속도
+		GOSUB 오른발들기10_2
+		
+		SPEED 5
+		GOSUB 왼쪽기울기2
+		SPEED 4
+		GOSUB 기본자세
+		
+	ELSE
+		GOSUB 왼쪽기울기2
+		SPEED 보행속도
+		GOSUB 오른발들기10_2
+		
+		
+		GOSUB 왼발중심이동_2
+			SPEED 좌우속도
+		GOSUB 왼발중립_2
+		GOSUB 왼발뻣어착지
+			SPEED 보행속도
+		GOSUB 왼발들기10
+	
+		SPEED 5
+		GOSUB 오른쪽기울기2
+		SPEED 4
+		GOSUB 기본자세
+	ENDIF
+	
+	RETURN
+
+'************************************************
+한보후진:
+	보행속도 = 13
+	좌우속도 = 7
+	SPEED 5
+	GOSUB 오른쪽기울기2
+	SPEED 보행속도
+	GOSUB 왼발들기10_2
+	
+	GOSUB 오른발중심이동_2
+		SPEED 좌우속도
+	GOSUB 오른발중립_2
+	GOSUB 오른발뻣어착지
+		SPEED 보행속도
+	GOSUB 오른발들기10_2
+	
+	
+	GOSUB 왼발중심이동_2
+		SPEED 좌우속도
+	GOSUB 왼발중립_2
+	GOSUB 왼발뻣어착지
+		SPEED 보행속도
+	GOSUB 왼발들기10_2
+	
+	
+		SPEED 5
+	GOSUB 오른쪽기울기2
+		SPEED 4
+	GOSUB 기본자세
+	
+	RETURN
+'************************************************
+한보반후진:
+	보행속도 = 13
+	좌우속도 = 7
+	SPEED 5
+	GOSUB 오른쪽기울기2
+	SPEED 보행속도
+	GOSUB 왼발들기10
+	
+	FOR i=0 TO 1
+	
+		GOSUB 오른발중심이동_2
+			SPEED 좌우속도
+		GOSUB 오른발중립_2
+		GOSUB 오른발뻣어착지
+			SPEED 보행속도
+		GOSUB 오른발들기10
+		
+		IF I = 1 THEN
+			SPEED 5
+			GOSUB 왼쪽기울기2
+			SPEED 4
+			GOSUB 기본자세
+			GOTO MAIN
+		ENDIF
+		
+		GOSUB 왼발중심이동_2
+			SPEED 좌우속도
+		GOSUB 왼발중립_2
+		GOSUB 왼발뻣어착지
+			SPEED 보행속도
+		GOSUB 왼발들기10
+	
+	NEXT i
+	SPEED 5
+	GOSUB 오른쪽기울기2
+	SPEED 4
+	GOSUB 기본자세
+	RETURN
+'**********************************************
+
+이보후진:
+	보행속도 = 14
+	좌우속도 = 8
+	SPEED 5
+	GOSUB 오른쪽기울기2
+	SPEED 보행속도
+	GOSUB 왼발들기10_2
+	
+	FOR i=0 TO 1
+	
+		SPEED 좌우속도
+		GOSUB 오른발중심이동_2
+			
+		GOSUB 오른발중립_2
+		GOSUB 오른발뻣어착지
+
+			SPEED 보행속도
+		GOSUB 오른발들기10_2
+			SPEED 좌우속도
+		GOSUB 왼발중심이동_2
+			
+		GOSUB 왼발중립_2
+		GOSUB 왼발뻣어착지
+
+			SPEED 보행속도
+		GOSUB 왼발들기10_2
+	
+	NEXT i
+	SPEED 5
+	GOSUB 오른쪽기울기2
+	SPEED 4
+	GOSUB 기본자세
+	RETURN
+'************************************************
+왼쪽옆으로:
+
+	SPEED 5
+	GOSUB 왼쪽기울기2
+	
+	SPEED 9
+	GOSUB 오른발옆뻣어착지
+	
+	GOSUB 옆으로중앙
+	
+	GOSUB 왼발옆뻣어착지
+	
+	SPEED 9
+	GOSUB 왼발들기5
+	GOSUB 오른쪽기울기2
+	SPEED 7
+	GOSUB 기본자세
+	
+	RETURN
+	
+'**********************************************
+오른쪽옆으로:
+
+	SPEED 5
+	GOSUB 오른쪽기울기2
+	SPEED 9
+	GOSUB 왼발옆뻣어착지
+	
+	GOSUB 옆으로중앙
+	GOSUB 오른발옆뻣어착지
+	
+	SPEED 9
+	GOSUB 오른발들기5
+	GOSUB 왼쪽기울기2
+	SPEED 7
+	GOSUB 기본자세
+	
+	RETURN
+
+'*********************************************
+
+오른발옆뻣어착지:
+	MOVE G6A,110,  92, 124,  97,  93,  70
+	MOVE G6D, 76,  72, 160,  82, 128,  70
+	MOVE G6B,100,  35,  90, , , 
+	MOVE G6C,100,  35,  90, , , 
+	WAIT
+	RETURN
+
+옆으로중앙:
+	MOVE G6A, 93,  76, 145,  94, 109, 100
+	MOVE G6D, 93,  76, 145,  94, 109, 100
+	MOVE G6B,100,  35,  90, , , 
+	MOVE G6C,100,  35,  90, , , 
+	WAIT
+	RETURN
+'*********************************************
+
+왼발옆뻣어착지:
+	MOVE G6A, 76,  72, 160,  82, 128,  70
+	MOVE G6D,110,  92, 124,  97,  93,  70
+	MOVE G6B,100,  35,  90, , , 
+	MOVE G6C,100,  35,  90, , , 
+	WAIT
+	RETURN
+
+'**********************************************
+오른발앞들기10:
+	MOVE G6A,113,  75, 145,  97,  93,  60
+	MOVE G6D, 90,  50, 157, 115, 112,  60
+	MOVE G6B,105,  40,  70, , , 
+	MOVE G6C, 90,  40,  70, , , 
+	WAIT
+	RETURN	
+
+오른발턴착지:
+	MOVE G6A,108,  78, 145,  98,  93,  60
+	MOVE G6D, 95,  43, 169, 110, 110,  60
+	MOVE G6B,105,  40,  70, , , 
+	MOVE G6C, 80,  40,  70, , , 
+	WAIT
+	RETURN
+
+
+왼발앞들기10:
+	MOVE G6A, 90,  50, 157, 115, 112,  60
+	MOVE G6D,113,  75, 145,  97,  93,  60
+	MOVE G6B, 90,  40,  70, , , 
+	MOVE G6C,105,  40,  70, , , 
+	WAIT 
+	RETURN	
+
+왼발턴착지:
+	MOVE G6A, 95,  43, 169, 110, 110,  60
+	MOVE G6D,108,  78, 145,  98,  93,  60
+	MOVE G6B, 80,  40,  70, , , 
+	MOVE G6C,105,  40,  70, , , 
+	WAIT
+	RETURN	
+
+'************************************************
+왼쪽턴:
+	SPEED 6
+	GOSUB 왼쪽기울기2
+	SPEED 7
+	GOSUB 오른발앞들기10
+	GOSUB 오른발턴착지
+	GOSUB 기본자세
+	RETURN
+
+오른쪽턴:
+	SPEED 6
+	GOSUB 오른쪽기울기2
+	SPEED 7
+	GOSUB 왼발앞들기10
+	GOSUB 왼발턴착지
+	GOSUB 기본자세
+	RETURN
+'************************************************
+
+'************************************************
+인사:
+	SPEED 8
+	MOVE G6A,100,  58, 135, 160, 100, 100
+	MOVE G6D,100,  58, 135, 160, 100, 100
+	WAIT
+	DELAY 1000
+	SPEED 6
+	GOSUB 기본자세
+	RETURN
+'************************************************
+앞으로눕기:
+
+	SPEED 10
+	MOVE G6A,100, 155,  25, 140, 100, 100
+	MOVE G6D,100, 155,  25, 140, 100, 100
+	MOVE G6B,130,  50,  85, 100, 100, 100
+	MOVE G6C,130,  50,  85, 100, 100, 100
+	WAIT
+	
+	MOVE G6A, 60, 165,  25, 160, 145, 100
+	MOVE G6D, 60, 165,  25, 160, 145, 100
+	MOVE G6B,150,  60,  90, 100, 100, 100
+	MOVE G6C,150,  60,  90, 100, 100, 100
+	WAIT
+	
+	MOVE G6A, 60, 165,  30, 165, 155, 100
+	MOVE G6D, 60, 165,  30, 165, 155, 100
+	MOVE G6B,170,  10, 100, 100, 100, 100
+	MOVE G6C,170,  10, 100, 100, 100, 100
+	WAIT
+	SPEED 3
+
+	
+	MOVE G6A, 75, 165,  55, 165, 155, 100
+	MOVE G6D, 75, 165,  55, 165, 155, 100
+	MOVE G6B,185,  10, 100, 100, 100, 100
+	MOVE G6C,185,  10, 100, 100, 100, 100
+	WAIT
+	SPEED 10
+
+	
+	MOVE G6A, 80, 155,  85, 150, 150, 100
+	MOVE G6D, 80, 155,  85, 150, 150, 100
+	MOVE G6B,185,  40, 60,  100, 100, 100
+	MOVE G6C,185,  40, 60,  100, 100, 100
+	WAIT
+		
+	MOVE G6A,100, 130, 120,  80, 110, 100
+	MOVE G6D,100, 130, 120,  80, 110, 100
+	MOVE G6B,125, 160,  10, 100, 100, 100
+	MOVE G6C,125, 160,  10, 100, 100, 100
+	WAIT	
+	
+	GOSUB 기본자세
+	
+	RETURN
+
+
+뒤로일어나기:
+	SPEED 10
+	'GOSUB 기본자세
+	
+	MOVE G6A,100, 130, 120,  80, 110, 100
+	MOVE G6D,100, 130, 120,  80, 110, 100
+	MOVE G6B,150, 160,  10, 100, 100, 100
+	MOVE G6C,150, 160,  10, 100, 100, 100
+	WAIT
+	
+	MOVE G6A, 80, 155,  85, 150, 150, 100
+	MOVE G6D, 80, 155,  85, 150, 150, 100
+	MOVE G6B,185,  40, 60,  100, 100, 100
+	MOVE G6C,185,  40, 60,  100, 100, 100
+	WAIT
+	
+	MOVE G6A, 75, 165,  55, 165, 155, 100
+	MOVE G6D, 75, 165,  55, 165, 155, 100
+	MOVE G6B,185,  10, 100, 100, 100, 100
+	MOVE G6C,185,  10, 100, 100, 100, 100
+	WAIT
+	
+	MOVE G6A, 60, 165,  30, 165, 155, 100
+	MOVE G6D, 60, 165,  30, 165, 155, 100
+	MOVE G6B,170,  10, 100, 100, 100, 100
+	MOVE G6C,170,  10, 100, 100, 100, 100
+	WAIT
+	
+	MOVE G6A, 60, 165,  25, 160, 145, 100
+	MOVE G6D, 60, 165,  25, 160, 145, 100
+	MOVE G6B,150,  60,  90, 100, 100, 100
+	MOVE G6C,150,  60,  90, 100, 100, 100
+	WAIT
+	
+	MOVE G6A,100, 155,  25, 140, 100, 100
+	MOVE G6D,100, 155,  25, 140, 100, 100
+	MOVE G6B,130,  50,  85, 100, 100, 100
+	MOVE G6C,130,  50,  85, 100, 100, 100
+	WAIT
+	'DELAY 100
+	
+	GOSUB 기본자세
+	
+	RETURN
+
+
+'**********************************************
+앞으로일어나기:
+	SPEED 10
+	GOSUB 기본자세
+	
+	MOVE G6A,100, 10,  100, 115, 100, 100
+	MOVE G6D,100, 10,  100, 115, 100, 100
+	MOVE G6B,100,  130,  10, 100, 100, 100
+	MOVE G6C,100,  130,  10, 100, 100, 100
+	WAIT
+
+	MOVE G6A,100, 10,  83, 140, 100, 100
+	MOVE G6D,100, 10,  83, 140, 100, 100
+	MOVE G6B,20,  130,  10, 100, 100, 100
+	MOVE G6C,20,  130,  10, 100, 100, 100
+	WAIT
+
+	MOVE G6A,100, 126,  60, 50, 100, 100
+	MOVE G6D,100, 126,  60, 50, 100, 100
+	MOVE G6B,20,  30,  90, 100, 100, 100
+	MOVE G6C,20,  30,  90, 100, 100, 100
+	WAIT
+	
+	MOVE G6A,100, 165,  70, 15, 100, 100
+	MOVE G6D,100, 165,  70, 15, 100, 100
+	MOVE G6B,30,  20,  95, 100, 100, 100
+	MOVE G6C,30,  20,  95, 100, 100, 100
+	WAIT
+	
+	MOVE G6A,100, 165,  40, 100, 100, 100
+	MOVE G6D,100, 165,  40, 100, 100, 100
+	MOVE G6B,110,  70,  50, 100, 100, 100
+	MOVE G6C,110,  70,  50, 100, 100, 100
+	WAIT
+	
+	GOSUB 기본자세
+	
+	
+	RETURN
+
+'******************************************
+세레모니1:
+	SPEED 10
+	MOVE G6A,100,  80, 167,  50, 100, 100
+	MOVE G6D,100,  80, 167,  50, 100, 100
+	MOVE G6B,100, 145, 125, , , 
+	MOVE G6C,100, 145, 122, , , 
+	WAIT
+	
+	FOR I = 0 TO 1
+	MOVE G6B,100, 100, 140, , , , 
+	MOVE G6C,100, 100, 140, , , , 
+	WAIT
+	MOVE G6B,100, 165, 160, , , , 
+	MOVE G6C,100, 165, 160, , , , 
+	WAIT
+	
+	NEXT I
+	SPEED 8
+	DELAY 200
+	GOSUB 기본자세
+	
+	RETURN
+
+
+'******************************************
+발차기왼발들기10:
+	MOVE G6A, 90, 107, 105, 105, 113, 70
+	MOVE G6D,114,  80, 148,  90,  88, 70
+	MOVE G6B, 90,  40,  80, , , 
+	MOVE G6C,100,  40,  80, , , 
+	WAIT
+RETURN
+발차기오른발들기10:
+	MOVE G6A,114,  78, 148,  90,  88, 70
+	MOVE G6D, 90, 107, 105, 105, 113, 70
+	MOVE G6B,100,  40,  80, , , 
+	MOVE G6C, 90,  40,  80, , , 
+	WAIT
+RETURN
+'******************************************
+정면왼발차기:
+
+	SPEED 5
+	GOSUB 오른쪽기울기2
+	SPEED 12
+	GOSUB 첫왼발들기10
+	
+	HIGHSPEED SETON
+	
+	MOVE G6A, 90,  28, 170, 161, 113,  70
+	MOVE G6D,113,  74, 148,  88,  88,  70
+	WAIT
+	
+	HIGHSPEED SETOFF
+	DELAY 500
+	GOSUB 발차기왼발들기10
+	
+	SPEED 5
+	GOSUB 오른쪽기울기2
+	SPEED 4
+	GOSUB 기본자세
+	
+	RETURN
+'******************************************
+정면오른발차기:
+
+	SPEED 5
+	GOSUB 왼쪽기울기2
+	SPEED 12
+	GOSUB 첫오른발들기10
+	
+	HIGHSPEED SETON
+	MOVE G6A,113,  74, 148,  88,  88,  70
+	MOVE G6D, 90,  28, 170, 161, 113,  70
+	WAIT
+	
+	HIGHSPEED SETOFF
+	DELAY 500
+	GOSUB 발차기오른발들기10
+	
+	SPEED 5
+	GOSUB 왼쪽기울기2
+	SPEED 4
+	GOSUB 기본자세
+	
+	RETURN
+'******************************************
+'**********************************************
+'오른쪽덤블링:
+SPEED 8
+MOVE G6A,100, 135,  60, 123, 100, 100
+MOVE G6D,100, 135,  60, 123, 100, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+DELAY 300
+
+SPEED 3
+MOVE G6A, 83, 110,  91, 116, 100, 100
+MOVE G6D,114, 135,  60, 123, 105, 100
+WAIT
+
+MOVE G6A,89,  135,  60, 123, 100, 100
+MOVE G6D,114, 135,  60, 123, 105, 100
+WAIT
+
+MOVE G6A, 89, 135,  60, 123, 130, 100
+MOVE G6D,120, 135,  60, 123, 110, 100
+WAIT
+
+SPEED 4
+MOVE G6A,89,  135,  60, 123, 158, 100
+MOVE G6D,120, 135,  60, 123, 120, 100
+MOVE G6B,100, 165, 185, 100, 100, 100
+MOVE G6C,100, 165, 185, 100, 100, 100
+WAIT
+
+SPEED 8
+MOVE G6A,120, 135,  60, 123, 183, 100
+MOVE G6D,120, 135,  60, 123, 185, 100
+WAIT
+
+DELAY 200
+
+SPEED 5
+MOVE G6B,100, 120, 145, 100, 100, 100
+MOVE G6C,100, 120, 145, 100, 100, 100
+WAIT
+
+SPEED 6
+MOVE G6A,105, 133,  60, 123, 183, 100
+MOVE G6D, 86, 112,  73, 127, 101, 100
+
+WAIT
+
+SPEED 3
+MOVE G6A,112, 133,  62, 123, 133, 100
+MOVE G6D, 86, 112,  73, 127, 101, 100
+MOVE G6B,100, 80, 80, 100, 100, 100
+MOVE G6C,100, 80, 80, 100, 100, 100
+WAIT
+
+SPEED 3
+MOVE G6A,107, 135,  62, 123, 113, 100
+MOVE G6D, 88, 115,  89, 115,  90, 100
+WAIT
+
+SPEED 4
+MOVE G6A,100, 135,  60, 123, 100, 100
+MOVE G6D,100, 135,  60, 123, 100, 100
+WAIT
+
+SPEED 10
+GOSUB 기본자세
+
+RETURN
+
+'**********************************************
+'왼쪽덤블링:
+SPEED 8
+MOVE G6A,100, 135,  60, 123, 100, 100
+MOVE G6D,100, 135,  60, 123, 100, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+
+DELAY 300
+SPEED 3
+MOVE G6A,114, 135,  60, 123, 105, 100
+MOVE G6D, 88, 110,  91, 116, 100, 100
+WAIT
+
+MOVE G6A,114, 135,  60, 123, 105, 100
+MOVE G6D,89,  135,  60, 123, 100, 100
+WAIT
+
+MOVE G6A,120, 135,  60, 123, 110, 100
+MOVE G6D, 89, 135,  60, 123, 130, 100
+WAIT
+
+
+SPEED 4
+MOVE G6A,120, 135,  60, 123, 120, 100
+MOVE G6D,89,  135,  60, 123, 158, 100
+MOVE G6B,100, 165, 185, 100, 100, 100
+MOVE G6C,100, 165, 185, 100, 100, 100
+WAIT
+
+SPEED 8
+MOVE G6A,120, 135,  60, 123, 185, 100
+MOVE G6D,120, 135,  60, 123, 183, 100
+
+WAIT
+
+DELAY 200
+
+SPEED 5
+MOVE G6B,100, 120, 145, 100, 100, 100
+MOVE G6C,100, 120, 145, 100, 100, 100
+WAIT
+
+SPEED 6
+
+MOVE G6A, 86, 112,  73, 127, 101, 100
+MOVE G6D,105, 133,  60, 123, 183, 100
+WAIT
+
+SPEED 3
+MOVE G6A, 86, 112,  73, 127, 101, 100
+MOVE G6D,112, 133,  62, 123, 133, 100
+MOVE G6B,100, 80, 80, 100, 100, 100
+MOVE G6C,100, 80, 80, 100, 100, 100
+WAIT
+
+SPEED 3
+MOVE G6A, 88, 115,  86, 115,  90, 100
+MOVE G6D,107, 135,  62, 123, 113, 100
+WAIT
+
+SPEED 4
+MOVE G6A,100, 135,  60, 123, 100, 100
+MOVE G6D,100, 135,  60, 123, 100, 100
+WAIT
+
+SPEED 10
+GOSUB 기본자세
+
+RETURN
+
+'**********************************************
+'**********************************************
+오른쪽덤블링:
+
+SPEED 8
+MOVE G6A,100, 135,  60, 123, 100, 100
+MOVE G6D,100, 135,  60, 123, 100, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+DELAY 100
+
+SPEED 3
+MOVE G6A, 83, 110,  91, 116, 100, 100
+MOVE G6D,114, 135,  60, 123, 105, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+DELAY 100
+
+MOVE G6A,89,  135,  60, 123, 100, 100
+MOVE G6D,114, 135,  60, 123, 105, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+
+MOVE G6A, 89, 135,  60, 123, 130, 100
+MOVE G6D,120, 135,  60, 123, 110, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+
+SPEED 4
+MOVE G6A,89,  135,  60, 123, 158, 100
+MOVE G6D,120, 135,  60, 123, 120, 100
+MOVE G6B,100, 165, 185, 100, 100, 100
+MOVE G6C,100, 165, 185, 100, 100, 100
+WAIT
+
+SPEED 8
+MOVE G6A,120, 131,  60, 123, 183, 100
+MOVE G6D,120, 131,  60, 123, 185, 100
+MOVE G6B,100, 165, 185, 100, 100, 100
+MOVE G6C,100, 165, 185, 100, 100, 100
+WAIT
+
+DELAY 200
+
+SPEED 5
+MOVE G6A,120, 131,  60, 123, 183, 100
+MOVE G6D,120, 131,  60, 123, 185, 100
+MOVE G6B,100, 120, 145, 100, 100, 100
+MOVE G6C,100, 120, 145, 100, 100, 100
+WAIT
+
+SPEED 6
+MOVE G6A,105, 131,  60, 123, 183, 100
+MOVE G6D, 86, 112,  73, 127, 101, 100
+MOVE G6B,100, 120, 145, 100, 100, 100
+MOVE G6C,100, 120, 145, 100, 100, 100
+WAIT
+
+SPEED 3
+MOVE G6A,112, 131,  62, 123, 133, 100
+MOVE G6D, 86, 118,  73, 127, 101, 100
+MOVE G6B,100, 80, 80, 100, 100, 100
+MOVE G6C,100, 80, 80, 100, 100, 100
+WAIT
+
+SPEED 3
+MOVE G6A,107, 135,  62, 123, 113, 100
+MOVE G6D, 88, 115,  89, 115,  90, 100
+MOVE G6B,100, 80, 80, 100, 100, 100
+MOVE G6C,100, 80, 80, 100, 100, 100
+WAIT
+
+SPEED 4
+MOVE G6A,100, 135,  60, 123, 100, 100
+MOVE G6D,100, 135,  60, 123, 100, 100
+MOVE G6B,100, 80, 80, 100, 100, 100
+MOVE G6C,100, 80, 80, 100, 100, 100
+WAIT
+
+SPEED 10
+GOSUB 기본자세
+
+RETURN
+
+'**********************************************
+왼쪽덤블링:
+
+SPEED 8
+MOVE G6A,100, 135,  60, 123, 100, 100
+MOVE G6D,100, 135,  60, 123, 100, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+
+
+DELAY 100
+SPEED 3
+MOVE G6A,114, 135,  60, 123, 105, 100
+MOVE G6D, 88, 110,  91, 116, 100, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+DELAY 100
+MOVE G6A,114, 135,  60, 123, 105, 100
+MOVE G6D,89,  135,  60, 123, 100, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+
+MOVE G6A,120, 135,  60, 123, 110, 100
+MOVE G6D, 89, 135,  60, 123, 130, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+
+
+SPEED 4
+MOVE G6A,120, 135,  60, 123, 120, 100
+MOVE G6D,89,  135,  60, 123, 158, 100
+MOVE G6B,100, 165, 185, 100, 100, 100
+MOVE G6C,100, 165, 185, 100, 100, 100
+WAIT
+
+SPEED 8
+MOVE G6A,120, 131,  60, 123, 185, 100
+MOVE G6D,120, 131,  60, 123, 183, 100
+MOVE G6B,100, 165, 185, 100, 100, 100
+MOVE G6C,100, 165, 185, 100, 100, 100
+WAIT
+
+
+DELAY 200
+
+SPEED 5
+MOVE G6A,120, 131,  60, 123, 185, 100
+MOVE G6D,120, 131,  60, 123, 183, 100
+MOVE G6B,100, 120, 145, 100, 100, 100
+MOVE G6C,100, 120, 145, 100, 100, 100
+WAIT
+
+SPEED 6
+
+MOVE G6A, 86, 112,  73, 127, 101, 100
+MOVE G6D,105, 131,  60, 123, 183, 100
+MOVE G6B,100, 120, 145, 100, 100, 100
+MOVE G6C,100, 120, 145, 100, 100, 100
+WAIT
+
+SPEED 3
+MOVE G6A, 86, 118,  73, 127, 101, 100
+MOVE G6D,112, 131,  62, 123, 133, 100
+MOVE G6B,100, 80, 80, 100, 100, 100
+MOVE G6C,100, 80, 80, 100, 100, 100
+WAIT
+
+SPEED 3
+MOVE G6A, 88, 115,  86, 115,  90, 100
+MOVE G6D,107, 135,  62, 123, 113, 100
+MOVE G6B,100, 80, 80, 100, 100, 100
+MOVE G6C,100, 80, 80, 100, 100, 100
+WAIT
+
+SPEED 4
+MOVE G6A,100, 135,  60, 123, 100, 100
+MOVE G6D,100, 135,  60, 123, 100, 100
+MOVE G6B,100, 80, 80, 100, 100, 100
+MOVE G6C,100, 80, 80, 100, 100, 100
+WAIT
+
+SPEED 10
+GOSUB 기본자세
+
+RETURN
+'********************************************
+
+오른발슛:
+
+	SPEED 4
+	GOSUB 슛왼쪽기울기
+	
+	DELAY 100
+	SPEED 6
+	GOSUB 슛오른발들기
+	
+	
+	SPEED 15
+	HIGHSPEED SETON
+	
+	GOSUB 슛오른발차기
+	
+	DELAY 500
+	HIGHSPEED SETOFF
+	
+	SPEED 5
+	GOSUB 슛오른발착지
+	
+	SPEED 4
+	GOSUB 기본자세
+	RETURN
+	
+왼발슛:
+
+	SPEED 4
+	GOSUB 슛오른쪽기울기
+	
+	DELAY 100
+	SPEED 6
+	GOSUB 슛왼발들기
+	
+	
+	SPEED 15
+	HIGHSPEED SETON
+	
+	GOSUB 슛왼발차기
+	
+	DELAY 500
+	HIGHSPEED SETOFF
+	
+	SPEED 5
+	GOSUB 슛왼발착지
+	
+	SPEED 4
+	GOSUB 기본자세
+	RETURN
+'************************************************
+
+슛왼쪽기울기:
+MOVE G6A,112,  60, 180,  79, 104, 100
+MOVE G6D, 70,  60, 180,  79, 102, 100
+MOVE G6B,110,  45,  70, 100, 100, 100
+MOVE G6C, 90,  45,  70, 100, 100, 100
+WAIT
+RETURN
+
+슛오른발들기:
+MOVE G6A,115,  63, 180,  79,  93,  100
+MOVE G6D, 90,  80, 100,  55, 116,  100
+MOVE G6B, 80,  45,  70, 100, 100, 100
+MOVE G6C,120,  45,  70, 100, 100, 100
+WAIT
+RETURN
+
+슛오른발차기:
+MOVE G6A,115,  54, 180,  79,  98,  100
+MOVE G6D, 90,  20, 150, 155, 116,  100
+MOVE G6B,120,  45,  70, 100, 100, 100
+MOVE G6C, 80,  45,  70, 100, 100, 100
+WAIT
+RETURN
+
+슛오른발착지:
+MOVE G6A,115,  78, 145,  93, 102, 100
+MOVE G6D, 70,  78, 145,  93, 102, 100
+MOVE G6B,110,  45,  70, 100, 100, 100
+MOVE G6C, 90,  45,  70, 100, 100, 100
+WAIT
+RETURN
+
+'*********************************
+슛오른쪽기울기:
+MOVE G6A, 70,  60, 180,  79, 102, 100
+MOVE G6D,112,  60, 180,  79, 104, 100
+MOVE G6B, 90,  45,  70, 100, 100, 100
+MOVE G6C,110,  45,  70, 100, 100, 100
+WAIT
+RETURN
+
+슛왼발들기:
+MOVE G6A, 90,  90, 127,  65, 116,  100
+MOVE G6D,115,  63, 180,  79,  93,  100
+MOVE G6B,140,  45,  70, 100, 100, 100
+MOVE G6C, 60,  45,  70, 100, 100, 100
+WAIT
+RETURN
+
+슛왼발차기:
+MOVE G6A, 90,  90, 127, 147, 116,  100
+MOVE G6D,115,  54, 180,  79,  93,  100
+MOVE G6B, 60,  45,  70, 100, 100, 100
+MOVE G6C,140,  45,  70, 100, 100, 100
+WAIT
+RETURN
+
+
+슛왼발착지:
+MOVE G6A, 70,  78, 145,  93, 104, 100
+MOVE G6D,115,  78, 145,  93, 102, 100
+MOVE G6B, 90,  45,  70, 100, 100, 100
+MOVE G6C,110,  45,  70, 100, 100, 100
+WAIT
+RETURN
+
+'**********************************************		
+오른발옆으로차기:
+SPEED 5
+GOSUB 오른쪽기울기2
+SPEED 10
+MOVE G6A, 58,  75, 148,  93, 190,  70
+MOVE G6D, 58,  75, 148,  93, 190,  70
+MOVE G6B,100, 110, 110, 100, 100, 100
+MOVE G6C,100, 110, 110, 100, 100, 100
+WAIT
+DELAY 1000
+
+SPEED 5
+MOVE G6A, 58,  75, 148,  30, 150,  70
+MOVE G6D, 58,  75, 148,  30, 150,  70
+MOVE G6B, 100, 180, 110, 100, 100, 100
+MOVE G6C, 100, 180, 110, 100, 100, 100
+WAIT
+GOSUB 기본자세
+'GOTO 뒤로일어나기
+RETURN
+'**********************************************
+왼발옆으로차기:
+SPEED 5
+GOSUB 왼쪽기울기2
+SPEED 10
+MOVE G6A, 58,  75, 148,  93, 190,  70
+MOVE G6D, 58,  75, 148,  93, 190,  70
+MOVE G6B,100, 110, 110, 100, 100, 100
+MOVE G6C,100, 110, 110, 100, 100, 100
+WAIT
+DELAY 1000
+
+SPEED 5
+MOVE G6A, 58,  75, 148,  30, 150,  70
+MOVE G6D, 58,  75, 148,  30, 150,  70
+MOVE G6B, 100, 180, 110, 100, 100, 100
+MOVE G6C, 100, 180, 110, 100, 100, 100
+WAIT
+GOSUB 기본자세
+'GOTO 뒤로일어나기
+RETURN
+'**********************************************
+골키퍼다리벌려막기:
+SPEED 8
+MOVE G6A, 58,  75, 148,  93, 190,  70
+MOVE G6D, 58,  75, 148,  93, 190,  70
+MOVE G6B,100, 110, 110, 100, 100, 100
+MOVE G6C,100, 110, 110, 100, 100, 100
+WAIT
+DELAY 300
+
+SPEED 5
+MOVE G6A, 58,  75, 148,  30, 150,  70
+MOVE G6D, 58,  75, 148,  30, 150,  70
+MOVE G6B, 100, 180, 140, 100, 100, 100
+MOVE G6C, 100, 180, 140, 100, 100, 100
+WAIT
+SPEED 10
+DELAY 300
+GOSUB 기본자세
+'GOTO 뒤로일어나기
+
+RETURN
+
+'*********************************************	
+앉아보행:
+	SPEED 10
+	MOVE G6B,100,  35,  80, 100, 100, 100
+	MOVE G6C,100,  35,  80, 100, 100, 100
+	WAIT
+	
+	FOR I = 0 TO 3
+	
+	MOVE G6A,115, 150,  24, 140,  94, 100
+	MOVE G6D, 86, 151,  26, 140, 110, 100
+	WAIT
+	
+	MOVE G6A,100, 160,  25, 133, 100, 100
+	MOVE G6D,100, 131,  26, 162, 100, 100
+	WAIT
+	
+	MOVE G6A, 86, 151,  26, 140, 110, 100
+	MOVE G6D,115, 150,  24, 140,  94, 100
+	WAIT
+	
+	MOVE G6A,100, 131,  26, 162, 100, 100
+	MOVE G6D,100, 160,  25, 133, 100, 100
+	WAIT
+	
+	NEXT I
+	
+	SPEED 8
+	MOVE G6A,115, 150,  24, 140,  94, 100
+	MOVE G6D, 86, 151,  26, 140, 110, 100
+	WAIT
+	
+	MOVE G6A,100, 151,  23, 140, 101, 100
+	MOVE G6D,100, 151,  23, 140, 101, 100
+	WAIT
+	
+	RETURN
+앉아후진:
+	SPEED 10
+	MOVE G6B,100,  35,  80, 100, 100, 100
+	MOVE G6C,100,  35,  80, 100, 100, 100
+	WAIT
+	
+	FOR I = 0 TO 3
+	
+	MOVE G6A,115, 150,  24, 140,  94, 100
+	MOVE G6D, 86, 151,  26, 140, 110, 100
+	WAIT
+	
+	MOVE G6A,100, 131,  26, 162, 100, 100
+	MOVE G6D,100, 160,  25, 133, 100, 100
+	WAIT
+	
+	
+	MOVE G6A, 86, 151,  26, 140, 110, 100
+	MOVE G6D,115, 150,  24, 140,  94, 100
+	WAIT
+	
+	MOVE G6A,100, 160,  25, 133, 100, 100
+	MOVE G6D,100, 131,  26, 162, 100, 100
+	WAIT
+	
+	NEXT I
+	
+	SPEED 8
+	MOVE G6A,115, 150,  24, 140,  94, 100
+	MOVE G6D, 86, 151,  26, 140, 110, 100
+	WAIT
+	
+	MOVE G6A,100, 151,  23, 140, 101, 100
+	MOVE G6D,100, 151,  23, 140, 101, 100
+	WAIT
+	RETURN
+		
+앉아왼쪽옆으로:
+	SPEED 8 
+	MOVE G6A,112, 150,  24, 140, 100, 100
+	MOVE G6D, 86, 151,  24, 140, 105, 100
+	MOVE G6B,100,  40,  75, 100, 100, 100
+	MOVE G6C,100,  40,  75, 100, 100, 100
+	WAIT
+	
+	MOVE G6A, 86, 150,  24, 140, 115, 100
+	MOVE G6D, 86, 151,  24, 140, 115, 100
+	WAIT
+	
+	MOVE G6A, 86, 151,  24, 140, 105, 100
+	MOVE G6D,115, 150,  24, 140, 100, 100
+	WAIT
+	
+	SPEED 5
+	GOSUB 앉은자세
+	RETURN
+	
+앉아오른쪽옆으로:
+	SPEED 8
+	MOVE G6A, 86, 151,  23, 140, 105, 100
+	MOVE G6D,112, 150,  23, 140, 100, 100
+	MOVE G6B,100,  40,  75, 100, 100, 100
+	MOVE G6C,100,  40,  75, 100, 100, 100
+	WAIT
+	
+	MOVE G6A, 86, 151,  26, 140, 115, 100
+	MOVE G6D, 86, 151,  26, 140, 115, 100
+	WAIT
+	
+	'SPEED 10
+	MOVE G6A,118, 154,  24, 140, 95, 100
+	MOVE G6D, 80, 154,  24, 140, 110, 100
+	'MOVE G6B,100,  70,  75, 100, 100, 100
+	WAIT
+	
+	SPEED 8
+	MOVE G6A,100, 151,  23, 140, 101, 100
+	MOVE G6D,100, 151,  23, 140, 101, 100
+	MOVE G6B,100,  30,  80, , , 
+	MOVE G6C,100,  30,  80, , , 
+	WAIT
+	
+	RETURN
+'******************************************
+비상:
+SPEED 5
+GOSUB 오른쪽기울기2
+MOVE G6A, 90,  98, 105,  115, 115, 60
+MOVE G6D,116,  74, 145,  98,  93, 60
+MOVE G6B,100,  150,  150, 100, 100, 100
+MOVE G6C,100,  150,  150, 100, 100, 100
+WAIT
+	
+MOVE G6A, 90, 121,  36, 105, 115,  60
+MOVE G6D,116,  60, 146, 138,  93,  60
+WAIT
+
+
+MOVE G6A, 90,  98, 105,  64, 115,  60
+MOVE G6D,116,  35, 170, 167,  93,  60
+MOVE G6B,100, 160, 180, 100, 100, 100
+MOVE G6C,100, 160, 180, 100, 100, 100
+WAIT
+
+SPEED 10
+MOVE G6A, 90, 117,  41, 113, 115,  60
+MOVE G6D,116,  33, 176, 167,  93,  60
+MOVE G6B,100, 160, 180, 100, 100, 100
+MOVE G6C,100, 160, 180, 100, 100, 100
+WAIT
+
+	
+FOR i = 0 TO 1 
+	MOVE G6A, 90, 117,  41, 113, 115,  60
+	MOVE G6D,116,  30, 176, 167,  93,  60
+	MOVE G6B,100, 180, 130, 100, 100, 100
+	MOVE G6C,100, 180, 130, 100, 100, 100
+	WAIT
+	SPEED 15
+	MOVE G6A, 90,  63, 165,  47, 115,  60
+	MOVE G6D,116,  41, 176, 167,  93,  60
+	MOVE G6B,100,  70,  50, 100, 100, 100
+	MOVE G6C,100,  70,  50, 100, 100, 100
+	WAIT
+	SPEED 7
+NEXT i
+
+
+FOR i = 0 TO 2 
+	SPEED 6
+	MOVE G6A, 90,  74, 176,  32, 115,  60
+	MOVE G6D,116,  38, 176, 167,  93,  60
+	MOVE G6B,170, 169, 117, 100, 100, 100
+	MOVE G6C,170, 169, 117, 100, 100, 100
+	WAIT
+		
+	SPEED 15
+	HIGHSPEED SETON
+	MOVE G6A, 90,  36, 154,  32, 115,  60
+	MOVE G6D,116,  35, 176, 167,  93,  60
+	MOVE G6B,170,  40,  70, 100, 100, 100
+	MOVE G6C,170,  40,  70, 100, 100, 100
+	WAIT
+	DELAY 100
+	HIGHSPEED SETOFF
+NEXT i
+'****************
+'DELAY 1500
+SPEED 1
+HIGHSPEED SETON
+FOR i = 1 TO 15 
+	SPEED i
+	MOVE G6B,170,  80,  80, 100, 100, 100
+	MOVE G6C,170,  80,  80, 100, 100, 100
+	WAIT
+	
+	MOVE G6B,170,  120,  120, 100, 100, 100
+	MOVE G6C,170,  120,  120, 100, 100, 100
+	WAIT
+NEXT i
+DELAY 100
+HIGHSPEED SETOFF
+DELAY 500
+'****************
+SPEED 6
+
+MOVE G6A, 90,  98, 105,  64, 115,  60
+MOVE G6D,116,  37, 170, 167,  93,  60
+MOVE G6B,100, 160, 180, 100, 100, 100
+MOVE G6C,100, 160, 180, 100, 100, 100
+WAIT
+
+
+MOVE G6A, 90, 121,  36, 105, 115,  60
+MOVE G6D,116,  60, 146, 138,  93,  60
+MOVE G6B,100,  150,  150, 100, 100, 100
+MOVE G6C,100,  150,  150, 100, 100, 100
+WAIT
+SPEED 4
+
+MOVE G6A, 90,  98, 105,  115, 115, 60
+MOVE G6D,116,  74, 145,  98,  93, 60
+WAIT
+	
+GOSUB 오른쪽기울기2	
+GOSUB 기본자세	
+
+RETURN
+'----------------------------------------------------
+십자표시연기:
+SPEED 5
+MOVE G6A,113,  56, 182,  75,  90, 60
+MOVE G6D, 73,  56, 182,  75, 116, 60
+MOVE G6B,100, 100, 100, 100, 100, 100
+MOVE G6C,100,  40,  90, 100, 100, 100
+WAIT
+
+MOVE G6A,114,  56, 181,  75, 90, 100
+MOVE G6D, 80, 155,  23, 135, 117, 100
+MOVE G6B,100, 110, 100, 100, 100, 100
+MOVE G6C,100, 110, 100, 100, 100, 100
+WAIT
+SPEED 4
+MOVE G6A,106,  56, 181,  75, 133, 100
+MOVE G6D, 80, 155,  23, 135, 155, 100
+MOVE G6B,100, 145, 100, 100, 100, 100
+MOVE G6C,100, 154, 100, 100, 100, 100
+WAIT
+DELAY 200
+SPEED 4
+MOVE G6A,110,  56, 181,  75, 133, 100
+MOVE G6D,100,  59, 170,  85, 155, 100
+MOVE G6B,100, 145, 100, 100, 100, 100
+MOVE G6C,100, 154, 100, 100, 100, 100
+WAIT
+
+DELAY 1000
+SPEED 10
+FOR i = 0 TO 5
+MOVE G6C,100, 174, 100, 100, 100, 100
+WAIT
+MOVE G6C,100, 134, 100, 100, 100, 100
+WAIT
+NEXT i
+DELAY 1000
+SPEED 4
+MOVE G6A,109,  56, 181,  75, 133, 100
+MOVE G6D, 80, 155,  23, 135, 155, 100
+MOVE G6B,100, 145, 100, 100, 100, 100
+MOVE G6C,100, 154, 100, 100, 100, 100
+WAIT
+
+MOVE G6A,114,  56, 181,  75, 90, 60
+MOVE G6D, 80, 155,  23, 135, 117, 60
+MOVE G6B,100, 110, 100, 100, 100, 100
+MOVE G6C,100, 110, 100, 100, 100, 100
+WAIT
+SPEED 6
+MOVE G6A,113,  56, 182,  75,  90, 100
+MOVE G6D, 73,  56, 182,  75, 116, 100
+MOVE G6B,100, 100, 100, 100, 100, 100
+MOVE G6C,100,  40,  90, 100, 100, 100
+WAIT
+
+GOSUB 기본자세'차렷자세
+
+RETURN
+'**********************************************
+데모시작모션:
+SPEED 6
+GOSUB 앉은자세
+
+SPEED 4
+MOVE G6B,100, 100, 100, 100, 100, 100
+MOVE G6C,100, 100, 100, 100, 100, 100
+WAIT
+
+SPEED 6
+MOVE G6B,190, 100, 100, 100, 100, 100
+MOVE G6C,190, 100, 100, 100, 100, 100
+WAIT
+
+SPEED 5
+DELAY 1000
+FOR i=0 TO 1
+
+MOVE G6A,100, 130,  23, 162, 101, 100
+MOVE G6D,100, 130,  23, 162, 101, 100
+WAIT
+
+MOVE G6A,100, 166,  23, 125, 101, 100
+MOVE G6D,100, 166,  23, 125, 101, 100
+WAIT
+
+
+NEXT i
+
+DELAY 1000
+SPEED 4
+
+MOVE G6A, 89, 159,  43, 115, 112, 100
+MOVE G6D,113, 153,  41, 120,  87, 100
+WAIT
+
+MOVE G6A,100, 124,  58, 135, 100, 100
+MOVE G6D,100, 124,  58, 135, 100, 100
+WAIT
+
+MOVE G6A,110,  96,  99, 124,  88, 100
+MOVE G6D, 91,  97,  96, 126, 112, 100
+WAIT
+
+MOVE G6A,100,  76, 145,  93, 100, 100
+MOVE G6D,100,  76, 145,  93, 100, 100
+WAIT
+DELAY 1000
+SPEED 6
+MOVE G6B,100, 100, 100, 100, 100, 100
+MOVE G6C,100, 100, 100, 100, 100, 100
+WAIT
+
+GOSUB 기본자세
+
+RETURN
+'******************************************
+매트릭스피하기:
+SPEED 10
+GOSUB 기본자세'앉은자세
+
+'DELAY 1000
+MOVE G6A, 72, 165,  23,  70, 143, 100
+MOVE G6D, 72, 165,  23,  70, 143, 100
+MOVE G6B,170, 100, 100, 100, 100, 100
+MOVE G6C,170, 100, 100, 100, 100, 100
+
+
+MOVE G6A, 79, 160,  23,  42, 185, 100
+MOVE G6D, 79, 160,  23,  42, 185, 100
+WAIT
+
+DELAY 4000
+
+SPEED 6
+MOVE G6A, 72, 165,  23,  70, 143, 100
+MOVE G6D, 72, 165,  23,  70, 143, 100
+MOVE G6B,170, 50, 70, 100, 100, 100
+MOVE G6C,170, 50, 70, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 151,  23, 140, 101, 100
+MOVE G6D,100, 151,  23, 140, 101, 100
+MOVE G6B,100,  30,  80, , , 
+MOVE G6C,100,  30,  80, , , 
+WAIT
+
+SPEED 8
+GOSUB 기본자세
+
+RETURN
+'******************************************
+좌우로몸풀기:
+MOVE G6A, 87, 120,  73, 130, 112, 100
+MOVE G6D, 87, 120,  73, 130, 112, 100
+MOVE G6B,102, 100, 100, 100, 100, 100
+MOVE G6C,102, 100, 100, 100, 100, 100
+WAIT
+DELAY 1000
+SPEED 5
+
+FOR i = 0 TO 1
+MOVE G6A,117, 166,  22, 130, 133, 100
+MOVE G6D, 63,  77, 138, 102,  89, 100
+WAIT
+DELAY 500
+
+MOVE G6A, 87, 120,  73, 130, 112, 100
+MOVE G6D, 87, 120,  73, 130, 112, 100
+WAIT
+DELAY 500
+
+MOVE G6A, 63,  77, 138, 102,  89, 100
+MOVE G6D,117, 166,  22, 130, 133, 100
+WAIT
+DELAY 500
+
+MOVE G6A, 87, 120,  73, 130, 112, 100
+MOVE G6D, 87, 120,  73, 130, 112, 100
+WAIT
+DELAY 500
+
+NEXT i
+SPEED 5
+
+
+MOVE G6A, 87, 120,  73, 125, 112, 100
+MOVE G6D, 87, 120,  73, 125, 112, 100
+WAIT
+DELAY 500
+
+SPEED 10
+
+MOVE G6A, 100,  62, 165,  90, 100, 100
+MOVE G6D, 100,  62, 165,  90, 100, 100
+MOVE G6B,102,  30,  80, 100, 100, 100
+MOVE G6C,102,  30,  80, 100, 100, 100
+
+
+SPEED 10
+GOSUB 기본자세
+RETURN
+
+'******************************************
+
+앞으로덤블링:
+SPEED 8
+GOSUB 기본자세
+MOVE G6A,100, 155,  20, 140, 100, 100
+MOVE G6D,100, 155,  20, 140, 100, 100
+MOVE G6B,130,  50,  85, 100, 100, 100
+MOVE G6C,130,  50,  85, 100, 100, 100
+WAIT
+
+MOVE G6A, 60, 165,  30, 165, 155, 100
+MOVE G6D, 60, 165,  30, 165, 155, 100
+MOVE G6B,170,  10, 100, 100, 100, 100
+MOVE G6C,170,  10, 100, 100, 100, 100
+WAIT
+
+
+MOVE G6A, 75, 165,  55, 165, 155, 100
+MOVE G6D, 75, 165,  55, 165, 155, 100
+MOVE G6B,185,  10, 100, 100, 100, 100
+MOVE G6C,185,  10, 100, 100, 100, 100
+WAIT
+
+MOVE G6A, 80, 155,  85, 150, 150, 100
+MOVE G6D, 80, 155,  85, 150, 150, 100
+MOVE G6B,185,  40, 60,  100, 100, 100
+MOVE G6C,185,  40, 60,  100, 100, 100
+WAIT
+
+
+MOVE G6A,100, 130, 120,  80, 110, 100
+MOVE G6D,100, 130, 120,  80, 110, 100
+MOVE G6B,150, 160,  10, 100, 100, 100
+MOVE G6C,150, 160,  10, 100, 100, 100
+WAIT
+
+
+MOVE G6A,100, 160, 110, 140, 100, 100
+MOVE G6D,100, 160, 110, 140, 100, 100
+MOVE G6B,140,  70,  20, 100, 100, 100
+MOVE G6C,140,  70,  20, 100, 100, 100
+WAIT
+
+SPEED 15
+MOVE G6A,100,  56, 110,  26, 100, 100
+MOVE G6D,100,  71, 177, 162, 100, 100
+MOVE G6B,170,  40,  50, 100, 100, 100
+MOVE G6C,170,  40,  50, 100, 100, 100
+WAIT
+MOVE G6A,100,  62, 110,  15, 100, 100
+MOVE G6D,100,  71, 128, 113, 100, 100
+MOVE G6B,190,  40,  50, 100, 100, 100
+MOVE G6C,190,  40,  50, 100, 100, 100
+WAIT
+
+SPEED 15
+MOVE G6A,100,  62, 110,  15, 100, 100
+MOVE G6D,100,  62, 110,  15, 100, 100
+WAIT
+SPEED 10
+
+MOVE G6A,100, 110, 100,  15, 100, 100
+MOVE G6D,100, 110, 100,  15, 100, 100
+MOVE G6B,190, 160, 115, 100, 100, 100
+MOVE G6C,190, 160, 115, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 170,  70,  15, 100, 100
+MOVE G6D,100, 170,  70,  15, 100, 100
+MOVE G6B,190, 170, 120, 100, 100, 100
+MOVE G6C,190, 170, 119, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 170,  70,  50, 100, 100
+MOVE G6D,100, 170,  70,  50, 100, 100
+MOVE G6B,190,  80,  60, 100, 100, 100
+MOVE G6C,190,  80,  60, 100, 100, 100
+WAIT
+
+GOSUB 앉은자세
+
+
+GOSUB 기본자세
+
+RETURN
+'-------------------------------------
+뒤로덤블링:
+SPEED 8
+'GOSUB 기본자세
+MOVE G6A,100, 170,  71,  23, 100, 100
+MOVE G6D,100, 170,  71,  23, 100, 100
+MOVE G6B, 80,  50,  70, 100, 100, 100
+MOVE G6C, 80,  50,  70, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 133,  71,  23, 100, 100
+MOVE G6D,100, 133,  71,  23, 100, 100
+MOVE G6B, 10,  96,  15, 100, 100, 100
+MOVE G6C, 10,  96,  14, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 133,  49,  23, 100, 100
+MOVE G6D,100, 133,  49,  23, 100, 100
+MOVE G6B, 45, 116,  15, 100, 100, 100
+MOVE G6C, 45, 116,  14, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 133,  49,  23, 100, 100
+MOVE G6D,100,  70, 180, 160, 100, 100
+MOVE G6B, 45,  50,  70, 100, 100, 100
+MOVE G6C, 45,  50,  70, 100, 100, 100
+WAIT
+SPEED 15
+MOVE G6A,100,  70, 180, 160, 100, 100
+MOVE G6D,100,  70, 180, 160, 100, 100
+MOVE G6B, 10,  50,  70, 100, 100, 100
+MOVE G6C, 10,  50,  70, 100, 100, 100
+WAIT
+SPEED 15
+HIGHSPEED SETON
+MOVE G6A,100, 105, 180, 160, 100, 100
+MOVE G6D,100, 105, 180, 160, 100, 100
+MOVE G6B,185,  60,  50, 100, 100, 100
+MOVE G6C,185,  60,  50, 100, 100, 100
+WAIT
+DELAY 50
+HIGHSPEED SETOFF
+'************
+GOSUB 뒤로일어나기
+
+RETURN
+
+forward_walk:
+
+	SPEED 5
+MOVE24  85,  71, 152,  91, 112,  60, 100,  40,  80,    ,    ,    , 100,  40,  80,    ,    ,    , 112,  76, 145,  93,  92,  60,
+	
+	SPEED 14 
+'left up
+MOVE24  90, 107, 105, 105, 114,  60,  90,  40,  80,    ,    ,    , 100,  40,  80,    ,    ,    , 114,  76, 145,  93,  90,  60,
+'---------------------------------------
+'left down
+MOVE24  90,  56, 143, 122, 114,  60,  80,  40,  80,    ,    ,    , 105,  40,  80,    ,    ,    , 113,  80, 145,  90,  90,  60,
+MOVE24  90,  46, 163, 112, 114,  60,  80,  40,  80,    ,    ,    , 105,  40,  80,    ,    ,    , 112,  80, 145,  90,  90,  60,
+	
+	SPEED 10
+'left center
+MOVE24 100,  66, 141, 113, 100, 100,  90,  40,  80,    ,    ,    , 100,  40,  80,    ,    ,    , 100,  83, 156,  80, 100, 100,
+MOVE24 113,  78, 142, 105,  90,  60, 100,  40,  80,    ,    ,    , 100,  40,  80,    ,    ,    ,  90, 102, 136,  85, 114,  60,
+
+	SPEED 14
+'right up
+MOVE24 113,  76, 145,  93,  90,  60, 100,  40,  80,    ,    ,    ,  90,  40,  80,    ,    ,    ,  90, 107, 105, 105, 114,  60,
+			
+'right down
+MOVE24 113,  80, 145,  90,  90,  60, 105,  40,  80,    ,    ,    ,  80,  40,  80,    ,    ,    ,  90,  56, 143, 122, 114,  60,
+MOVE24 112,  80, 145,  90,  90,  60, 105,  40,  80,    ,    ,    ,  80,  40,  80,    ,    ,    ,  90,  46, 163, 112, 114,  60,
+		
+	SPEED 10
+'right center
+MOVE24 100,  83, 156,  80, 100, 100, 100,  40,  80,    ,    ,    ,  90,  40,  80,    ,    ,    , 100,  66, 141, 113, 100, 100,
+MOVE24  90, 102, 136,  85, 114,  60, 100,  40,  80,    ,    ,    , 100,  40,  80,    ,    ,    , 113,  78, 142, 105,  90,  60,
+		
+	SPEED 14
+'left up
+MOVE24  90, 107, 105, 105, 114,  60,  90,  40,  80,    ,    ,    , 100,  40,  80,    ,    ,    , 113,  76, 145,  93,  90,  60,
+'---------------------------------------
+
+	SPEED 5
+MOVE24  85,  71, 152,  91, 112,  60, 100,  40,  80,    ,    ,    , 100,  40,  80,    ,    ,    , 112,  76, 145,  93,  92,  60,
+	
+	RETURN
+'================================================
+
+ rightslope2:
+
+             MOVE G6A, 90,  73, 148,  93, 110,  70
+             MOVE G6D,108,  75, 145,  93,  93,  70
+             MOVE G6B,100,  50,  70, 100, 100, 100
+             MOVE G6C,100,  60,  70, 100, 100, 100
+             WAIT
+             RETURN
+leftfootup10:
+
+             MOVE G6A, 90,  98, 105,  115, 115, 70
+             MOVE G6D,114,  75, 145,  93,  93, 70
+             MOVE G6B,90,  50,  70, 100, 100, 100
+             MOVE G6C,110,  60,  70, 100, 100, 100
+             WAIT
+             RETURN
+
+leftfootup10_2:
+             MOVE G6A, 90,  98, 105,  115, 115, 70
+             MOVE G6D,114,  72, 145,  93,  93, 70
+             MOVE G6B,90,  50,  70, 100, 100, 100
+             MOVE G6C,110,  60,  70, 100, 100, 100
+             WAIT
+             RETURN
+
+leftfootup5_3:
+
+             MOVE G6A, 87,  86, 130,  98, 113,  70
+             MOVE G6D,112,  75, 145,  93,  93,  70
+             MOVE G6B,90,  50,  70, 100, 100, 100
+             MOVE G6C,110,  60,  70, 100, 100, 100
+	         WAIT
+             RETURN              
+
+leftfootstretch1:
+
+             MOVE G6A, 86,  41, 163, 112, 115,  60
+             MOVE G6D,112,  86, 130,  93,  93,  60
+             MOVE G6B, 80,  50,  70, 100, 100, 100
+             MOVE G6C,140,  50,  70, 100, 100, 100
+             WAIT
+             RETURN
+
+             
+
+leftfootstretch2:
+
+             MOVE G6A, 90,  56, 138, 115, 112,  60
+             MOVE G6D,112,  86, 130,  93,  93,  60
+             MOVE G6B, 80,  50,  70, 100, 100, 100
+             MOVE G6C,140,  50,  70, 100, 100, 100
+             WAIT
+             RETURN
+            
+
+leftfootcenter1:
+
+             MOVE G6A,100,  49, 158, 112, 100, 100
+             MOVE G6D,100,  81, 146,  92, 100, 100
+             MOVE G6B, 90,  50,  70, 100, 100, 100
+             MOVE G6C,120,  50,  70, 100, 100, 100
+             WAIT
+             RETURN
+
+leftfootcenter2:
+
+             MOVE G6A,100,  69, 143, 108, 101, 100
+             MOVE G6D,100,  77, 156,  87, 101, 100
+             MOVE G6B, 90,  50,  70, 100, 100, 100
+             MOVE G6C,120,  50,  70, 100, 100, 100
+             WAIT
+
+             RETURN
+
+leftfootmoving1:
+
+             MOVE G6A,112,  74, 140, 106,  93,  60
+             MOVE G6D, 90,  91, 145,  81, 115,  60
+             MOVE G6B,100,  50,  70, 100, 100, 100
+             MOVE G6C,100,  50,  70, 100, 100, 100
+             WAIT
+
+             RETURN
+
+leftfootmoving2:
+
+             MOVE G6A,112,  69, 143, 108,  93,  60
+             MOVE G6D, 87,  77, 156,  87, 115,  60
+             MOVE G6B,100,  50,  70, 100, 100, 100
+             MOVE G6C,100,  50,  70, 100, 100, 100
+             WAIT
+             RETURN
+
+'**********************************************
+
+ 
+
+leftslope2:
+
+             MOVE G6A,108,  75, 145,  93,  93,  70
+             MOVE G6D, 90,  73, 148,  93, 110,  70
+             MOVE G6B,100,  60,  70, 100, 100, 100
+             MOVE G6C,100,  50,  70, 100, 100, 100
+             WAIT
+             RETURN
+
+rightfootup10:
+
+             MOVE G6A,114,  75, 145,  93,  93, 70
+             MOVE G6D, 90,  98, 105,  115, 115, 70
+             MOVE G6B,110,  60,  70, 100, 100, 100
+             MOVE G6C,90,  50,  70, 100, 100, 100
+             WAIT
+             RETURN
+
+rightfootup10_2:
+
+             MOVE G6A,114,  72, 145,  93,  93, 70
+             MOVE G6D, 90,  98, 105,  115, 115, 70
+             MOVE G6B,110,  60,  70, 100, 100, 100
+             MOVE G6C,90,  50,  70, 100, 100, 100
+             WAIT
+             RETURN              
+
+             
+
+rightfootup5_3:
+
+             MOVE G6A,112,  75, 145,  93,  93,  70
+             MOVE G6D, 87,  86, 130,  98, 113,  70
+             MOVE G6B,110,  60,  70, 100, 100, 100
+             MOVE G6C,90,  50,  70, 100, 100, 100
+             WAIT
+             RETURN
+
+             
+
+rightfootstretch1:
+
+             MOVE G6A,112,  86, 130,  93,  93,  60
+             MOVE G6D, 86,  44, 163, 112, 114,  60
+             MOVE G6B,140,  50,  70, 100, 100, 100
+             MOVE G6C, 80,  50,  70, 100, 100, 100
+             WAIT
+             RETURN
+
+rightfootstrech2:
+
+             MOVE G6A,112,  86, 130,  93,  93,  60
+             MOVE G6D, 90,  56, 138, 115, 112,  60
+             MOVE G6B,140,  50,  70, 100, 100, 100
+             MOVE G6C, 80,  50,  70, 100, 100, 100
+             WAIT
+
+             RETURN
+
+rightfootcenter1:
+
+             MOVE G6A,100,  81, 146,  92, 100, 100
+             MOVE G6D,100,  49, 158, 112, 100, 100
+             MOVE G6B,120,  50,  70, 100, 100, 100
+             MOVE G6C, 90,  50,  70, 100, 100, 100
+		     WAIT
+             RETURN
+
+rightfootcenter2:
+
+             MOVE G6A,100,  77, 156,  87, 101, 100
+             MOVE G6D,100,  69, 143, 108, 101, 100
+             MOVE G6B,120,  50,  70, 100, 100, 100
+             MOVE G6C, 90,  50,  70, 100, 100, 100
+             WAIT
+
+             RETURN
+
+rightfootmoving1:
+
+             MOVE G6A, 90,  91, 145,  81, 115,  60
+             MOVE G6D,112,  74, 140, 106,  93,  60
+             MOVE G6B,100,  50,  70, 100, 100, 100
+             MOVE G6C,100,  50,  70, 100, 100, 100
+             WAIT
+             RETURN
+
+rightfootmoving2:
+
+             MOVE G6A, 87,  77, 156,  87, 115,  60
+             MOVE G6D,112,  69, 143, 108,  93,  60
+             MOVE G6B,100,  50,  70, 100, 100, 100
+             MOVE G6C,100,  50,  70, 100, 100, 100
+             WAIT
+             RETURN
+
+ 
+
+'**********************************************
+
+rightfootffup10:
+
+MOVE G6A,112,  76, 145,  97,  93,  60
+MOVE G6D, 90,  50, 157, 115, 112,  60
+MOVE G6B,120,  50,  70, 100, 100, 100
+MOVE G6C, 80,  50,  70, 100, 100, 100
+WAIT
+RETURN              
+ 
+
+rightfootturnland:
+
+ 
+MOVE G6A,108,  79, 145,  98,  93,  60
+MOVE G6D, 95,  40, 169, 110, 110,  60
+MOVE G6B,140,  50,  70, 100, 100, 100
+MOVE G6C, 60,  50,  70, 100, 100, 100
+WAIT
+RETURN
+
+ 
+
+ 
+
+leftffootup10:
+
+MOVE G6A, 90,  50, 157, 115, 112,  60
+MOVE G6D,112,  76, 145,  97,  93,  60
+MOVE G6B, 80,  50,  70, 100, 100, 100
+MOVE G6C,120,  50,  70, 100, 100, 100
+WAIT
+RETURN              
+ 
+
+leftfootturnland:
+
+ 
+
+MOVE G6A, 95,  40, 169, 110, 110,  60
+MOVE G6D,108,  79, 145,  98,  93,  60
+MOVE G6B, 60,  50,  70, 100, 100, 100
+MOVE G6C,140,  50,  70, 100, 100, 100
+WAIT
+RETURN              
+
+
+ 
+rightlanding:
+
+             MOVE G6A,110,  87, 120, 115,  93,  70
+             MOVE G6D, 76,  69, 160,  95, 128,  70
+             MOVE G6B,100,  70,  70, 100, 100, 100
+             MOVE G6C,100,  50,  70, 100, 100, 100
+             WAIT
+             RETURN
+
+leftcenter:
+
+             MOVE G6A, 93,  80, 135,  103, 109, 100
+             MOVE G6D, 93,  80, 135,  103, 109, 100
+             MOVE G6B,100,  60,  70, 100, 100, 100
+             MOVE G6C,100,  60,  70, 100, 100, 100
+             WAIT
+             RETURN
+
+'*********************************************
+
+
+leftlanding:
+ 
+             MOVE G6D,110,  87, 120, 115,  93,  70
+             MOVE G6A, 76,  69, 160,  95, 128,  70
+             MOVE G6B,100,  50,  70, 100, 100, 100
+             MOVE G6C,100,  70,  70, 100, 100, 100
+             WAIT
+             RETURN
+
+ 
+
+'*********************************************
+ 
+ 
+
+
+
+wavedance:
+
+SPEED 5
+GOSUB leftslope2
+
+GOSUB rightlanding
+
+             MOVE G6A, 91,  77, 135, 103, 109, 100
+             MOVE G6D, 91,  77, 135, 103, 109, 100
+             MOVE G6B,100, 100, 120, 100, 100, 100
+             MOVE G6C,100, 100, 120, 100, 100, 100
+             WAIT
+
+SPEED 10
+FOR I = 0 TO 2
+MOVE G6B,100, 145, 130, 100, 100, 100
+MOVE G6C,100,  65,  70, 100, 100, 100
+WAIT
+
+MOVE G6B,100,  65,  70, 100, 100, 100
+MOVE G6C,100, 145, 130, 100, 100, 100
+WAIT
+
+NEXT I
+
+ 
+MOVE G6B,100, 100, 120, 100, 100, 100
+MOVE G6C,100, 100, 120, 100, 100, 100
+WAIT
+
+DELAY 500
+
+SPEED 7
+
+FOR I = 0 TO 2
+
+MOVE G6A,101, 100, 100, 111,  95, 100
+MOVE G6D, 80,  86, 121, 107, 125, 100
+MOVE G6B,100, 100, 120, 100, 100, 100
+MOVE G6C,100, 100, 120, 100, 100, 100
+WAIT
+
+MOVE G6A,108, 158,  22, 135,  89, 100
+MOVE G6D, 66, 133,  50, 137, 140, 100
+MOVE G6B,100, 100, 120, 100, 100, 100
+MOVE G6C,100, 100, 120, 100, 100, 100
+WAIT
+
+ 
+
+'center
+
+MOVE G6A, 89, 158,  22, 135, 110, 100
+MOVE G6D, 80, 148,  31, 138, 122, 100
+MOVE G6B,100, 100, 120, 100, 100, 100
+MOVE G6C,100, 100, 120, 100, 100, 100
+WAIT
+
+ 
+
+MOVE G6A, 66, 133,  50, 137, 140, 100
+MOVE G6D,108, 158,  22, 135,  89, 100
+MOVE G6B,100, 100, 120, 100, 100, 100
+MOVE G6C,100, 100, 120, 100, 100, 100
+WAIT
+
+ 
+MOVE G6A, 80,  86, 121, 107, 125, 100
+MOVE G6D,101, 100, 100, 111,  95, 100
+MOVE G6B,100, 100, 120, 100, 100, 100
+MOVE G6C,100, 100, 120, 100, 100, 100
+WAIT
+
+
+MOVE G6A, 91,  77, 135, 103, 109, 100
+MOVE G6D, 91,  77, 135, 103, 109, 100
+MOVE G6B,100, 100, 120, 100, 100, 100
+MOVE G6C,100, 100, 120, 100, 100, 100
+WAIT
+
+ 
+NEXT I
+
+
+DELAY 500
+SPEED 9
+GOSUB leftlanding
+
+SPEED 5
+GOSUB rightslope2
+GOSUB 기본자세
+
+RETURN
+
+'**********************************************
+
+
+
+'********************************************	
+물구나무서기:
+GOSUB 앞으로눕기
+SPEED 6
+MOVE G6A,100, 125,  65,  10, 100  
+MOVE G6D,100, 125,  65,  10, 100 
+MOVE G6B, 110,  30,  80,  ,  ,  , 
+MOVE G6C,110,  30,  80,  ,  ,  , 
+ 
+
+SPEED 3
+MOVE G6A,100, 125,  65,  10, 100,  
+MOVE G6D, 100, 125,  65,  10, 100 
+MOVE G6B, 170,  30,  80,  ,  ,  ,
+MOVE G6C, 170,  30,  80,  ,  ,  , 
+WAIT
+
+DELAY 200
+SPEED 6
+MOVE G6A,100,  89, 129,  57, 100,  
+MOVE G6D, 100,  89, 129,  57, 100 
+MOVE G6B, 180,  30,  80,  ,  ,  ,
+MOVE G6C, 180,  30,  80,  ,  ,  , 
+
+WAIT
+
+MOVE G6A,100,  64, 179,  57, 100,  
+MOVE G6D, 100,  64, 179,  57, 100 
+MOVE G6B, 190,  50,  80,  ,  ,  ,
+MOVE G6C, 190,  50,  80,  ,  ,  , 
+WAIT
+DELAY 500
+
+MOVE G6A,100,  64, 179,  57, 160,  
+MOVE G6D, 100,  64, 179,  57, 160 
+WAIT
+
+DELAY 1000
+
+SPEED 3
+MOVE G6A,100,  64, 179,  17, 160,  
+MOVE G6D, 100,  64, 179,  97, 160 
+WAIT
+
+DELAY 1000
+
+MOVE G6A,100,  64, 179,  97, 160,  
+MOVE G6D, 100,  64, 179,  17, 160 
+WAIT
+
+DELAY 1000
+
+
+MOVE G6A,100,  64, 179,  57, 160,  
+MOVE G6D, 100,  64, 179,  57, 160 
+WAIT
+DELAY 500
+SPEED 7
+
+MOVE G6A,100,  64, 179,  57, 100  
+MOVE G6D,100,  64, 179,  57, 100  
+WAIT
+
+MOVE G6A,100,  64, 179,  57, 190  
+MOVE G6D,100,  64, 179,  57, 190  
+WAIT
+
+MOVE G6A,100,  64, 179,  57, 100  
+MOVE G6D,100,  64, 179,  57, 100  
+WAIT
+DELAY 1000
+
+MOVE G6B, 190,  50,  80,  ,  ,  , 
+MOVE G6C,190,  50,  80,  ,  ,  , 
+WAIT
+
+MOVE G6A,100,  89, 129,  57, 100,  
+MOVE G6D,100,  89, 129,  57, 100  
+MOVE G6B, 180,  30,  80,  ,  ,  ,
+MOVE G6C, 180,  30,  80,  ,  ,  , 
+WAIT
+
+SPEED 3
+MOVE G6A,100, 125,  65,  10, 100,  
+MOVE G6D, 100, 125,  65,  10, 100  
+MOVE G6B, 170,  30,  80,  ,  ,  ,
+MOVE G6C, 170,  30,  80,  ,  ,  , 
+WAIT
+
+SPEED 6
+MOVE G6A,100, 125,  65,  10, 100,  
+MOVE G6D, 100, 125,  65,  10, 100 
+MOVE G6B, 110,  30,  80,  ,  ,  ,
+MOVE G6C, 110,  30,  80,  ,  ,  , 
+WAIT
+ 
+GOSUB 기본자세
+
+GOSUB 뒤로일어나기
+
+
+
+RETURN
+
+
+
+rightsideattack:
+
+             SPEED 5
+             GOSUB leftslope2
+          
+
+             SPEED 15
+             HIGHSPEED SETON
+             MOVE G6A, 57,  71, 142, 105, 144, 100
+             MOVE G6D,106, 157,  26, 134, 100, 100
+             MOVE G6B,112,  92,  99, 100, 100, 100
+             MOVE G6C,107, 125, 108, 100, 100, 100
+           
+
+             DELAY 1000
+             HIGHSPEED SETOFF
+             SPEED 8
+             GOSUB 기본자세
+             RETURN
+          
+
+             
+
+leftsideattack:
+
+             SPEED 5
+             GOSUB rightslope2
+
+             SPEED 15
+             HIGHSPEED SETON
+             MOVE G6A,106, 157,  26, 134, 100, 100
+             MOVE G6D, 57,  71, 142, 105, 144, 100
+             MOVE G6B,107, 125, 108, 100, 100, 100
+             MOVE G6C,112,  92,  99, 100, 100, 100
+             
+
+             DELAY 1000
+             HIGHSPEED SETOFF
+             SPEED 8
+             GOSUB 기본자세
+             RETURN
+
+'**********************************************
+
+forwardattack:
+
+             SPEED 15
+             MOVE G6A, 92, 100, 110, 100, 107, 100
+             MOVE G6D, 92, 100, 110, 100, 107, 100
+             MOVE G6B,190, 149,  10, 100, 100, 100
+             MOVE G6C,190, 150,  10, 100, 100, 100
+             WAIT
+             SPEED 15
+             HIGHSPEED SETON
+             FOR I = 0 TO 2
+
+                           MOVE G6B,190,  10, 75, 100, 100, 100
+                           MOVE G6C,190, 140,  10, 100, 100, 100
+                           WAIT
+                           DELAY 150
+                           MOVE G6B,190, 140,  10, 100, 100, 100
+                           MOVE G6C,190,  10, 75, 100, 100, 100
+                           WAIT
+                           DELAY 150
+
+             
+
+             NEXT I
+             HIGHSPEED SETOFF
+             SPEED 15
+             MOVE G6A, 92, 100, 110, 100, 107, 100
+             MOVE G6D, 92, 100, 110, 100, 107, 100
+             MOVE G6B,190, 149,  10, 100, 100, 100
+             MOVE G6C,190, 150,  10, 100, 100, 100
+             WAIT
+             GOSUB 기본자세
+
+           
+             RETURN
+
+sitdownforwardattack:
+
+             SPEED 15
+             HIGHSPEED SETON
+             FOR I = 0 TO 2
+
+                           MOVE G6B,190,  10, 75, 100, 100, 100
+                           MOVE G6C,190, 140,  10, 100, 100, 100
+                           WAIT
+                          DELAY 150
+                          MOVE G6B,190, 140,  10, 100, 100, 100
+                          MOVE G6C,190,  10, 75, 100, 100, 100
+                           WAIT
+                           DELAY 150
+
+             NEXT I
+             HIGHSPEED SETOFF
+             SPEED 15
+
+             GOSUB 기본자세
+             SPEED 10
+             RETURN
+
+'**********************************************           
+
+sideattack:
+
+             SPEED 10
+             MOVE G6A, 92, 109,  95, 115, 107, 100
+             MOVE G6D, 92, 105,  95, 115, 107, 100
+             MOVE G6B, 10,  20,  70, 100, 100, 100
+             MOVE G6C, 10,  20,  70, 100, 100, 100
+             WAIT
+             SPEED 15
+             MOVE G6A, 92, 109,  95, 105, 107, 100
+             MOVE G6D, 92, 105,  95, 105, 107, 100
+             MOVE G6B, 10, 182, 121, 100, 100, 100
+             MOVE G6C, 10, 190, 119, 100, 100, 100
+             WAIT
+             DELAY 500
+             SPEED 10
+             GOSUB 기본자세
+         
+
+             RETURN
+
+
+sideattack2:
+
+             SPEED 15
+             MOVE G6A, 92, 100, 110, 100, 107, 100
+             MOVE G6D, 92, 100, 110, 100, 107, 100
+             MOVE G6B,100,  45,  70, 100, 100, 100
+             MOVE G6C,100,  45,  70, 100, 100, 100
+             WAIT
+
+                           
+             MOVE G6B,100, 175,  100, 100, 100, 100
+             MOVE G6C,100, 175,  100, 100, 100, 100
+             WAIT
+             DELAY 500
+           
+
+             MOVE G6B,170, 175, 160, 100, 100, 100
+             MOVE G6C,170, 175, 160, 100, 100, 100
+             WAIT
+             MOVE G6B,100,  45,  70, 100, 100, 100
+             MOVE G6C,100,  45,  70, 100, 100, 100
+             WAIT
+             SPEED 10
+             GOSUB 기본자세
+
+          
+
+             RETURN
+
+ 
+
+sitdownsideattack2:
+
+             SPEED 15
+
+             MOVE G6B,100, 175,  100, 100, 100, 100
+             MOVE G6C,100, 175,  100, 100, 100, 100
+             WAIT
+             DELAY 500
+
+             MOVE G6B,170, 175, 160, 100, 100, 100
+             MOVE G6C,170, 175, 160, 100, 100, 100
+             WAIT
+             MOVE G6B,100,  45,  70, 100, 100, 100
+             MOVE G6C,100,  45,  70, 100, 100, 100
+             WAIT
+             SPEED 10
+             GOSUB 기본자세
+      
+             RETURN
+
+'**********************************************
+
+sitdownsideattack:
+
+SPEED 10
+ 
+MOVE G6B, 10,  45,  70, 100, 100, 100
+MOVE G6C, 10,  45,  70, 100, 100, 100
+WAIT
+SPEED 15
+
+ 
+MOVE G6B, 10, 182, 121, 100, 100, 100
+MOVE G6C, 10, 190, 119, 100, 100, 100
+WAIT
+DELAY 500
+SPEED 10
+GOSUB 기본자세
+ 
+
+RETURN
+'**********************************************
+
+
+             
+
+
+ 
+
+sitdownwalking:
+
+             SPEED 9
+             
+
+            FOR I = 0 TO 10
+
+          
+
+             MOVE G6A,115, 150,  24, 140,  94, 100
+             MOVE G6D, 86, 151,  26, 140, 110, 100
+             WAIT
+
+             
+             MOVE G6A,100, 160,  25, 133, 100, 100
+             MOVE G6D,100, 131,  26, 162, 100, 100
+             WAIT
+             
+
+             MOVE G6A, 86, 151,  26, 140, 110, 100
+             MOVE G6D,115, 150,  24, 140,  94, 100
+             WAIT
+
+             
+
+             MOVE G6A,100, 131,  26, 162, 100, 100
+             MOVE G6D,100, 160,  25, 133, 100, 100
+             WAIT
+             
+
+             NEXT I
+
+             
+             SPEED 5
+             MOVE G6A,115, 150,  24, 140,  94, 100
+             MOVE G6D, 86, 151,  26, 140, 110, 100
+             WAIT
+
+             
+             GOSUB 기본자세
+             RETURN
+
+sitdownbackwalking:
+
+             SPEED 9
+             
+             FOR I = 0 TO 10
+     
+
+             MOVE G6A,115, 150,  24, 140,  94, 100
+             MOVE G6D, 86, 151,  26, 140, 110, 100
+             WAIT
+
+             
+             MOVE G6A,100, 131,  26, 162, 100, 100
+             MOVE G6D,100, 160,  25, 133, 100, 100
+             WAIT
+
+       
+
+             MOVE G6A, 86, 151,  26, 140, 110, 100
+             MOVE G6D,115, 150,  24, 140,  94, 100
+             WAIT
+
+          
+
+             MOVE G6A,100, 160,  25, 133, 100, 100
+             MOVE G6D,100, 131,  26, 162, 100, 100
+             WAIT
+
+             
+             NEXT I
+ 
+       
+
+             SPEED 5
+
+             MOVE G6A,115, 150,  24, 140,  94, 100
+             MOVE G6D, 86, 151,  26, 140, 110, 100
+             WAIT
+
+             
+             GOSUB 기본자세
+             RETURN
+
+                           
+
+sitdownleft:
+
+             SPEED 8 
+             MOVE G6A,112, 150,  24, 140, 100, 100
+             MOVE G6D, 86, 151,  26, 140, 105, 100
+             MOVE G6B,100,  60,  70, 100, 100, 100
+             MOVE G6C,100,  60,  70, 100, 100, 100
+             WAIT
+
+         
+             MOVE G6A, 86, 150,  26, 140, 115, 100
+             MOVE G6D, 86, 151,  26, 140, 115, 100
+             WAIT
+
+         
+             MOVE G6A, 86, 151,  26, 140, 105, 100
+             MOVE G6D,115, 150,  24, 140, 100, 100
+             WAIT
+
+           
+             SPEED 5
+             GOSUB 기본자세
+             RETURN
+
+             
+
+sitdownrightside:
+
+             SPEED 8
+             MOVE G6A, 86, 151,  26, 140, 105, 100
+             MOVE G6D,112, 150,  24, 140, 100, 100
+             MOVE G6B,100,  60,  70, 100, 100, 100
+             MOVE G6C,100,  60,  70, 100, 100, 100
+             WAIT
+
+           
+             MOVE G6A, 86, 150,  26, 140, 115, 100
+             MOVE G6D, 86, 151,  26, 140, 115, 100
+             WAIT
+
+            
+             MOVE G6A,115, 150,  24, 140, 100, 100
+             MOVE G6D, 86, 151,  26, 140, 105, 100
+         
+             WAIT
+
+           
+             SPEED 5
+             GOSUB 기본자세
+             RETURN
+
+
+ backwardstand:
+
+
+SPEED 10
+
+'GOSUB standing
+
+ 
+MOVE G6A,100, 130, 120,  80, 110, 100
+MOVE G6D,100, 130, 120,  80, 110, 100
+MOVE G6B,150, 160,  10, 100, 100, 100
+MOVE G6C,150, 160,  10, 100, 100, 100
+WAIT
+
+ 
+MOVE G6A, 80, 155,  85, 150, 150, 100
+MOVE G6D, 80, 155,  85, 150, 150, 100
+MOVE G6B,185,  40, 60,  100, 100, 100
+MOVE G6C,185,  40, 60,  100, 100, 100
+WAIT
+
+ 
+MOVE G6A, 75, 165,  55, 165, 155, 100
+MOVE G6D, 75, 165,  55, 165, 155, 100
+MOVE G6B,185,  10, 100, 100, 100, 100
+MOVE G6C,185,  10, 100, 100, 100, 100
+WAIT
+
+ 
+MOVE G6A, 60, 165,  30, 165, 155, 100
+MOVE G6D, 60, 165,  30, 165, 155, 100
+MOVE G6B,170,  10, 100, 100, 100, 100
+MOVE G6C,170,  10, 100, 100, 100, 100
+WAIT
+
+ 
+MOVE G6A, 60, 165,  20, 160, 145, 100
+MOVE G6D, 60, 165,  20, 160, 145, 100
+MOVE G6B,150,  60,  90, 100, 100, 100
+MOVE G6C,150,  60,  90, 100, 100, 100
+WAIT
+ 
+
+MOVE G6A,100, 155,  20, 140, 100, 100
+MOVE G6D,100, 155,  20, 140, 100, 100
+MOVE G6B,130,  50,  85, 100, 100, 100
+MOVE G6C,130,  50,  85, 100, 100, 100
+WAIT
+'DELAY 100
+
+ 
+GOSUB standing
+ 
+
+RETURN
+
+ 
+
+ 
+ 
+
+fowardland:
+
+ 
+SPEED 8
+GOSUB standing
+MOVE G6A,100, 155,  20, 140, 100, 100
+MOVE G6D,100, 155,  20, 140, 100, 100
+MOVE G6B,130,  50,  85, 100, 100, 100
+MOVE G6C,130,  50,  85, 100, 100, 100
+WAIT
+
+ 
+MOVE G6A, 60, 165,  30, 165, 155, 100
+MOVE G6D, 60, 165,  30, 165, 155, 100
+MOVE G6B,170,  10, 100, 100, 100, 100
+MOVE G6C,170,  10, 100, 100, 100, 100
+WAIT
+
+ 
+
+ 
+
+MOVE G6A, 75, 165,  55, 165, 155, 100
+MOVE G6D, 75, 165,  55, 165, 155, 100
+MOVE G6B,185,  10, 100, 100, 100, 100
+MOVE G6C,185,  10, 100, 100, 100, 100
+WAIT
+ 
+
+MOVE G6A, 80, 155,  85, 150, 150, 100
+MOVE G6D, 80, 155,  85, 150, 150, 100
+MOVE G6B,185,  40, 60,  100, 100, 100
+MOVE G6C,185,  40, 60,  100, 100, 100
+WAIT
+
+  
+
+MOVE G6A,100, 130, 120,  80, 110, 100
+MOVE G6D,100, 130, 120,  80, 110, 100
+MOVE G6B,150, 160,  10, 100, 100, 100
+MOVE G6C,150, 160,  10, 100, 100, 100
+WAIT
+
+ 
+GOSUB standing
+
+ 
+RETURN
+
+ 
+ 
+
+'**********************************************
+fowarstandup:
+
+SPEED 10
+GOSUB standing
+
+
+MOVE G6A,100, 10,  100, 115, 100, 100
+MOVE G6D,100, 10,  100, 115, 100, 100
+MOVE G6B,100,  130,  10, 100, 100, 100
+MOVE G6C,100,  130,  10, 100, 100, 100
+WAIT
+
+
+
+MOVE G6A,100, 10,  83, 140, 100, 100
+MOVE G6D,100, 10,  83, 140, 100, 100
+MOVE G6B,20,  130,  10, 100, 100, 100
+MOVE G6C,20,  130,  10, 100, 100, 100
+WAIT
+
+ 
+
+MOVE G6A,100, 126,  60, 50, 100, 100
+MOVE G6D,100, 126,  60, 50, 100, 100
+MOVE G6B,20,  30,  90, 100, 100, 100
+MOVE G6C,20,  30,  90, 100, 100, 100
+WAIT
+
+
+
+MOVE G6A,100, 165,  70, 15, 100, 100
+MOVE G6D,100, 165,  70, 15, 100, 100
+MOVE G6B,30,  20,  95, 100, 100, 100
+MOVE G6C,30,  20,  95, 100, 100, 100
+WAIT
+ 
+
+MOVE G6A,100, 165,  40, 100, 100, 100
+MOVE G6D,100, 165,  40, 100, 100, 100
+MOVE G6B,110,  70,  50, 100, 100, 100
+MOVE G6C,110,  70,  50, 100, 100, 100
+WAIT
+
+ 
+GOSUB standing
+
+ 
+RETURN
+
+ 
+'**********************************************
+
+backwardliedown:
+
+SPEED 10
+GOSUB standing
+MOVE G6A,100, 165,  40, 100, 100, 100
+MOVE G6D,100, 165,  40, 100, 100, 100
+MOVE G6B,110,  70,  50, 100, 100, 100
+MOVE G6C,110,  70,  50, 100, 100, 100
+WAIT
+
+
+MOVE G6A,100, 165,  70, 15, 100, 100
+MOVE G6D,100, 165,  70, 15, 100, 100
+MOVE G6B,30,  20,  95, 100, 100, 100
+MOVE G6C,30,  20,  95, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 126,  60, 50, 100, 100
+MOVE G6D,100, 126,  60, 50, 100, 100
+MOVE G6B,20,  30,  90, 100, 100, 100
+MOVE G6C,20,  30,  90, 100, 100, 100
+WAIT
+
+  
+
+MOVE G6A,100, 10,  83, 140, 100, 100
+MOVE G6D,100, 10,  83, 140, 100, 100
+MOVE G6B,20,  130,  10, 100, 100, 100
+MOVE G6C,20,  130,  10, 100, 100, 100
+WAIT
+
+
+
+MOVE G6A,100, 10,  100, 115, 100, 100
+MOVE G6D,100, 10,  100, 115, 100, 100
+MOVE G6B,100,  130,  10, 100, 100, 100
+MOVE G6C,100,  130,  10, 100, 100, 100
+WAIT
+
+
+
+GOSUB standing
+ 
+
+RETURN
+
+'******************************************
+
+forward_punch:
+	SPEED 15
+	MOVE G6A, 92, 100, 110, 100, 107, 100
+	MOVE G6D, 92, 100, 110, 100, 107, 100
+	MOVE G6B,190, 150,  10, 100, 100, 100
+	MOVE G6C,190, 150,  10, 100, 100, 100
+	WAIT
+	SPEED 15
+	HIGHSPEED SETON
+
+	MOVE G6B,190,  10, 75, 100, 100, 100
+	MOVE G6C,190, 140,  10, 100, 100, 100
+	WAIT
+	DELAY 500
+	MOVE G6B,190, 140,  10, 100, 100, 100
+	MOVE G6C,190,  10, 75, 100, 100, 100
+	WAIT
+	DELAY 500
+	
+	MOVE G6A, 92, 100, 113, 100, 107, 100
+	MOVE G6D, 92, 100, 113, 100, 107, 100
+	MOVE G6B,190, 150,  10, 100, 100, 100
+	MOVE G6C,190, 150,  10, 100, 100, 100
+	WAIT
+	
+	HIGHSPEED SETOFF
+
+	MOVE G6A,100, 115,  90, 110, 100, 100
+	MOVE G6D,100, 115,  90, 110, 100, 100
+	MOVE G6B,100,  80,  60, 100, 100, 100
+	MOVE G6C,100,  80,  60, 100, 100, 100
+	WAIT
+
+	RETURN
+	 
+standing:
+MOVE G6A,100,  77, 145,  95, 100, 100
+MOVE G6D,100,  77, 145,  95, 100, 100
+MOVE G6B,100,  45,  70, 100, 100, 100
+MOVE G6C,100,  45,  70, 100, 100, 100
+WAIT
+mode = 0
+RETURN
+
+hands_up:
+	SPEED 5
+	MOVE G6A, 100,  76, 145,  93, 100
+	MOVE G6D, 100,  76, 145,  93, 100	
+	MOVE G6B, 100, 168, 150
+	MOVE G6C, 100, 168, 150
+	WAIT
+
+	RETURN
+'********************************************	
+팔벌리기:
+SPEED 3
+MOVE G6B, 100, 100, 100,  ,  ,  ,
+MOVE G6C, 100, 100, 100,  ,  ,  , 
+	RETURN
+
+sit_down_pose:
+
+	
+	SPEED 10
+	MOVE G6A,100, 151,  23, 140, 101, 100
+	MOVE G6D,100, 151,  23, 140, 101, 100
+	MOVE G6B,100,  30,  80, 100, 100, 100
+	MOVE G6C,100,  30,  80, 100, 100, 100	
+	WAIT
+
+	RETURN
+'================================================
+
+'--------------------------------------
+a번동작:
+	SPEED 3
+	GOSUB 앉은자세
+	
+	'DELAY 2000
+	
+	SPEED 15
+	
+	'FOR  i = 0 TO 5
+	'a = robot_no + i
+	'a = a % 6
+	'ON a GOTO p1,p2,p3,p4,p5,p6
+'p1: 		
+	MOVE G6B, 100, 100, 100,  ,  ,  ,
+	MOVE G6C, 100, 100, 100,  ,  ,  , 
+	GOTO p7
+'p2:
+	'MOVE G6B, 100, 185, 100,  ,  ,  ,
+'	MOVE G6C, 100, 185, 100,  ,  ,  , 
+''	GOTO p7
+''p3:
+'	MOVE G6B, 100, 55, 100,  ,  ,  ,
+'	MOVE G6C, 100, 55, 100,  ,  ,  , 
+''	GOTO p7
+''p4:
+'	MOVE G6B, 100, 145, 100,  ,  ,  ,
+'	MOVE G6C, 100, 145, 100,  ,  ,  , 
+''	GOTO p7
+''p5:
+'	MOVE G6B, 100, 15, 100,  ,  ,  ,
+'	MOVE G6C, 100, 15, 100,  ,  ,  , 
+''	GOTO p7
+''p6:
+'	MOVE G6B, 100, 185, 145,  ,  ,  ,
+'	MOVE G6C, 100, 185, 145,  ,  ,  , 
+p7:
+'	
+'	DELAY  2000
+	'NEXT i
+
+
+	'FOR  i = 0 TO 5
+'	a = robot_no + i
+'	a = a % 6
+'	ON a GOTO p11,p12,p13,p14,p15,p16
+'p11: 		
+	MOVE G6B, 100, 100, 100,  ,  ,  ,
+	MOVE G6C, 100, 100, 100,  ,  ,  , 
+	GOTO p17
+'p12:
+'	MOVE G6B, 100, 100, 190,  ,  ,  ,
+'	MOVE G6C, 100, 100, 190,  ,  ,  , 
+'	GOTO p17
+'p13:
+'	MOVE G6B, 100, 190, 10,  ,  ,  ,
+'	MOVE G6C, 100, 190, 10,  ,  ,  , 
+'	GOTO p17
+'p14:
+'	MOVE G6B, 100, 10, 190,  ,  ,  ,
+'	MOVE G6C, 100, 10, 190,  ,  ,  , 
+'	GOTO p17
+'p15:
+'	MOVE G6B, 100, 100, 10,  ,  ,  ,
+'	MOVE G6C, 100, 100, 10,  ,  ,  , 
+'	GOTO p17
+'p16:
+'	MOVE G6B, 100, 185, 100,  ,  ,  ,
+'	MOVE G6C, 100, 185, 100,  ,  ,  , 
+p17:
+	'DELAY  2000
+	'NEXT i
+	
+	SPEED 4
+	MOVE G6B, 100, 100, 100,  ,  ,  ,
+	MOVE G6C, 100, 100, 100,  ,  ,  , 
+
+
+	GOSUB 기본자세 
+	RETURN
+'--------------------------------------
+
+b번동작:
+	SPEED 4
+	GOSUB 팔벌리기
+	WAIT
+	DELAY 1000
+	
+'time = robot_no - 1
+'time = time * 200
+'DELAY time
+'
+b번동작1:
+	SPEED 4
+
+	MOVE G6B, 100, 100, 100,  ,  ,  ,
+	MOVE G6C, 100, 100, 100,  ,  ,  , 
+	WAIT
+	
+	MOVE G6B, 100, 15, 100,  ,  ,  ,
+	MOVE G6C, 100, 15, 100,  ,  ,  , 
+	WAIT
+	
+	MOVE G6B, 100, 188, 145,  ,  ,  ,
+	MOVE G6C, 100, 188, 145,  ,  ,  , 
+	WAIT
+	DELAY 2000	
+
+	MOVE G6B, 100, 15, 100,  ,  ,  ,
+	MOVE G6C, 100, 15, 100,  ,  ,  , 
+	WAIT
+	DELAY 500	
+
+	MOVE G6B, 100, 188, 145,  ,  ,  ,
+	MOVE G6C, 100, 188, 145,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 100, 15, 100,  ,  ,  ,
+	MOVE G6C, 100, 15, 100,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 100, 100, 100,  ,  ,  ,
+	MOVE G6C, 100, 100, 100,  ,  ,  , 
+	WAIT
+	RETURN
+'-----------------
+b번동작2:
+
+	DELAY 2000
+	
+	SPEED 4
+
+	MOVE G6B, 100, 10, 190,  ,  ,  ,
+	MOVE G6C, 100, 10, 190,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 100, 190, 10,  ,  ,  ,
+	MOVE G6C, 100, 190, 10,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 100, 10, 190,  ,  ,  ,
+	MOVE G6C, 100, 10, 190,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 100, 100, 100,  ,  ,  ,
+	MOVE G6C, 100, 100, 100,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 190, 100, 100,  ,  ,  ,
+	MOVE G6C, 190, 100, 100,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 10, 100, 100,  ,  ,  ,
+	MOVE G6C, 10, 100, 100,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 190, 100, 100,  ,  ,  ,
+	MOVE G6C, 190, 100, 100,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 190, 15, 55,  ,  ,  ,
+	MOVE G6C, 190, 15, 55,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 100, 188, 145,  ,  ,  ,
+	MOVE G6C, 100, 188, 145,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 100, 100, 100,  ,  ,  ,
+	MOVE G6C, 100, 100, 100,  ,  ,  , 
+	WAIT
+
+
+	RETURN
+'-------------------------------------
+c번동작:
+
+	WAIT
+	
+	SPEED 4
+
+	MOVE G6B, 100, 10, 190,  ,  ,  ,
+	MOVE G6C, 100, 10, 190,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 100, 190, 10,  ,  ,  ,
+	MOVE G6C, 100, 190, 10,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 100, 10, 190,  ,  ,  ,
+	MOVE G6C, 100, 10, 190,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 100, 100, 100,  ,  ,  ,
+	MOVE G6C, 100, 100, 100,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 190, 100, 100,  ,  ,  ,
+	MOVE G6C, 190, 100, 100,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 10, 100, 100,  ,  ,  ,
+	MOVE G6C, 10, 100, 100,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 190, 100, 100,  ,  ,  ,
+	MOVE G6C, 190, 100, 100,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 190, 15, 55,  ,  ,  ,
+	MOVE G6C, 190, 15, 55,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 100, 188, 145,  ,  ,  ,
+	MOVE G6C, 100, 188, 145,  ,  ,  , 
+	WAIT
+
+	MOVE G6B, 100, 100, 100,  ,  ,  ,
+	MOVE G6C, 100, 100, 100,  ,  ,  , 
+	WAIT
+	
+	SPEED 10
+
+	MOVE G6B, 100, 100, 100,  ,  ,  ,
+	MOVE G6C, 100, 100, 100,  ,  ,  , 
+	WAIT
+	DELAY 500	
+
+	MOVE G6B, 100, 145, 100,  ,  ,  ,
+	MOVE G6C, 100, 145, 100,  ,  ,  , 
+	WAIT
+	DELAY 500	
+
+	MOVE G6B, 100, 55, 100,  ,  ,  ,
+	MOVE G6C, 100, 55, 100,  ,  ,  , 
+	WAIT
+	DELAY 500	
+
+	MOVE G6B, 100, 145, 100,  ,  ,  ,
+	MOVE G6C, 100, 145, 100,  ,  ,  , 
+	WAIT
+	DELAY 500	
+	
+	MOVE G6B, 100, 100, 100,  ,  ,  ,
+	MOVE G6C, 100, 100, 100,  ,  ,  , 
+	WAIT
+	DELAY 500	
+	
+	SPEED 3
+	RETURN
+'-------------------------------------
+
+춤4번동작:
+
+	SPEED 15
+
+	'FOR a = 0 TO 1
+	MOVE G6A,101,  76, 145,  93, 100, 100
+	MOVE G6D, 99,  76, 145,  93, 100, 102
+	MOVE G6B, 100, 145, 180,  ,  ,  ,
+	MOVE G6C, 100, 100, 145,  ,  ,  , 
+	WAIT
+
+	MOVE G6D,101,  76, 145,  93, 100, 100
+	MOVE G6A, 99,  76, 145,  93, 100, 102
+	MOVE G6C, 100, 145, 180,  ,  ,  ,
+	MOVE G6B, 100, 120, 145,  ,  ,  , 
+	WAIT
+		DELAY 100
+	'NEXT a
+	
+	DELAY 100
+	
+	'FOR a = 0 TO 1
+	MOVE G6A,101,  76, 145,  93, 100, 100
+	MOVE G6D, 99,  76, 145,  93, 100, 102
+	MOVE G6B, 100, 145, 180,  ,  ,  ,
+	MOVE G6C, 100, 120, 145,  ,  ,  , 
+	WAIT
+
+	MOVE G6D,101,  76, 145,  93, 100, 100
+	MOVE G6A, 99,  76, 145,  93, 100, 102
+	MOVE G6C, 100, 145, 180,  ,  ,  ,
+	MOVE G6B, 100, 120, 145,  ,  ,  , 
+		DELAY 100
+	WAIT
+	'NEXT a
+	
+	DELAY 100
+	
+	'FOR a = 0 TO 1
+	MOVE G6A,101,  76, 145,  93, 100, 100
+	MOVE G6D, 99,  76, 145,  93, 100, 102
+	MOVE G6B, 100, 145, 180,  ,  ,  ,
+	MOVE G6C, 100, 120, 145,  ,  ,  , 
+	WAIT
+
+	MOVE G6D,101,  76, 145,  93, 100, 100
+	MOVE G6A, 99,  76, 145,  93, 100, 102
+	MOVE G6C, 100, 145, 180,  ,  ,  ,
+	MOVE G6B, 100, 120, 145,  ,  ,  , 
+	WAIT
+	'NEXT a	
+	
+	RETURN
+'-------------------------------------
+
+춤3번동작:
+
+	SPEED 15
+	WAIT
+
+	'FOR a = 0 TO 1
+	MOVE G6A, 85,  76, 145,  93, 100, 100
+	MOVE G6D, 85,  76, 145,  93, 100, 100
+	MOVE G6B, 100, 55, 55,  ,  ,  ,
+	MOVE G6C, 100, 55, 55,  ,  ,  , 
+	WAIT
+
+	MOVE G6D, 100,  76, 145,  93, 100, 100
+	MOVE G6A, 100,  76, 145,  93, 100, 100
+	MOVE G6C, 100, 45, 65,  ,  ,  ,
+	MOVE G6B, 100, 45, 65,  ,  ,  , 
+	WAIT
+	DELAY 100
+	'NEXT a
+	
+	DELAY 200
+	
+	'FOR a = 0 TO 1
+	MOVE G6A, 85,  76, 145,  93, 100, 100
+	MOVE G6D, 85,  76, 145,  93, 100, 100
+	MOVE G6B, 100, 55, 55,  ,  ,  ,
+	MOVE G6C, 100, 55, 55,  ,  ,  , 
+	WAIT
+
+	MOVE G6D, 100,  76, 145,  93, 100, 100
+	MOVE G6A, 100,  76, 145,  93, 100, 100
+	MOVE G6C, 100, 45, 65,  ,  ,  ,
+	MOVE G6B, 100, 45, 65,  ,  ,  , 
+	WAIT
+	DELAY 100
+	'NEXT a
+	
+	'FOR a = 0 TO 1
+	MOVE G6A, 85,  76, 145,  93, 100, 100
+	MOVE G6D, 85,  76, 145,  93, 100, 100
+	MOVE G6B, 100, 55, 55,  ,  ,  ,
+	MOVE G6C, 100, 55, 55,  ,  ,  , 
+	WAIT
+
+	MOVE G6D, 100,  76, 145,  93, 100, 100
+	MOVE G6A, 100,  76, 145,  93, 100, 100
+	MOVE G6C, 100, 45, 65,  ,  ,  ,
+	MOVE G6B, 100, 45, 65,  ,  ,  , 
+	WAIT
+	DELAY 100
+	'NEXT a
+	
+	DELAY 200
+
+
+	RETURN	
+
+
+춤2번동작:
+
+	SPEED 10
+	WAIT
+
+	HIGHSPEED SETON
+
+	MOVE G6C, 190, 100, 100,  ,  ,  ,
+	MOVE G6B, 190, 100, 100,  ,  ,  , 
+
+	'FOR a = 0 TO 1	
+	MOVE G6C, 190, 100, 100,  ,  ,  ,
+	MOVE G6B, 190, 45, 45,  ,  ,  , 	
+	WAIT
+	DELAY 200
+	
+	MOVE G6C, 190, 45, 45,  ,  ,  ,
+	MOVE G6B, 190, 100, 100,  ,  ,  , 	
+	WAIT
+	DELAY 200
+	'NEXT a
+	
+	
+	HIGHSPEED SETOFF
+	RETURN			
+	
+춤1번동작:
+
+	SPEED 10
+	WAIT
+
+	HIGHSPEED SETON
+
+	MOVE G6C, 145, 20, 70,  ,  ,  ,
+	MOVE G6B, 145, 20, 70,  ,  ,  , 
+
+	'FOR a = 0 TO 1	
+	MOVE G6C, 145, 20, 40,  ,  ,  ,
+	MOVE G6B, 145, 20, 40,  ,  ,  , 	
+	WAIT
+	
+	MOVE G6C, 145, 15, 25,  ,  ,  ,
+	MOVE G6B, 145, 15, 25,  ,  ,  , 	
+	WAIT
+	
+	MOVE G6C, 145, 20, 40,  ,  ,  ,
+	MOVE G6B, 145, 20, 40,  ,  ,  , 	
+	WAIT
+	DELAY 100
+	
+	MOVE G6C, 145, 15, 25,  ,  ,  ,
+	MOVE G6B, 145, 15, 25,  ,  ,  , 	
+	WAIT
+	
+	MOVE G6C, 155, 20, 40,  ,  ,  ,
+	MOVE G6B, 155, 20, 40,  ,  ,  , 	
+	WAIT
+	DELAY 100
+	
+	MOVE G6C, 155, 15, 25,  ,  ,  ,
+	MOVE G6B, 155, 15, 25,  ,  ,  , 	
+	WAIT
+
+	MOVE G6C, 155, 20, 40,  ,  ,  ,
+	MOVE G6B, 155, 20, 40,  ,  ,  , 	
+	WAIT
+		
+	DELAY 400
+	'NEXT a
+	
+	MOVE G6C, 145, 20, 70,  ,  ,  ,
+	MOVE G6B, 145, 20, 70,  ,  ,  , 	
+	
+	HIGHSPEED SETOFF
+	RETURN	
+'-------------------------------------
+춤5번동작:
+	GOSUB 오른쪽옆으로
+	GOSUB 왼쪽옆으로
+
+	GOSUB 춤4번동작
+	GOSUB 춤3번동작	
+	'GOSUB 춤4번동작
+	'GOSUB 춤3번동작
+	RETURN
+
+춤6번동작:
+	GOSUB 오른쪽옆으로
+	GOSUB 춤1번동작
+	GOSUB 왼쪽옆으로
+	GOSUB 춤1번동작
+	RETURN
+'-------------------------------------
+
+
+뒤로일어나기2:
+
+MOVE G6A,100, 170,  71,  23, 100, 100
+MOVE G6D,100, 170,  71,  23, 100, 100
+MOVE G6B, 80,  50,  70, 100, 100, 100
+MOVE G6C, 80,  50,  70, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 133,  71,  23, 100, 100
+MOVE G6D,100, 133,  71,  23, 100, 100
+MOVE G6B, 10,  96,  15, 100, 100, 100
+MOVE G6C, 10,  96,  14, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 133,  49,  23, 100, 100
+MOVE G6D,100, 133,  49,  23, 100, 100
+MOVE G6B, 45, 116,  15, 100, 100, 100
+MOVE G6C, 45, 116,  14, 100, 100, 100
+WAIT
+
+GOSUB 기본자세
+DELAY 500
+GOSUB 춤1번동작
+
+GOSUB 앞으로일어나기
+RETURN
+
+GYRO2:
+	'GYRO_AD = AD(6)
+'		IF GYRO_AD > min AND GYRO_AD < max THEN
+'			앞 = 0
+'			RETURN
+'		ENDIF
+'	FOR I = 0 TO COUNT_MAX
+'		GYRO_AD = AD(6)
+'		IF GYRO_AD < min THEN
+'			앞 = 앞 + 1 
+'		ELSEIF  GYRO_AD > max THEN
+'			뒤 = 뒤 + 1 
+'		ELSE
+'			앞 = 0
+'			뒤 = 0
+'			RETURN	
+'		ENDIF 
+'	NEXT I
+'	
+	RETURN
+'
+GYRO_일어나기_GOTO:
+'	IF 앞 > COUNT_MAX THEN
+'		앞 = 0
+'		GOSUB 앞으로일어나기
+'	ELSEIF 뒤 > COUNT_MAX THEN
+'		뒤 = 0
+'		
+'		GOSUB 뒤로일어나기
+'	ENDIF
+'	
+	GOTO main
+'	
+
+GYRO_일어나기_GOSUB:
+'	IF 앞 > COUNT_MAX THEN
+'		앞 = 0
+'		GOSUB 앞으로일어나기
+'		RETURN
+'	ELSEIF 뒤 > COUNT_MAX THEN
+'		뒤 = 0
+'		GOSUB 뒤로일어나기
+'		RETURN
+'	ENDIF
+'	
+	GOTO main
+GYRO_RUN_일어나기_GOTO:
+'	IF GYRO_AD < min THEN
+'		앞 = 0
+'		GOSUB 앞으로일어나기
+'	ELSEIF GYRO_AD > max THEN
+'		뒤 = 0
+'		
+'		GOSUB 뒤로일어나기
+'	ENDIF
+	
+	GOTO main
+
+
+	
+'================================================
+robot_voltage:						' [ 10 x Value / 256 = Voltage]
+	DIM v AS BYTE
+
+	A = AD(6)
+	
+	IF A < 148 THEN 				' 5.8v
+	
+	FOR v = 0 TO 2
+	OUT 52,1
+	DELAY 200
+	OUT 52,0
+	DELAY 200
+	NEXT v
+		
+	RETURN
+'================================================
+robot_tilt:	
+	tilt_value = AD(0)
+	IF tilt_value > 800 THEN RETURN
+	  
+	IF tilt_value < 450 THEN GOTO tilt_low
+	IF tilt_value > 650 THEN GOTO tilt_high
+	
+	RETURN
+tilt_low:
+	tilt_value = AD(0)
+	'IF A < 30 THEN  GOTO forward_standup
+	'IF A < 450 THEN  GOTO bow_pose
+	IF tilt_value < 450 THEN  GOTO backward_standup
+	RETURN
+tilt_high:	
+	tilt_value = AD(0)
+	'IF A > 200 THEN GOTO backward_standup
+	IF tilt_value > 650 THEN GOTO forward_standup
+	RETURN
+'================================================
+sit_down_pose16:
+    
+	IF A16 = 0 THEN GOTO standard_pose16
+	A16 = 0
+	SPEED 10
+	MOVE G6A, 100, 151,  23, 140, 101, 100
+	MOVE G6D, 100, 151,  23, 140, 101, 100
+	MOVE G6B, 100,  30,  80, 100, 100, 100
+	MOVE G6C, 100,  30,  80, 100, 100, 100	
+	WAIT
+'== motor power off  ============================
+	MOTOROFF G24
+	TEMPO 230
+	MUSIC "FEDC"
+	RETURN
+'================================================
+standard_pose16:
+	TEMPO 230
+	MUSIC "CDE"
+	GETMOTORSET G24,1,1,1,1,1,0,1,1,1,0,0,0,1,1,1,0,0,0,1,1,1,1,1,0
+'== motor power on  =============================
+	MOTOR G24
+	A16 = 1
+'================================================
+	SPEED 10
+	GOSUB standard_pose
+	RETURN
+'================================================
+'================================================
+bow_pose:
+	MOVE G6A, 100,  58, 135, 160, 100, 100 
+	MOVE G6D, 100,  58, 135, 160, 100, 100
+	MOVE G6B, 100,  30,  80,  ,  ,  ,
+	MOVE G6C, 100,  30,  80,  ,  ,  , 
+	WAIT
+	DELAY 1000
+	RETURN
+
+'================================================
+hans_up:
+	SPEED 5
+	MOVE G6A, 100,  76, 145,  93, 100
+	MOVE G6D, 100,  76, 145,  93, 100	
+	MOVE G6B, 100, 168, 150
+	MOVE G6C, 100, 168, 150
+	WAIT
+	RETURN
+
+
+'================================================
+sit_hans_up:
+	SPEED 10
+	MOVE G6A, 100, 151,  23, 140, 101, 100,
+	MOVE G6D, 100, 151,  23, 140, 101, 100
+	MOVE G6B, 100, 168, 150
+	MOVE G6C, 100, 168, 150
+	WAIT
+	RETURN
+'================================================
+'================================================
+foot_up:
+	SPEED 5
+	MOVE G6A,  85,  71, 152,  91, 112,  60,
+	MOVE G6D, 112,  76, 145,  93,  92,  60,
+	MOVE G6B, 100,  40,  80,    ,    ,    ,
+	MOVE G6C, 100,  40,  80,    ,    ,    ,	
+	WAIT   
+	MOVE G6A,  90,  98, 105, 115, 115,  60,
+	MOVE G6D, 116,  74, 145,  98,  93,  60,
+	MOVE G6B, 100,  95, 100, 100, 100, 100,
+	MOVE G6C, 100, 105, 100, 100, 100, 100,
+	WAIT
+	MOVE G6A, 100, 151,  23, 140, 115, 100,
+	WAIT
+	DELAY 1000
+	MOVE G6A,  85,  71, 152,  91, 112,  60,
+	MOVE G6D, 112,  76, 145,  93,  92,  60,
+	WAIT
+	RETURN
+'================================================
+
+
+'================================================
+wing_move:
+	
+	SPEED 5
+	
+	MOVE G6A, 85,  71, 152,  91, 112,  60
+	MOVE G6D,112,  76, 145,  93,  92,  60
+	MOVE G6B,100,  40,  80, , , ,
+	MOVE G6C,100,  40,  80, , , ,	
+	WAIT
+	
+	MOVE G6A, 90,  98, 105, 115, 115,  60
+	MOVE G6D,116,  74, 145,  98,  93,  60
+	MOVE G6B,100, 150, 150, 100, 100, 100
+	MOVE G6C,100, 150, 150, 100, 100, 100
+	WAIT
+	
+	MOVE G6A, 90, 121,  36, 105, 115,  60
+	MOVE G6D,116,  60, 146, 138,  93,  60
+	MOVE G6B,100, 150, 150, 100, 100, 100
+	MOVE G6C,100, 150, 150, 100, 100, 100
+	WAIT
+
+	MOVE G6A, 90,  98, 105,  64, 115,  60
+	MOVE G6D,116,  50, 160, 160,  93,  60
+	MOVE G6B,145, 110, 110, 100, 100, 100
+	MOVE G6C,145, 110, 110, 100, 100, 100
+	WAIT
+
+	FOR i = 10 TO 15
+		SPEED i
+		MOVE G6B,145,  80,  80, 100, 100, 100
+		MOVE G6C,145,  80,  80, 100, 100, 100
+		WAIT
+	
+		MOVE G6B,145, 120, 120, 100, 100, 100
+		MOVE G6C,145, 120, 120, 100, 100, 100
+		WAIT
+	NEXT i
+
+	DELAY 1000
+	SPEED 6
+
+	MOVE G6A, 90,  98, 105,  64, 115,  60
+	MOVE G6D,116,  50, 160, 160,  93,  60
+	MOVE G6B,100, 160, 180, 100, 100, 100
+	MOVE G6C,100, 160, 180, 100, 100, 100
+	WAIT
+
+	MOVE G6A, 90, 121,  36, 105, 115,  60
+	MOVE G6D,116,  60, 146, 138,  93,  60
+	MOVE G6B,100, 150, 150, 100, 100, 100
+	MOVE G6C,100, 150, 150, 100, 100, 100
+	WAIT
+	SPEED 4
+
+	MOVE G6A, 90,  98, 105, 115, 115,  60
+	MOVE G6D,116,  74, 145,  98,  93,  60
+	WAIT
+	
+	MOVE G6A, 85,  71, 152,  91, 112,  60
+	MOVE G6D,112,  76, 145,  93,  92,  60
+	MOVE G6B,100,  40,  80, , , ,
+	MOVE G6C,100,  40,  80, , , ,	
+	WAIT
+	RETURN
+'================================================
+'================================================
+right_shoot:
+	SPEED 4
+MOVE G6A,112,  56, 180,  79, 104, 100
+MOVE G6D, 70,  56, 180,  79, 102, 100
+MOVE G6B,110,  45,  70, 100, 100, 100
+MOVE G6C, 90,  45,  70, 100, 100, 100
+WAIT
+right_shoot1:
+	SPEED 6
+MOVE G6A,115,  60, 180,  79,  95, 100
+MOVE G6D, 90,  90, 127,  65, 116, 100
+MOVE G6B, 80,  45,  70, 100, 100, 100
+MOVE G6C,120,  45,  70, 100, 100, 100
+WAIT
+	SPEED 15
+	HIGHSPEED SETON
+right_shoot2:
+MOVE G6A,115,  52, 180,  79,  95, 100
+MOVE G6D, 90,  90, 127, 147, 116, 100
+MOVE G6B,140,  45,  70, 100, 100, 100
+MOVE G6C, 60,  45,  70, 100, 100, 100
+WAIT
+	DELAY 500
+	HIGHSPEED SETOFF
+right_shoot3:
+	SPEED 5
+MOVE G6A,115,  76, 145,  93, 102, 100
+MOVE G6D, 70,  76, 145,  93, 104, 100
+MOVE G6B,110,  45,  70, 100, 100, 100
+MOVE G6C, 90,  45,  70, 100, 100, 100
+WAIT
+RETURN	
+'================================================
+left_shoot:
+	SPEED 4
+MOVE G6A, 70,  56, 180,  79, 102, 100
+MOVE G6D,112,  56, 180,  79, 104, 100
+MOVE G6B, 90,  45,  70, 100, 100, 100
+MOVE G6C,110,  45,  70, 100, 100, 100
+WAIT
+left_shoot1:
+	SPEED 6
+MOVE G6A, 90,  90, 127,  65, 116, 100
+MOVE G6D,115,  60, 180,  79,  95, 100
+MOVE G6B,140,  45,  70, 100, 100, 100
+MOVE G6C, 60,  45,  70, 100, 100, 100
+WAIT
+	SPEED 15
+	HIGHSPEED SETON
+left_shoot2:
+MOVE G6A, 90,  90, 127, 147, 116, 100
+MOVE G6D,115,  52, 180,  79,  95, 100
+MOVE G6B, 60,  45,  70, 100, 100, 100
+MOVE G6C,140,  45,  70, 100, 100, 100
+WAIT
+	DELAY 500
+	HIGHSPEED SETOFF
+left_shoot3:
+	SPEED 5
+MOVE G6A, 70,  76, 145,  93, 104, 100
+MOVE G6D,115,  76, 145,  93, 102, 100
+MOVE G6B, 90,  45,  70, 100, 100, 100
+MOVE G6C,110,  45,  70, 100, 100, 100
+WAIT
+RETURN
+'================================================
+'================================================
+handstanding:
+	GOSUB fall_forward
+	GOSUB standard_pose
+	GOSUB foot_up2
+ 	GOSUB standard_pose
+	GOSUB back_stand_up
+RETURN
+'================================================
+fall_forward:
+	SPEED 10
+	MOVE G6A, 100, 155,  25, 140, 100, 100
+	MOVE G6D, 100, 155,  25, 140, 100, 100
+	MOVE G6B, 130,  50,  85, 100, 100, 100
+	MOVE G6C, 130,  50,  85, 100, 100, 100
+	WAIT
+	MOVE G6A,  60, 165,  25, 160, 145, 100
+	MOVE G6D,  60, 165,  25, 160, 145, 100
+	MOVE G6B, 150,  60,  90, 100, 100, 100
+	MOVE G6C, 150,  60,  90, 100, 100, 100
+	WAIT
+	MOVE G6A,  60, 165,  30, 165, 155, 100
+	MOVE G6D,  60, 165,  30, 165, 155, 100
+	MOVE G6B, 170,  10, 100, 100, 100, 100
+	MOVE G6C, 170,  10, 100, 100, 100, 100
+	WAIT
+	SPEED 3
+	MOVE G6A,  75, 165,  55, 165, 155, 100
+	MOVE G6D,  75, 165,  55, 165, 155, 100
+	MOVE G6B, 185,  10, 100, 100, 100, 100
+	MOVE G6C, 185,  10, 100, 100, 100, 100
+	WAIT
+	SPEED 10
+	MOVE G6A,  80, 155,  85, 150, 150, 100
+	MOVE G6D,  80, 155,  85, 150, 150, 100
+	MOVE G6B, 185,  40, 60,  100, 100, 100
+	MOVE G6C, 185,  40, 60,  100, 100, 100
+	WAIT
+	MOVE G6A, 100, 130, 120,  80, 110, 100
+	MOVE G6D, 100, 130, 120,  80, 110, 100
+	MOVE G6B, 125, 160,  10, 100, 100, 100
+	MOVE G6C, 125, 160,  10, 100, 100, 100
+	WAIT	
+	RETURN
+'================================================
+foot_up2:
+	SPEED 6
+	MOVE G6A, 100, 125,  65,  10, 100,    ,  
+	MOVE G6D, 100, 125,  65,  10, 100,    , 
+	MOVE G6B, 110,  30,  80,    ,    ,    , 
+	MOVE G6C, 110,  30,  80,    ,    ,    , 
+	SPEED 3
+	MOVE G6A, 100, 125,  65,  10, 100,    ,
+	MOVE G6D, 100, 125,  65,  10, 100,    ,
+	MOVE G6B, 170,  30,  80,    ,    ,    ,
+	MOVE G6C, 170,  30,  80,    ,    ,    , 
+	WAIT
+	DELAY 200
+	SPEED 6
+	MOVE G6A, 100,  89, 129,  57, 100,    , 
+	MOVE G6D, 100,  89, 129,  57, 100,    , 
+	MOVE G6B, 180,  30,  80,    ,    ,    ,
+	MOVE G6C, 180,  30,  80,    ,    ,    , 
+	WAIT
+	MOVE G6A, 100,  64, 179,  57, 100,    ,   
+	MOVE G6D, 100,  64, 179,  57, 100,    ,  
+	MOVE G6B, 190,  50,  80,    ,    ,    ,
+	MOVE G6C, 190,  50,  80,    ,    ,    ,
+	WAIT
+	DELAY 2000
+	MOVE G6A, 100,  64, 179,  57, 100,    ,   
+	MOVE G6D, 100,  64, 179,  57, 100,    ,   
+	MOVE G6B, 190,  50,  80,    ,    ,    ,
+	MOVE G6C, 190,  50,  80,    ,    ,    ,
+	WAIT
+	MOVE G6A, 100,  89, 129,  57, 100,    , 
+	MOVE G6D, 100,  89, 129,  57, 100,    ,   
+	MOVE G6B, 180,  30,  80,    ,    ,    ,
+	MOVE G6C, 180,  30,  80,    ,    ,    ,
+	WAIT
+	SPEED 3
+	MOVE G6A, 100, 125,  65,  10, 100,    , 
+	MOVE G6D, 100, 125,  65,  10, 100,    ,   
+	MOVE G6B, 170,  30,  80,    ,    ,    ,
+	MOVE G6C, 170,  30,  80,    ,    ,    ,
+	WAIT
+	SPEED 6
+	MOVE G6A, 100, 125,  65,  10, 100,    ,   
+	MOVE G6D, 100, 125,  65,  10, 100,    ,  
+	MOVE G6B, 110,  30,  80,    ,    ,    ,
+	MOVE G6C, 110,  30,  80,    ,    ,    ,
+	WAIT
+	RETURN
+'================================================	
+back_stand_up:
+	SPEED 10
+	MOVE G6A, 100, 130, 120,  80, 110, 100
+	MOVE G6D, 100, 130, 120,  80, 110, 100
+	MOVE G6B, 150, 160,  10, 100, 100, 100
+	MOVE G6C, 150, 160,  10, 100, 100, 100
+	WAIT
+	MOVE G6A,  80, 155,  85, 150, 150, 100
+	MOVE G6D,  80, 155,  85, 150, 150, 100
+	MOVE G6B, 185,  40, 60,  100, 100, 100
+	MOVE G6C, 185,  40, 60,  100, 100, 100
+	WAIT
+	MOVE G6A,  75, 165,  55, 165, 155, 100
+	MOVE G6D,  75, 165,  55, 165, 155, 100
+	MOVE G6B, 185,  10, 100, 100, 100, 100
+	MOVE G6C, 185,  10, 100, 100, 100, 100
+	WAIT	
+	MOVE G6A,  60, 165,  30, 165, 155, 100
+	MOVE G6D,  60, 165,  30, 165, 155, 100
+	MOVE G6B, 170,  10, 100, 100, 100, 100
+	MOVE G6C, 170,  10, 100, 100, 100, 100
+	WAIT	
+	MOVE G6A,  60, 165,  25, 160, 145, 100
+	MOVE G6D,  60, 165,  25, 160, 145, 100
+	MOVE G6B, 150,  60,  90, 100, 100, 100
+	MOVE G6C, 150,  60,  90, 100, 100, 100
+	WAIT	
+	MOVE G6A, 100, 155,  25, 140, 100, 100
+	MOVE G6D, 100, 155,  25, 140, 100, 100
+	MOVE G6B, 130,  50,  85, 100, 100, 100
+	MOVE G6C, 130,  50,  85, 100, 100, 100
+	WAIT	
+	RETURN
+'================================================	
+'================================================
+fast_walk: 
+DIM A10 AS BYTE
+	SPEED 10
+	MOVE G6B,100,  30,  90, 100, 100, 100
+	MOVE G6C,100,  30,  90, 100, 100, 100
+	WAIT
+	SPEED 7
+fast_run01:
+	MOVE G6A, 90,  72, 148,  93, 110,  70
+	MOVE G6D,108,  75, 145,  93,  95,  70
+	WAIT
+	SPEED 15
+fast_run02:
+	MOVE G6A, 90,  95, 105, 115, 110,  70
+	MOVE G6D,112,  75, 145,  93,  95,  70
+	MOVE G6B, 90,  30,  90, 100, 100, 100
+	MOVE G6C,110,  30,  90, 100, 100, 100
+	WAIT
+	SPEED 15
+'----------------------------  4 times
+	FOR A10 = 1 TO 4
+
+fast_run20:
+	MOVE G6A,100,  80, 119, 118, 106, 100
+	MOVE G6D,105,  75, 145,  93, 100, 100
+	MOVE G6B, 80,  30,  90, 100, 100, 100
+	MOVE G6C,120,  30,  90, 100, 100, 100
+fast_run21:
+	MOVE G6A,105,  74, 140, 106, 100, 100
+	MOVE G6D, 95, 105, 124,  93, 106, 100
+	MOVE G6B,100,  30,  90, 100, 100, 100
+	MOVE G6C,100,  30,  90, 100, 100, 100
+fast_run22:
+	MOVE G6D,100,  80, 119, 118, 106, 100
+	MOVE G6A,105,  75, 145,  93, 100, 100
+	MOVE G6C, 80,  30,  90, 100, 100, 100
+	MOVE G6B,120,  30,  90, 100, 100, 100
+fast_run23:
+	MOVE G6D,105,  74, 140, 106, 100, 100
+	MOVE G6A, 95, 105, 124,  93, 106, 100
+	MOVE G6C,100,  30,  90, 100, 100, 100
+	MOVE G6B,100,  30,  90, 100, 100, 100
+
+	NEXT A10
+'------------------------------
+	SPEED 8
+	MOVE G6A, 85,  80, 130,  95, 106, 100
+	MOVE G6D,108,  73, 145,  93, 100, 100
+	MOVE G6B, 80,  30,  90, 100, 100, 100
+	MOVE G6C,120,  30,  90, 100, 100, 100
+	WAIT
+fast_run03:
+	MOVE G6A, 90,  72, 148,  93, 110,  70
+	MOVE G6D,108,  75, 145,  93,  93,  70
+	WAIT
+	SPEED 5
+
+	RETURN
+'================================================
+'================================================
+left_turn:
+	SPEED 6
+	MOVE G6D,  85,  71, 152,  91, 112,  60  
+	MOVE G6A, 112,  76, 145,  93,  92,  60 
+	MOVE G6C, 100,  40,  80,    ,    ,    ,
+	MOVE G6B, 100,  40,  80,    ,    ,    ,
+	WAIT
+
+	SPEED 9
+	MOVE G6A, 113,  75, 145,  97,  93,  60
+	MOVE G6D,  90,  50, 157, 115, 112,  60 
+	MOVE G6B, 105,  40,  70,    ,    ,    , 
+	MOVE G6C,  90,  40,  70,    ,    ,    , 
+	WAIT   
+
+	MOVE G6A, 108,  78, 145,  98,  93,  60
+	MOVE G6D,  95,  43, 169, 110, 110,  60 
+	MOVE G6B, 105,  40,  70,    ,    ,    ,
+	MOVE G6C,  80,  40,  70,    ,    ,    , 
+	WAIT
+	RETURN
+'================================================
+'================================================
+right_turn:
+	SPEED 6
+	MOVE G6A,  85,  71, 152,  91, 112,  60  
+	MOVE G6D, 112,  76, 145,  93,  92,  60 
+	MOVE G6B, 100,  40,  80,    ,    ,    ,
+	MOVE G6C, 100,  40,  80,    ,    ,    ,
+	WAIT
+
+	SPEED 9
+	MOVE G6D, 113,  75, 145,  97,  93,  60
+	MOVE G6A,  90,  50, 157, 115, 112,  60 
+	MOVE G6C, 105,  40,  70,    ,    ,    , 
+	MOVE G6B,  90,  40,  70,    ,    ,    , 
+	WAIT   
+
+	MOVE G6D, 108,  78, 145,  98,  93,  60
+	MOVE G6A,  95,  43, 169, 110, 110,  60 
+	MOVE G6C, 105,  40,  70,    ,    ,    ,
+	MOVE G6B,  80,  40,  70,    ,    ,    , 
+	WAIT
+	RETURN
+'================================================
+'================================================
+
+'================================================
+left_shift:
+
+	SPEED 5
+	GOSUB left_shift1
+	SPEED 9
+	GOSUB left_shift2
+	
+	GOSUB left_shift3
+	GOSUB left_shift4
+	
+	SPEED 9
+	GOSUB left_shift5
+	GOSUB left_shift6
+	
+	RETURN
+'================================================
+left_shift1:
+	MOVE G6A,  85,  71, 152,  91, 112,  60,
+	MOVE G6D, 112,  76, 145,  93,  92,  60,
+	MOVE G6B, 100,  40,  80,    ,    ,    ,
+	MOVE G6C, 100,  40,  80,    ,    ,    ,	
+	WAIT
+	RETURN
+'---------------------------
+left_shift2:
+	MOVE G6D, 110,  92, 124,  97,  93,  70,
+	MOVE G6A,  76,  72, 160,  82, 128,  70,
+	MOVE G6B, 100,  35,  90,    ,    ,    ,
+	MOVE G6C, 100,  35,  90,    ,    ,    ,
+	WAIT
+	RETURN
+'---------------------------
+left_shift3:
+	MOVE G6A,  93,  76, 145,  94, 109, 100,
+	MOVE G6D,  93,  76, 145,  94, 109, 100,
+	MOVE G6B, 100,  35,  90,    ,    ,    ,
+	MOVE G6C, 100,  35,  90,    ,    ,    ,
+	WAIT
+	RETURN
+'---------------------------
+left_shift4:
+	MOVE G6A, 110,  92, 124,  97,  93,  70,
+	MOVE G6D,  76,  72, 160,  82, 128,  70,
+	MOVE G6B, 100,  35,  90,    ,    ,    ,
+	MOVE G6C, 100,  35,  90,    ,    ,    ,
+	WAIT
+	RETURN
+'---------------------------
+left_shift5:
+	MOVE G6D,  86,  83, 135,  97, 114,  60,
+	MOVE G6A, 113,  78, 145,  93,  93,  60,
+	MOVE G6C,  90,  40,  80,    ,    ,    , 
+	MOVE G6B, 100,  40,  80,    ,    ,    , 
+	WAIT
+	RETURN
+'---------------------------	
+left_shift6:
+	MOVE G6D,  85,  71, 152,  91, 112,  60,
+	MOVE G6A, 112,  76, 145,  93,  92,  60,
+	MOVE G6C, 100,  40,  80,    ,    ,    ,
+	MOVE G6B, 100,  40,  80,    ,    ,    ,
+	WAIT
+	RETURN
+'================================================
+'================================================
+sit_down_pose26:
+	IF A26 = 0 THEN GOTO standard_pose26
+
+	A26 = 0
+	SPEED 10
+	MOVE G6A,100, 151,  23, 140, 101, 100
+	MOVE G6D,100, 151,  23, 140, 101, 100
+	MOVE G6B,100,  30,  80, 100, 100, 100
+	MOVE G6C,100,  30,  80, 100, 100, 100	
+	WAIT
+
+	RETURN
+'================================================
+standard_pose26:
+	A26 = 1
+	MOVE G6A,100,  76, 145,  93, 100, 100 
+	MOVE G6D,100,  76, 145,  93, 100, 100  
+	MOVE G6B,100,  30,  80, 100, 100, 100
+	MOVE G6C,100,  30,  80, 100, 100, 100
+	WAIT
+	
+	RETURN
+'================================================
+'================================================
+right_shift:
+
+	SPEED 5
+	GOSUB right_shift1
+	
+	SPEED 9
+	GOSUB right_shift2
+	
+	GOSUB right_shift3
+	
+	GOSUB right_shift4
+	
+	SPEED 9
+	GOSUB right_shift5
+	GOSUB right_shift6
+	
+	RETURN
+'================================================
+right_shift1:
+	MOVE G6D,  85,  71, 152,  91, 112, 60  
+	MOVE G6A, 112,  76, 145,  93,  92, 60 
+	MOVE G6C, 100,  40,  80,  ,  ,  ,
+	MOVE G6B, 100,  40,  80,  ,  ,  ,
+	WAIT
+	RETURN
+	
+right_shift2:
+	MOVE G6A,110,  92, 124,  97,  93,  70
+	MOVE G6D, 76,  72, 160,  82, 128,  70
+	MOVE G6B,100,  35,  90, , , ,
+	MOVE G6C,100,  35,  90, , , ,
+	WAIT
+	RETURN
+
+right_shift3:
+	MOVE G6A, 93,  76, 145,  94, 109, 100
+	MOVE G6D, 93,  76, 145,  94, 109, 100
+	MOVE G6B,100,  35,  90, , , ,
+	MOVE G6C,100,  35,  90, , , ,
+	WAIT
+	RETURN
+
+right_shift4:
+	MOVE G6D,110,  92, 124,  97,  93,  70
+	MOVE G6A, 76,  72, 160,  82, 128,  70
+	MOVE G6B,100,  35,  90, , , ,
+	MOVE G6C,100,  35,  90, , , ,
+	WAIT
+	RETURN
+
+right_shift5:
+	MOVE G6A, 86,  83, 135,  97, 114,  60
+	MOVE G6D,113,  78, 145,  93,  93,  60
+	MOVE G6B, 90,  40,  80, , , ,
+	MOVE G6C,100,  40,  80, , , ,
+	WAIT
+	RETURN
+
+right_shift6:
+	MOVE G6A, 85,  71, 152,  91, 112,  60
+	MOVE G6D,112,  76, 145,  93,  92,  60
+	MOVE G6B,100,  40,  80, , , ,
+	MOVE G6C,100,  40,  80, , , ,	
+	WAIT
+	RETURN
+'================================================	
+'================================================
+backward_walk:
+
+	SPEED 5
+	GOSUB backward_walk1
+	
+	SPEED 13
+	GOSUB backward_walk2
+	
+	SPEED 7
+	GOSUB backward_walk3
+	GOSUB backward_walk4
+	GOSUB backward_walk5
+
+	SPEED 13
+	GOSUB backward_walk6
+		
+	SPEED 7
+	GOSUB backward_walk7
+	GOSUB backward_walk8
+	GOSUB backward_walk9
+
+	SPEED 13
+	GOSUB backward_walk2
+
+	SPEED 5
+	GOSUB backward_walk1
+
+	RETURN
+'================================================
+backward_walk1:
+	MOVE G6A, 85,  71, 152,  91, 112,  60
+	MOVE G6D,112,  76, 145,  93,  92,  60
+	MOVE G6B,100,  40,  80, , , ,
+	MOVE G6C,100,  40,  80, , , ,	
+	WAIT
+	RETURN
+
+backward_walk2:
+	MOVE G6A, 90, 107, 105, 105, 114,  60
+	MOVE G6D,113,  78, 145,  93,  90,  60
+	MOVE G6B, 90,  40,  80, , , ,
+	MOVE G6C,100,  40,  80, , , ,
+	WAIT
+	RETURN
+	
+backward_walk9:
+	MOVE G6A, 90,  56, 143, 122, 114,  60
+	MOVE G6D,113,  80, 145,  90,  90,  60
+	MOVE G6B, 80,  40,  80, , , ,
+	MOVE G6C,105,  40,  80, , , ,
+	WAIT
+	RETURN
+
+backward_walk8:
+	MOVE G6A,100,  62, 146, 108, 100, 100
+	MOVE G6D,100,  88, 140,  86, 100, 100
+	MOVE G6B, 90,  40,  80, , , ,
+	MOVE G6C,100,  40,  80, , , ,
+	WAIT
+	RETURN
+		
+backward_walk7:
+	MOVE G6A,113,  76, 142, 105,  90,  60
+	MOVE G6D, 90,  96, 136,  85, 114,  60	
+	MOVE G6B,100,  40,  80, , , ,
+	MOVE G6C,100,  40,  80, , , , 
+	WAIT
+	RETURN
+
+backward_walk6:
+	MOVE G6D, 90, 107, 105, 105, 114,  60
+	MOVE G6A,113,  78, 145,  93,  90,  60
+	MOVE G6C,90,  40,  80, , , , 
+	MOVE G6B,100,  40,  80, , , , 
+	WAIT
+	RETURN
+
+backward_walk5:
+	MOVE G6D, 90,  56, 143, 122, 114,  60
+	MOVE G6A,113,  80, 145,  90,  90,  60
+	MOVE G6C,80,  40,  80, , , , 
+	MOVE G6B,105,  40,  80, , , , 
+	WAIT
+	RETURN
+
+backward_walk4:
+	MOVE G6D,100,  62, 146, 108, 100, 100 
+	MOVE G6A,100,  88, 140,  86, 100, 100
+	MOVE G6C,90,  40,  80, , ,,
+	MOVE G6B,100,  40,  80, , , , 
+	WAIT
+	RETURN
+
+backward_walk3:
+	MOVE G6D,113,  76, 142, 105,  90,  60
+	MOVE G6A, 90,  96, 136,  85, 114,  60
+	MOVE G6C,100,  40,  80, , , ,
+	MOVE G6B,100,  40,  80, , , ,
+	WAIT
+	RETURN
+'================================================
+'================================================
+forward_tumbling:
+
+SPEED 8
+GOSUB standard_pose
+MOVE G6A,100, 155,  20, 140, 100, 100
+MOVE G6D,100, 155,  20, 140, 100, 100
+MOVE G6B,130,  50,  85, 100, 100, 100
+MOVE G6C,130,  50,  85, 100, 100, 100
+WAIT
+
+MOVE G6A, 60, 165,  30, 165, 155, 100
+MOVE G6D, 60, 165,  30, 165, 155, 100
+MOVE G6B,170,  10, 100, 100, 100, 100
+MOVE G6C,170,  10, 100, 100, 100, 100
+WAIT
+
+MOVE G6A, 75, 165,  55, 165, 155, 100
+MOVE G6D, 75, 165,  55, 165, 155, 100
+MOVE G6B,185,  10, 100, 100, 100, 100
+MOVE G6C,185,  10, 100, 100, 100, 100
+WAIT
+
+MOVE G6A, 80, 155,  85, 150, 150, 100
+MOVE G6D, 80, 155,  85, 150, 150, 100
+MOVE G6B,185,  40, 60,  100, 100, 100
+MOVE G6C,185,  40, 60,  100, 100, 100
+WAIT
+
+MOVE G6A,100, 130, 120,  80, 110, 100
+MOVE G6D,100, 130, 120,  80, 110, 100
+MOVE G6B,130, 160,  10, 100, 100, 100
+MOVE G6C,130, 160,  10, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 160, 110, 140, 100, 100
+MOVE G6D,100, 160, 110, 140, 100, 100
+MOVE G6B,140,  70,  20, 100, 100, 100
+MOVE G6C,140,  70,  20, 100, 100, 100
+WAIT
+
+SPEED 15
+MOVE G6A,100,  56, 110,  26, 100, 100
+MOVE G6D,100,  71, 177, 162, 100, 100
+MOVE G6B,170,  40,  50, 100, 100, 100
+MOVE G6C,170,  40,  50, 100, 100, 100
+WAIT
+
+MOVE G6A,100,  62, 110,  15, 100, 100
+MOVE G6D,100,  71, 128, 113, 100, 100
+MOVE G6B,190,  40,  50, 100, 100, 100
+MOVE G6C,190,  40,  50, 100, 100, 100
+WAIT
+
+SPEED 15
+MOVE G6A,100,  55, 110,  15, 100, 100
+MOVE G6D,100,  55, 110,  15, 100, 100
+MOVE G6B,190,  40,  50, 100, 100, 100
+MOVE G6C,190,  40,  50, 100, 100, 100
+WAIT
+
+SPEED 10
+
+MOVE G6A,100, 110, 100,  15, 100, 100
+MOVE G6D,100, 110, 100,  15, 100, 100
+MOVE G6B,170, 160, 115, 100, 100, 100
+MOVE G6C,170, 160, 115, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 170,  70,  15, 100, 100
+MOVE G6D,100, 170,  70,  15, 100, 100
+MOVE G6B,190, 170, 120, 100, 100, 100
+MOVE G6C,190, 170, 120, 100, 100, 100
+WAIT
+
+MOVE G6A,100, 170,  30, 110, 100, 100
+MOVE G6D,100, 170,  30, 110, 100, 100
+MOVE G6B,190,  40,  60, 100, 100, 100
+MOVE G6C,190,  40,  60, 100, 100, 100
+WAIT
+
+GOSUB sit_pose
+GOSUB standard_pose
+RETURN
+'================================================
+sit_pose:
+
+	SPEED 10
+	MOVE G6A,100, 151,  23, 140, 101, 100,
+	MOVE G6D,100, 151,  23, 140, 101, 100,
+	MOVE G6B,100,  30,  80, 100, 100, 100,
+	MOVE G6C,100,  30,  80, 100, 100, 100,	
+	WAIT
+	RETURN
+'================================================
+'================================================
+left_tumbling:
+
+SPEED 8
+MOVE G6A,100, 135,  60, 123, 100, 100
+MOVE G6D,100, 135,  60, 123, 100, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+
+
+DELAY 100
+SPEED 3
+MOVE G6A,114, 135,  60, 123, 105, 100
+MOVE G6D, 88, 110,  91, 116, 100, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+DELAY 100
+MOVE G6A,114, 135,  60, 123, 105, 100
+MOVE G6D,89,  135,  60, 123, 100, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+
+MOVE G6A,120, 135,  60, 123, 110, 100
+MOVE G6D, 89, 135,  60, 123, 130, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+
+SPEED 4
+MOVE G6A,120, 135,  60, 123, 120, 100
+MOVE G6D,89,  135,  60, 123, 158, 100
+MOVE G6B,100, 165, 185, 100, 100, 100
+MOVE G6C,100, 165, 185, 100, 100, 100
+WAIT
+
+SPEED 8
+MOVE G6A,120, 131,  60, 123, 185, 100
+MOVE G6D,120, 131,  60, 123, 183, 100
+MOVE G6B,100, 165, 185, 100, 100, 100
+MOVE G6C,100, 165, 185, 100, 100, 100
+WAIT
+
+DELAY 200
+
+SPEED 5
+MOVE G6A,120, 131,  60, 123, 185, 100
+MOVE G6D,120, 131,  60, 123, 183, 100
+MOVE G6B,100, 120, 145, 100, 100, 100
+MOVE G6C,100, 120, 145, 100, 100, 100
+WAIT
+
+SPEED 6
+
+MOVE G6A, 86, 112,  73, 127, 101, 100
+MOVE G6D,105, 131,  60, 123, 183, 100
+MOVE G6B,100, 120, 145, 100, 100, 100
+MOVE G6C,100, 120, 145, 100, 100, 100
+WAIT
+
+SPEED 3
+MOVE G6A, 86, 118,  73, 127, 101, 100
+MOVE G6D,112, 131,  62, 123, 133, 100
+MOVE G6B,100,  80,  80, 100, 100, 100
+MOVE G6C,100,  80,  80, 100, 100, 100
+WAIT
+
+SPEED 3
+MOVE G6A, 88, 115,  86, 115,  90, 100
+MOVE G6D,107, 135,  62, 123, 113, 100
+MOVE G6B,100,  80,  80, 100, 100, 100
+MOVE G6C,100,  80,  80, 100, 100, 100
+WAIT
+
+SPEED 4
+MOVE G6A,100, 135,  60, 123, 100, 100
+MOVE G6D,100, 135,  60, 123, 100, 100
+MOVE G6B,100,  80,  80, 100, 100, 100
+MOVE G6C,100,  80,  80, 100, 100, 100
+WAIT
+
+RETURN
+'================================================
+
+'================================================
+righ_tumbling:
+
+SPEED 8
+MOVE G6A,100, 135,  60, 123, 100, 100
+MOVE G6D,100, 135,  60, 123, 100, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+DELAY 100
+
+SPEED 3
+MOVE G6A, 83, 110,  91, 116, 100, 100
+MOVE G6D,114, 135,  60, 123, 105, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+DELAY 100
+
+MOVE G6A,89,  135,  60, 123, 100, 100
+MOVE G6D,114, 135,  60, 123, 105, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+
+MOVE G6A, 89, 135,  60, 123, 130, 100
+MOVE G6D,120, 135,  60, 123, 110, 100
+MOVE G6B,100, 120, 140, 100, 100, 100
+MOVE G6C,100, 120, 140, 100, 100, 100
+WAIT
+
+SPEED 4
+MOVE G6A,89,  135,  60, 123, 158, 100
+MOVE G6D,120, 135,  60, 123, 120, 100
+MOVE G6B,100, 165, 185, 100, 100, 100
+MOVE G6C,100, 165, 185, 100, 100, 100
+WAIT
+
+SPEED 8
+MOVE G6A,120, 131,  60, 123, 183, 100
+MOVE G6D,120, 131,  60, 123, 185, 100
+MOVE G6B,100, 165, 185, 100, 100, 100
+MOVE G6C,100, 165, 185, 100, 100, 100
+WAIT
+
+DELAY 200
+
+SPEED 5
+MOVE G6A,120, 131,  60, 123, 183, 100
+MOVE G6D,120, 131,  60, 123, 185, 100
+MOVE G6B,100, 120, 145, 100, 100, 100
+MOVE G6C,100, 120, 145, 100, 100, 100
+WAIT
+
+SPEED 6
+MOVE G6A,105, 131,  60, 123, 183, 100
+MOVE G6D, 86, 112,  73, 127, 101, 100
+MOVE G6B,100, 120, 145, 100, 100, 100
+MOVE G6C,100, 120, 145, 100, 100, 100
+WAIT
+
+SPEED 3
+MOVE G6A,112, 131,  62, 123, 133, 100
+MOVE G6D, 86, 118,  73, 127, 101, 100
+MOVE G6B,100,  80,  80, 100, 100, 100
+MOVE G6C,100,  80,  80, 100, 100, 100
+WAIT
+
+SPEED 3
+MOVE G6A,107, 135,  62, 123, 113, 100
+MOVE G6D, 88, 115,  89, 115,  90, 100
+MOVE G6B,100,  80,  80, 100, 100, 100
+MOVE G6C,100,  80,  80, 100, 100, 100
+WAIT
+
+SPEED 4
+MOVE G6A,100, 135,  60, 123, 100, 100
+MOVE G6D,100, 135,  60, 123, 100, 100
+MOVE G6B,100,  80,  80, 100, 100, 100
+MOVE G6C,100,  80,  80, 100, 100, 100
+WAIT
+
+RETURN
+'================================================
+'================================================
+back_tumbling:
+
+SPEED 8
+GOSUB standard_pose
+MOVE G6A, 100, 170,  71,  23, 100, 100
+MOVE G6D, 100, 170,  71,  23, 100, 100
+MOVE G6B,  80,  50,  70, 100, 100, 100
+MOVE G6C,  80,  50,  70, 100, 100, 100
+WAIT
+
+MOVE G6A, 100, 133,  71,  23, 100, 100
+MOVE G6D, 100, 133,  71,  23, 100, 100
+MOVE G6B,  10,  96,  15, 100, 100, 100
+MOVE G6C,  10,  96,  14, 100, 100, 100
+WAIT
+
+MOVE G6A, 100, 133,  49,  23, 100, 100
+MOVE G6D, 100, 133,  49,  23, 100, 100
+MOVE G6B,  45, 116,  15, 100, 100, 100
+MOVE G6C,  45, 116,  14, 100, 100, 100
+WAIT
+
+MOVE G6A, 100, 133,  49,  23, 100, 100
+MOVE G6D, 100,  70, 180, 160, 100, 100
+MOVE G6B,  45,  50,  70, 100, 100, 100
+MOVE G6C,  45,  50,  70, 100, 100, 100
+WAIT
+
+SPEED 15
+MOVE G6A, 100, 133, 180, 160, 100, 100
+MOVE G6D, 100, 133, 180, 160, 100, 100
+MOVE G6B,  10,  50,  70, 100, 100, 100
+MOVE G6C,  10,  50,  70, 100, 100, 100
+WAIT
+
+HIGHSPEED SETON
+MOVE G6A, 100,  95, 180, 160, 100, 100
+MOVE G6D, 100,  95, 180, 160, 100, 100
+MOVE G6B, 160,  50,  70, 100, 100, 100
+MOVE G6C, 160,  50,  70, 100, 100, 100
+WAIT
+
+HIGHSPEED SETOFF
+
+MOVE G6A, 100, 130, 120,  80, 110, 100
+MOVE G6D, 100, 130, 120,  80, 110, 100
+MOVE G6B, 130, 160,  10, 100, 100, 100
+MOVE G6C, 130, 160,  10, 100, 100, 100
+WAIT
+	
+GOSUB back_standing
+
+RETURN
+'================================================
+back_standing:
+
+	SPEED 10
+	
+	MOVE G6A,100, 130, 120,  80, 110, 100
+	MOVE G6D,100, 130, 120,  80, 110, 100
+	MOVE G6B,150, 160,  10, 100, 100, 100
+	MOVE G6C,150, 160,  10, 100, 100, 100
+	WAIT
+	
+	MOVE G6A, 80, 155,  85, 150, 150, 100
+	MOVE G6D, 80, 155,  85, 150, 150, 100
+	MOVE G6B,185,  40, 60,  100, 100, 100
+	MOVE G6C,185,  40, 60,  100, 100, 100
+	WAIT
+		
+	MOVE G6A, 75, 165,  55, 165, 155, 100
+	MOVE G6D, 75, 165,  55, 165, 155, 100
+	MOVE G6B,185,  10, 100, 100, 100, 100
+	MOVE G6C,185,  10, 100, 100, 100, 100
+	WAIT	
+	
+	MOVE G6A, 60, 165,  30, 165, 155, 100
+	MOVE G6D, 60, 165,  30, 165, 155, 100
+	MOVE G6B,170,  10, 100, 100, 100, 100
+	MOVE G6C,170,  10, 100, 100, 100, 100
+	WAIT	
+	
+	MOVE G6A, 60, 165,  25, 160, 145, 100
+	MOVE G6D, 60, 165,  25, 160, 145, 100
+	MOVE G6B,150,  60,  90, 100, 100, 100
+	MOVE G6C,150,  60,  90, 100, 100, 100
+	WAIT	
+	
+	MOVE G6A,100, 155,  25, 140, 100, 100
+	MOVE G6D,100, 155,  25, 140, 100, 100
+	MOVE G6B,130,  50,  85, 100, 100, 100
+	MOVE G6C,130,  50,  85, 100, 100, 100
+	WAIT	
+
+	RETURN
+'================================================
+'================================================
+left_attack:
+	SPEED 7
+	GOSUB left_attack1
+	
+	SPEED 12
+	HIGHSPEED SETON
+	MOVE G6A, 98, 157,  20, 134, 110, 100
+	MOVE G6D, 57, 115,  77, 125, 134, 100	
+	MOVE G6B,107, 135, 108, 100, 100, 100
+	MOVE G6C,112,  92,  99, 100, 100, 100
+	WAIT
+	DELAY 1000
+	HIGHSPEED SETOFF
+	SPEED 15
+	GOSUB sit_pose
+	RETURN
+'================================================
+left_attack1:
+	MOVE G6A,  85,  71, 152,  91, 107, 60  
+	MOVE G6D, 108,  76, 145,  93, 100, 60 
+	MOVE G6B, 100,  40,  80,  ,  ,  ,
+	MOVE G6C, 100,  40,  80,  ,  ,  ,
+	WAIT
+	RETURN
+'================================================
+'================================================
+right_attack:
+	SPEED 7
+	GOSUB right_attack1
+	
+	SPEED 12
+	HIGHSPEED SETON
+	MOVE G6D, 98, 157,  20, 134, 110, 100
+	MOVE G6A, 57, 115,  77, 125, 134, 100
+	MOVE G6B,112,  92,  99, 100, 100, 100
+	MOVE G6C,107, 135, 108, 100, 100, 100
+	WAIT	
+	DELAY 1000
+	HIGHSPEED SETOFF
+	SPEED 15
+	GOSUB sit_pose
+	RETURN
+'================================================
+right_attack1:
+	MOVE G6D,  85,  71, 152,  91, 107, 60  
+	MOVE G6A, 108,  76, 145,  93, 100, 60 
+	MOVE G6C, 100,  40,  80,  ,  ,  ,
+	MOVE G6B, 100,  40,  80,  ,  ,  ,
+	WAIT
+	RETURN
+'================================================
+'================================================
+left_forward:
+	SPEED 7
+	
+	MOVE G6A,  85,  71, 152,  91, 107, 60  
+	MOVE G6D, 108,  76, 145,  93, 100, 60 
+	MOVE G6B, 130,  40,  80,  ,  ,  ,
+	MOVE G6C,  70,  40,  80,  ,  ,  ,
+	WAIT
+	
+	SPEED 12
+	HIGHSPEED SETON
+	
+	MOVE G6A, 107, 164,  21, 125,  93
+	MOVE G6D,  66, 163,  85,  65, 130	
+	MOVE G6B, 189,  40,  77
+	MOVE G6C,  50,  72,  86
+	WAIT
+	
+	DELAY 1000
+	HIGHSPEED SETOFF
+	
+	GOSUB sit_pose
+	RETURN
+	
+'================================================
+'================================================
+right_forward:
+	SPEED 7
+	MOVE G6D,  85,  71, 152,  91, 107, 60  
+	MOVE G6A, 108,  76, 145,  93, 100, 60 	
+	MOVE G6C, 130,  40,  80,  ,  ,  ,
+	MOVE G6B,  70,  40,  80,  ,  ,  ,
+	WAIT
+	
+	SPEED 10
+	HIGHSPEED SETON
+	MOVE G6D, 107, 164,  21, 125,  93
+	MOVE G6A,  66, 163,  85,  65, 130		
+	MOVE G6C, 189,  40,  77
+	MOVE G6B,  50,  72,  86
+	WAIT
+	
+	DELAY 1000
+	HIGHSPEED SETOFF
+	
+	GOSUB sit_pose
+	RETURN	
+'================================================
+'================================================
+forward_standup:
+
+	SPEED 10
+	
+	MOVE G6A,100, 130, 120,  80, 110, 100
+	MOVE G6D,100, 130, 120,  80, 110, 100
+	MOVE G6B,150, 160,  10, 100, 100, 100
+	MOVE G6C,150, 160,  10, 100, 100, 100
+	WAIT
+	
+	MOVE G6A, 80, 155,  85, 150, 150, 100
+	MOVE G6D, 80, 155,  85, 150, 150, 100
+	MOVE G6B,185,  40, 60,  100, 100, 100
+	MOVE G6C,185,  40, 60,  100, 100, 100
+	WAIT
+		
+	MOVE G6A, 75, 165,  55, 165, 155, 100
+	MOVE G6D, 75, 165,  55, 165, 155, 100
+	MOVE G6B,185,  10, 100, 100, 100, 100
+	MOVE G6C,185,  10, 100, 100, 100, 100
+	WAIT	
+	
+	MOVE G6A, 60, 165,  30, 165, 155, 100
+	MOVE G6D, 60, 165,  30, 165, 155, 100
+	MOVE G6B,170,  10, 100, 100, 100, 100
+	MOVE G6C,170,  10, 100, 100, 100, 100
+	WAIT	
+	
+	MOVE G6A, 60, 165,  25, 160, 145, 100
+	MOVE G6D, 60, 165,  25, 160, 145, 100
+	MOVE G6B,150,  60,  90, 100, 100, 100
+	MOVE G6C,150,  60,  90, 100, 100, 100
+	WAIT	
+	
+	MOVE G6A,100, 155,  25, 140, 100, 100
+	MOVE G6D,100, 155,  25, 140, 100, 100
+	MOVE G6B,130,  50,  85, 100, 100, 100
+	MOVE G6C,130,  50,  85, 100, 100, 100
+	WAIT
+	
+	GOSUB standard_pose
+	
+	RETURN
+'================================================
+'================================================
+backward_standup:
+
+	SPEED 10
+	
+	MOVE G6A,100,  10, 100, 115, 100, 100
+	MOVE G6D,100,  10, 100, 115, 100, 100
+	MOVE G6B,100, 130,  10, 100, 100, 100
+	MOVE G6C,100, 130,  10, 100, 100, 100
+	WAIT
+
+	MOVE G6A,100,  10,  83, 140, 100, 100
+	MOVE G6D,100,  10,  83, 140, 100, 100
+	MOVE G6B, 20, 130,  10, 100, 100, 100
+	MOVE G6C, 20, 130,  10, 100, 100, 100
+	WAIT
+
+	MOVE G6A,100, 126,  60,  50, 100, 100
+	MOVE G6D,100, 126,  60,  50, 100, 100
+	MOVE G6B, 20,  30,  90, 100, 100, 100
+	MOVE G6C, 20,  30,  90, 100, 100, 100
+	WAIT
+	
+	MOVE G6A,100, 165,  70,  15, 100, 100
+	MOVE G6D,100, 165,  70,  15, 100, 100
+	MOVE G6B, 30,  20,  95, 100, 100, 100
+	MOVE G6C, 30,  20,  95, 100, 100, 100
+	WAIT
+	
+	MOVE G6A,100, 165,  40, 100, 100, 100
+	MOVE G6D,100, 165,  40, 100, 100, 100
+	MOVE G6B,110,  70,  50, 100, 100, 100
+	MOVE G6C,110,  70,  50, 100, 100, 100
+	WAIT
+	
+	GOSUB standard_pose
+	RETURN
+'=================================================
+
+arm_up_down:
+MOVE G6A,  ,  ,  ,  ,  
+MOVE G6D,  ,  ,  ,  ,  
+MOVE G6B,  96,  64,  56
+MOVE G6C, 100,  57,  64
+
+DELAY 3000
+
+SPEED 15
+MOVE G6A,  ,  ,  ,  ,  
+MOVE G6D,  ,  ,  ,  ,  
+MOVE G6B, 190,  62,  55
+MOVE G6C,  ,  ,  
+
+DELAY 5000
+SPEED 6
+MOVE G6A,  ,  ,  ,  ,  
+MOVE G6D,  ,  ,  ,  ,  
+MOVE G6B,  96,  64,  56
+MOVE G6C,  ,  ,  
+
+DELAY 3000
+SPEED 15
+MOVE G6A,  ,  ,  ,  ,  
+MOVE G6D,  ,  ,  ,  ,  
+MOVE G6B,  ,  ,  
+MOVE G6C, 186,  60,  66
+
+DELAY 5000
+SPEED 6
+MOVE G6A,  ,  ,  ,  ,  
+MOVE G6D,  ,  ,  ,  ,  
+MOVE G6B,  96,  64,  56
+MOVE G6C,  ,  ,  
+
+RETURN
+
+
+standard_pose2:
+
+	MOVE G6A,100,  76, 145,  93, 100, 100 
+	MOVE G6D,100,  76, 145,  93, 100, 100  
+	MOVE G6B,100,  30,  80, 96, 64, 56
+	MOVE G6C,100,  30,  80, 100, 57, 64
+	WAIT
+	
+	RETURN
+'================================================
+
+k1:
+	GOSUB bow_pose
+	GOSUB standard_pose
+    GOTO main_exit
+k2:
+    
+   	GOSUB hans_up
+	DELAY 500
+	GOSUB standard_pose
+    GOTO main_exit
+k3:
+	GOSUB sit_down_pose
+	DELAY 1000
+	GOSUB standard_pose
+	GOTO main_exit
+k4:
+	GOSUB sit_hans_up
+	DELAY 1000
+	GOSUB standard_pose
+	GOTO main_exit
+k5:
+	GOSUB foot_up
+	GOSUB standard_pose
+	GOTO main_exit
+k6:
+	GOSUB body_move
+	GOSUB standard_pose
+	GOTO main_exit
+k7:
+	GOSUB wing_move
+	GOSUB standard_pose
+	GOTO main_exit
+k8:
+	GOSUB right_shoot
+	GOSUB standard_pose
+	DELAY 500
+	GOSUB left_shoot
+	GOSUB standard_pose	
+	DELAY 500
+    GOTO main_exit
+k9:
+	SPEED 8
+	GOSUB handstanding
+	DELAY 1000
+	SPEED 6
+	GOSUB standard_pose
+    GOTO main_exit
+k10:
+	GOSUB fast_walk
+	GOSUB standard_pose
+    GOTO main_exit
+k11:					' ^ 1
+	GOSUB forward_walk
+	GOSUB standard_pose
+    GOTO main_exit	
+k12:					' _ 1
+	GOSUB backward_walk
+	GOSUB standard_pose
+	GOTO main
+k13:					' > 1
+	SPEED 8
+	GOSUB right_shift
+	SPEED 6
+	GOSUB standard_pose
+	GOTO main_exit
+k14:					' < 1
+	SPEED 8
+	GOSUB left_shift
+	SPEED 6
+	GOSUB standard_pose
+	GOTO main_exit
+k15:					' A
+	GOSUB left_attack
+	GOSUB standard_pose
+	GOTO main_exit
+k16:	
+	GOSUB sit_down_pose16
+	GOTO main_exit 
+	
+k17:					' C
+	GOSUB left_forward
+	GOSUB standard_pose
+	GOTO main_exit
+k18:					' E
+	'TEMPO 230
+'	MUSIC "C"					
+	' GOTO main_exit
+k19:					' P2
+	GOSUB backward_standup
+	GOSUB standard_pose
+	GOTO main_exit
+k20:					' B	
+	GOSUB right_attack
+	GOSUB standard_pose
+	GOTO main_exit
+k21:					' ^ 2
+	GOSUB forward_tumbling
+	GOSUB standard_pose	
+	GOTO main_exit	
+k22:					' *	
+	GOSUB left_turn
+	GOSUB standard_pose
+	GOTO main_exit
+k23:					' F
+	'TEMPO 230
+'	MUSIC "D"					
+	' GOTO main_exit
+k24:					' #
+	GOSUB right_turn
+	GOSUB standard_pose	
+	GOTO main_exit
+k25:					' P1
+	GOSUB forward_standup
+	GOSUB standard_pose
+	GOTO main_exit
+k26:					' [] 1	
+	GOSUB sit_down_pose26
+	GOTO main_exit
+k27:					' D
+	GOSUB right_forward
+	GOSUB standard_pose
+	GOTO main_exit	
+k28:					' < 2
+	GOSUB left_tumbling
+	SPEED 10
+	GOSUB standard_pose
+	GOTO main_exit		
+k29:					' [] 2
+	GOSUB forward_punch
+	SPEED 10
+	GOSUB standard_pose
+	GOTO main_exit	
+k30:					' > 2
+	GOSUB righ_tumbling
+	SPEED 10
+	GOSUB standard_pose
+	GOTO main_exit
+k31:					' _ 2
+	GOSUB back_tumbling
+	SPEED 10
+	GOSUB standard_pose
+	GOTO main_exit
+k32:					' G
+	'TEMPO 230
+'	MUSIC "E"					
+    DELAY 5000
+	GOTO main
+	
+Read_gp2d12:
+'   NewVal = AD (7) 
+'   Gp2d12_val = Gp2d12_val + NewVal 
+'   Gp2d12_val = Gp2d12_val / 2     ' floating average  
+   Gp2d12_val = AD (0) 
+   
+   IF Gp2d12_val < 4 THEN Gp2d12_val = 4
+
+   Gp2d12_val = Gp2d12_val - 3
+   Gp2d12_val = 6787 / Gp2d12_val
+   Gp2d12_val = Gp2d12_val - 4
+
+   IF Gp2d12_val > 100 THEN Gp2d12_val = 0 ' Abstandsbegrenzung
+RETURN

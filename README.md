@@ -26,15 +26,15 @@ A resource area for the Hitec Robonova humanoid robot
 
  - 11_simrobot ..... SimROBOT for Robonova - I haven't really explored the capabilities of this software but it does have a really cool Robonova "assistant" that can run all over your screen. Right click on him to view the menu and start the program.
 
-### These are some of the files that came with the original disk that was supplied with Robonova RN-1:
+###### These are some of the files that came with the original disk that was supplied with Robonova RN-1:
 
  - 12_template_program_for_robobasic ..... Template program for RoboBASIC
 
- - 13_robobasic_command_instruction_manual_v2.10 ..... roboBASIC Command Instruction Manual V2.10
+ - 13_robobasic_instruction_manual ..... roboBASIC Command Instruction Manual V2.10
 
- - 14_robonova_user_manual_v1.00 ..... ROBONOVA-I User Manual V1.00
+ - 14_user_manual ..... ROBONOVA-I User Manual V1.00
 
-### Below are various RoboBASIC program files. They have been collected from different sources and may not have been tested by me, so no guarantees:
+###### Below are various RoboBASIC program files. They have been collected from different sources and may not have been tested by me, so no guarantees:
 
  - 15_movement_templates ..... movement templates - a collection of various movement routines.
 
