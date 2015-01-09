@@ -1,0 +1,65 @@
+--------------------------------------------------------------------------------
+
+This software uses the FOX Toolkit Library ( http://www.fox-toolkit.org )
+FOX version 1.6.25
+
+
+--------------------------------------------------------------------------------
+
+
+FTGL
+
+Copyright (C) 2001-3 Henry Maddocks
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+--------------------------------------------------------------------------------
+
+
+
+The  FreeType 2  font  engine is  copyrighted  work and  cannot be  used
+legally  without a  software license.   In  order to  make this  project
+usable  to a vast  majority of  developers, we  distribute it  under two
+mutually exclusive open-source licenses.
+
+This means  that *you* must choose  *one* of the  two licenses described
+below, then obey  all its terms and conditions when  using FreeType 2 in
+any of your projects or products.
+
+  - The FreeType License, found in  the file `FTL.TXT', which is similar
+    to the original BSD license *with* an advertising clause that forces
+    you  to  explicitly cite  the  FreeType  project  in your  product's
+    documentation.  All  details are in the license  file.  This license
+    is  suited  to products  which  don't  use  the GNU  General  Public
+    License.
+
+  - The GNU  General Public License  version 2, found in  `GPL.TXT' (any
+    later version can be used  also), for programs which already use the
+    GPL.  Note  that the  FTL is  incompatible with the  GPL due  to its
+    advertisement clause.
+
+The contributed PCF driver comes with a license similar to that of the X
+Window System.   It is  compatible to the  above two licenses  (see file
+src/pcf/readme).
+
+
+--- end of LICENSE.TXT ---

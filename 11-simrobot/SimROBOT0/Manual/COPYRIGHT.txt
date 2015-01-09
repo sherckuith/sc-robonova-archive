@@ -1,0 +1,338 @@
+wxWidgets licence:
+
+                wxWindows Library Licence, Version 3.1
+                ======================================
+
+  Copyright (c) 1998-2005 Julian Smart, Robert Roebling et al
+
+  Everyone is permitted to copy and distribute verbatim copies
+  of this licence document, but changing it is not allowed.
+
+                       WXWINDOWS LIBRARY LICENCE
+     TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+  
+  This library is free software; you can redistribute it and/or modify it
+  under the terms of the GNU Library General Public Licence as published by
+  the Free Software Foundation; either version 2 of the Licence, or (at
+  your option) any later version.
+  
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library
+  General Public Licence for more details.
+
+  You should have received a copy of the GNU Library General Public Licence
+  along with this software, usually in a file named COPYING.LIB.  If not,
+  write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+  Boston, MA 02111-1307 USA.
+
+  EXCEPTION NOTICE
+
+  1. As a special exception, the copyright holders of this library give
+  permission for additional uses of the text contained in this release of
+  the library as licenced under the wxWindows Library Licence, applying
+  either version 3.1 of the Licence, or (at your option) any later version of
+  the Licence as published by the copyright holders of version
+  3.1 of the Licence document.
+
+  2. The exception is that you may use, copy, link, modify and distribute
+  under your own terms, binary object code versions of works based
+  on the Library.
+
+  3. If you copy code from files distributed under the terms of the GNU
+  General Public Licence or the GNU Library General Public Licence into a
+  copy of this library, as this licence permits, the exception does not
+  apply to the code that you add in this way.  To avoid misleading anyone as
+  to the status of such modified files, you must delete this exception
+  notice from such code and/or adjust the licensing conditions notice
+  accordingly.
+
+  4. If you write modifications of your own for this library, it is your
+  choice whether to permit this exception to apply to your modifications. 
+  If you do not wish that, you must delete the exception notice from such
+  code and/or adjust the licensing conditions notice accordingly.
+
+
+Lua license:
+
+Lua is licensed under the terms of the MIT license reproduced below.
+This means that Lua is free software and can be used for both academic
+and commercial purposes at absolutely no cost.
+
+For details and rationale, see http://www.lua.org/license.html .
+
+===============================================================================
+
+Copyright (C) 2003-2004 Tecgraf, PUC-Rio.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+===============================================================================
+
+
+oniguruma licence:
+
+/**********************************************************************
+  oniguruma.h - Oniguruma (regular expression library)
+**********************************************************************/
+/*-
+ * Copyright (c) 2002-2006  K.Kosako  <sndgk393 AT ybb DOT ne DOT jp>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+
+
+
+Allegro license:
+
+   Allegro is gift-ware. It was created by a number of people working in 
+   cooperation, and is given to you freely as a gift. You may use, modify, 
+   redistribute, and generally hack it about in any way you like, and you do 
+   not have to give us anything in return. However, if you like this product 
+   you are encouraged to thank us by making a return gift to the Allegro 
+   community. This could be by writing an add-on package, providing a useful 
+   bug report, making an improvement to the library, or perhaps just 
+   releasing the sources of your program so that other people can learn from 
+   them. If you redistribute parts of this code or make a game using it, it 
+   would be nice if you mentioned Allegro somewhere in the credits, but you 
+   are not required to do this. We trust you not to abuse our generosity.
+
+   Disclaimer:
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+   SHALL THE COPYRIGHT HOLDERS OR ANYONE DISTRIBUTING THE SOFTWARE BE LIABLE
+   FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE,
+   ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+   DEALINGS IN THE SOFTWARE.
+
+
+
+Ogg Vorbis Licence:
+
+Ogg Vorbis is a product of Xiph.org Foundation. 
+Copyright (c) 2002, Xiph.org Foundation
+
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+- Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+
+- Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+
+- Neither the name of the Xiph.org Foundation nor the names of its
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+STLPort licence:
+
+License Agreement 
+Boris Fomitchev grants Licensee a non-exclusive, non-transferable, royalty-free license to use STLport and its documentation without fee.
+
+By downloading, using, or copying STLport or any portion thereof,  Licensee agrees to abide by the intellectual property laws and all other applicable laws of the United States of America, and to all of the terms and conditions of this Agreement.
+
+Licensee shall maintain the following copyright and permission  notices on STLport sources and its documentation unchanged :
+
+Copyright 1999,2000 Boris Fomitchev
+
+This material is provided "as is", with absolutely no warranty expressed or implied. Any use is at your own risk.
+Permission to use or copy this software for any purpose is hereby granted without fee, provided the above notices are retained on all copies. Permission to modify the code and to distribute modified code is granted, provided the above notices are retained, and a notice that the code was modified is included with the above copyright notice. 
+The Licensee may distribute binaries compiled with STLport (whether original or modified) without any royalties or restrictions.
+
+The Licensee may distribute original or modified STLport sources, provided that:
+
+The conditions indicated in the above permission notice are met; 
+The following copyright notices are retained when present, and conditions provided in accompanying permission notices are met : 
+Copyright 1994 Hewlett-Packard Company
+
+Copyright 1996,97 Silicon Graphics Computer Systems, Inc.
+
+Copyright 1997 Moscow Center for SPARC Technology.
+
+Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose is hereby granted without fee, provided that the above copyright notice appear in all copies and that both that copyright notice and this permission notice appear in supporting documentation. Hewlett-Packard Company makes no representations about the suitability of this software for any purpose. It is provided "as is" without express or implied warranty.
+
+Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose is hereby granted without fee, provided that the above copyright notice appear in all copies and that both that copyright notice and this permission notice appear in supporting documentation. Silicon Graphics makes no representations about the suitability of this software for any purpose. It is provided "as is" without express or implied warranty.
+
+Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose is hereby granted without fee, provided that the above copyright notice appear in all copies and that both that copyright notice and this permission notice appear in supporting documentation. Moscow Center for SPARC Technology  makes no representations about the suitability of this software for any purpose. It is provided "as is" without express or implied warranty. 
+
+
+
+wxLua licence:
+
+                wxWindows Library Licence, Version 3
+                ====================================
+
+  Copyright (c) 1998 Julian Smart, Robert Roebling et al
+
+  Everyone is permitted to copy and distribute verbatim copies
+  of this licence document, but changing it is not allowed.
+
+                       WXWINDOWS LIBRARY LICENCE
+     TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+  
+  This library is free software; you can redistribute it and/or modify it
+  under the terms of the GNU Library General Public Licence as published by
+  the Free Software Foundation; either version 2 of the Licence, or (at
+  your option) any later version.
+  
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library
+  General Public Licence for more details.
+
+  You should have received a copy of the GNU Library General Public Licence
+  along with this software, usually in a file named COPYING.LIB.  If not,
+  write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+  Boston, MA 02111-1307 USA.
+
+  EXCEPTION NOTICE
+
+  1. As a special exception, the copyright holders of this library give
+  permission for additional uses of the text contained in this release of
+  the library as licenced under the wxWindows Library Licence, applying
+  either version 3 of the Licence, or (at your option) any later version of
+  the Licence as published by the copyright holders of version 3 of the
+  Licence document.
+
+  2. The exception is that you may use, copy, link, modify and distribute
+  under the user's own terms, binary object code versions of works based
+  on the Library.
+
+  3. If you copy code from files distributed under the terms of the GNU
+  General Public Licence or the GNU Library General Public Licence into a
+  copy of this library, as this licence permits, the exception does not
+  apply to the code that you add in this way.  To avoid misleading anyone as
+  to the status of such modified files, you must delete this exception
+  notice from such code and/or adjust the licensing conditions notice
+  accordingly.
+
+  4. If you write modifications of your own for this library, it is your
+  choice whether to permit this exception to apply to your modifications. 
+  If you do not wish that, you must delete the exception notice from such
+  code and/or adjust the licensing conditions notice accordingly.
+
+
+
+
+tolua++ licence:
+
+This is tolua++-1.0
+
+* What is tolua++?
+  tolua++ is an extension of toLua, a tool to integrate C/C++ code with
+  Lua. tolua++ includes new features oriented to c++, such as class
+  templates.
+
+  tolua is a tool that greatly simplifies the integration of C/C++ code 
+  with Lua. Based on a "cleaned" header file, tolua automatically generates 
+  the binding code to access C/C++ features from Lua. Using Lua-5.0 API and
+  metamethod facilities, the current version automatically maps C/C++ 
+  constants, external variables, functions, namespace, classes, and methods 
+  to Lua. It also provides facilities to create Lua modules.
+
+* Availability
+  tolua is freely available; you can redistribute it and/or modify it.
+  The software provided hereunder is on an "as is" basis, and
+  the author has no obligation to provide maintenance, support, 
+  updates, enhancements, or modifications.
+
+  tolua can be downloaded from the sites below:
+            http://www.codenix.com/~tolua/
+            http://www.codenix.com/~tolua/tolua++-1.0.tar.bz2
+
+* Installation
+  See INSTALL.
+
+* Contacting the author
+  tolua has been designed and implemented by Waldemar Celes.
+  tolua++ is maintained by Ariel Manzur.
+  Send your comments, bug reports and anything else to 
+  tolua@codenix.com
+
+
+compat5.1 licence:
+
+License
+Compat-5.1 is free software: it can be used for both academic and commercial purposes at absolutely no cost. There are no royalties or GNU-like "copyleft" restrictions. Compat-5.1 qualifies as Open Source software. Its licenses are compatible with GPL. Compat-5.1 is not in the public domain and the Kepler Project keep its copyright. The legal details are below.
+
+The spirit of the license is that you are free to use Compat-5.1 for any purpose at no cost without having to ask us. The only requirement is that if you do use Compat-5.1, then you should give us credit by including the appropriate copyright notice somewhere in your product or its documentation.
+
+The Compat-5.1 library is designed and implemented by Roberto Ierusalimschy, Diego Nehab, Andre Carregal and Tomas Guisasola. The implementation is not derived from licensed software.
+
+
+--------------------------------------------------------------------------------
+
+Copyright (c) 2004-2006 The Kepler Project.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+lbitlib  licence:
+
+bitlib is a C library for Lua 5.x that provides bitwise operations. It
+is copyright Reuben Thomas 2000-2006, and is released under the MIT
+license, like Lua (see http://www.lua.org/copyright.html; it's
+basically the same as the BSD license). There is no warranty.
+
+
