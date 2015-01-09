@@ -1,0 +1,217 @@
+'Copy and paste this into the Overall Template Program.
+'replace the key subroutine call names (k1: bow, or key1: bow depending of software version) to look something like this (minus all the ( ' )'s):
+'k1:
+' GoSub martial_arts_pose
+' GoTo main_exit
+'k2:
+' GoSub martial_arts_pose2
+' GoTo main_exit
+'k3:
+' GoSub martial_arts_pose3
+' GoTo main_exit
+'k4:
+' GoSub martial_arts_pose4
+' GoTo main_exit
+'k5:
+' GoSub martial_arts_pose5
+' GoTo main_exit
+
+' etc, etc, etc
+
+'Or... you can make the whole thing play out sequentially by... (but minus the ( ' )'s):
+'k1:
+' GoSub martial_arts_pose
+' GoSub martial_arts_pose2
+' GoSub martial_arts_pose3
+' GoSub martial_arts_pose4
+' GoSub martial_arts_pose5
+' GoTo main_exit
+
+' etc, etc, etc
+
+
+
+'(below is the part to copy at the bottom of the Overall Template Program)...
+
+'================================================
+'MARTIAL ARTS TEST DEMO (START)
+'By: Matt Bauer
+'BAUER Independents
+'http://www.bauerindependents.com
+'nerds@earthlink.net
+
+martial_arts_pose:
+HIGHSPEED SETON
+SPEED 15
+'Martial Arts Pose (MAP) right
+MOVE G24, 92, 110, 85, 122, 109, , 100, 177, 163, , , , 100, 88, 132, , , , 60, 61, 162, 94, 130,
+HIGHSPEED SETOFF
+WAIT
+DELAY 500
+'MAP transition (slow)
+SPEED 3
+MOVE G24, 74, 65, 142, 107, 140, , 100, 177, 163, , , , 102, 88, 132, , , , 86, 70, 147, 105, 95,
+WAIT
+'MAP combo
+HIGHSPEED SETON
+SPEED 15
+MOVE G24, 74, 66, 142, 108, 140, , 189, 92, 97, , , , 158, 23, 50, , , , 89, 69, 144, 106, 91,
+WAIT
+'rn_4:
+MOVE G24, 100, 75, 135, 115, 102, , 145, 115, 71, , , , 160, 102, 60, , , , 99, 68, 142, 117, 97,
+WAIT
+DELAY 400
+'rn_5:
+MOVE G24, 103, 64, 113, 156, 98, , 156, 44, 33, , , , 153, 34, 50, , , , 83, 112, 111, 115, 115,
+WAIT
+HIGHSPEED SETOFF
+WAIT
+DELAY 800
+'MAP transitionraise arms (slow)
+SPEED 6
+MOVE G24, 94, 83, 98, 137, 99, , 68, 144, 125, , , , 86, 127, 127, , , , 81, 116, 97, 110, 122,
+WAIT
+'rn_7:
+HIGHSPEED SETON
+SPEED 15
+MOVE G24, 109, 126, 47, 146, 91, , 189, 96, 101, , , , 29, 180, 190, , , , 69, 147, 100, 77, 127,
+WAIT
+HIGHSPEED SETOFF
+WAIT
+DELAY 1000
+'MAP tranition casual movements
+SPEED 4
+MOVE G24, 82, 42, 141, 131, 119, , 189, 96, 101, , , , 31, 180, 190, , , , 101, 113, 93, 113, 95,
+SPEED 10
+MOVE G24, 84, 57, 138, 130, 117, , 160, 24, 58, , , , 157, 38, 75, , , , 99, 63, 126, 138, 95,
+WAIT
+'MAP transition casual movements
+SPEED 4
+MOVE G24, 86, 82, 125, 108, 101, , 76, 157, 180, , , , 85, 75, 139, , , , 97, 113, 94, 111, 113,
+WAIT
+DELAY 300
+'MAP left defend pose
+Return
+
+martial_arts_pose2:
+HIGHSPEED SETON
+SPEED 14
+MOVE G24, 80, 72, 155, 83, 132, , 176, 103, 92, , , , 36, 170, 190, , , , 98, 66, 164, 82, 86,
+DELAY 600
+WAIT
+HIGHSPEED SETOFF
+WAIT
+'MAP arms up
+SPEED 10
+MOVE G24, 87, 61, 165, 90, 118, , 109, 159, 131, , , , 100, 141, 122, , , , 106, 53, 188, 75, 87,
+WAIT
+MUSIC "E" 'as code indicator durring troublshooting
+DELAY 200
+Return
+
+martial_arts_pose3:
+'MAP kneel down attack
+HIGHSPEED SETON
+SPEED 12
+MOVE G24, 103, 122, 59, 134, 88, , 177, 34, 45, , , , 187, 74, 73, , , , 60, 120, 103, 93, 146,
+WAIT
+DELAY 300
+'rn_13:
+MOVE G24, 116, 111, 61, 156, 87, , 185, 96, 93, , , , 11, 183, 179, , , , 64, 121, 103, 111, 130,
+WAIT
+DELAY 300
+HIGHSPEED SETOFF
+WAIT
+Return
+martial_arts_pose4:
+'(A) MAP casual defencive pose
+SPEED 5
+MOVE G24, 92, 85, 104, 125, 93, , 189, 10, 15, , , , 187, 91, 97, , , , 80, 108, 92, 118, 131,
+WAIT
+'(B) MAP back and fouth ballance movements (linked to previous)
+SPEED 3
+MOVE G24, 83, 77, 123, 110, 99, , 189, 14, 15, , , , 182, 92, 98, , , , 91, 116, 82, 116, 123,
+WAIT
+'(C) MAP back and fouth ballance movements (linked to previous)
+SPEED 3
+MOVE G24, 88, 73, 118, 122, 98, , 181, 14, 15, , , , 180, 87, 98, , , , 87, 101, 90, 126, 124,
+WAIT
+'(D) MAP back and fouth ballance movements (linked to previous)
+MOVE G24, 93, 89, 86, 138, 101, , 181, 14, 15, , , , 170, 88, 95, , , , 79, 104, 83, 129, 123,
+WAIT
+'(E) MAP back and fouth ballance movements (linked to previous)
+MOVE G24, 81, 72, 116, 128, 106, , 190, 10, 15, , , , 187, 97, 101, , , , 92, 105, 76, 138, 115,
+WAIT
+'(A) MAP back and fouth ballance movements (linked to previous)
+MOVE G24, 92, 85, 104, 125, 93, , 189, 10, 15, , , , 187, 91, 97, , , , 80, 108, 92, 118, 131,
+WAIT '
+'MAP transition casual
+SPEED 6
+MOVE G24, 108, 86, 103, 129, 90, , 104, 163, 157, , , , 102, 109, 145, , , , 71, 72, 139, 111, 127,
+WAIT
+Return
+
+martial_arts_pose5:
+GoSub map_right_attack 'As found in the default Overall Template Program
+DELAY 100
+'MAP clap-like sequense
+SPEED 15
+MOVE G24, 101, 65, 148, 100, 99, , 190, 10, 44, , , , 190, 10, 42, , , , 98, 63, 153, 99, 99,
+WAIT
+SPEED 8
+MOVE G24, 101, 65, 148, 100, 99, , 190, 66, 12, , , , 190, 66, 14, , , , 98, 63, 153, 99, 99,
+WAIT
+
+GoSub standard_pose
+WAIT
+Return
+
+
+'================================================
+'================================================
+
+map_sit_pose:
+Move G6A, 99, 164, 23, 114, 99
+Move G6D, 99, 166, 21, 113, 98
+Move G6B, 170, 55, 45
+Move G6C, 117, 55, 68
+WAIT
+Return
+
+'================================================
+'================================================
+
+map_stand_pose:
+Move G6A, 98, 78, 111, 131, 100
+Move G6D, 93, 69, 118, 137, 105
+Move G6B, 189, 23, 45
+Move G6C, 174, 26, 71
+Return
+'================================================
+'================================================
+
+map_right_attack:
+SPEED 7
+GoSub map_right_attack1
+
+HIGHSPEED SETON
+SPEED 12
+Move G6A, 58, 115, 77, 125, 134
+Move G6D, 93, 157, 20, 134, 110
+Move G6B, 125, 79, 99
+Move G6C, 107, 135, 108
+WAIT
+DELAY 1000
+HIGHSPEED SETOFF
+SPEED 15
+GoSub map_sit_pose
+Return
+'================================================
+map_right_attack1:
+Move G6D, 85, 71, 152, 91, 107, 60
+Move G6A, 108, 76, 145, 93, 100, 60
+WAIT
+Return
+'================================================
+'
+'MARTIAL ARTS TEST DEMO (END) 
