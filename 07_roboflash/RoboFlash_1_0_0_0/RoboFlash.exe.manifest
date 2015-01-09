@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <asmv1:assemblyIdentity name="RoboFlash.exe" version="1.0.0.0" publicKeyToken="497156983615d51f" language="neutral" processorArchitecture="msil" type="win32" />
+  <description asmv2:iconFile="roboflasht16.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="RoboFlash" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="RoboFlash.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="4" minorVersion="10" buildNumber="0" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="2.0.50727.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="RoboFlash.exe" size="32768">
+      <assemblyIdentity name="RoboFlash" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>Td0Ebt8nQQirpsxOQDCSwWVv+QE=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="roboflasht16.ico" size="1150">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>GjRXZmgLHUWnuAlVBFeUdYoaP6Q=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=YOUR-447023AE6B\Compaq_Owner" issuerKeyHash="2652e4819c63afd5ee3928d7298eb6a397cdf17b" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>rE/dM4N3nhvHDQSowQG60hBAKsQ=</DigestValue></Reference></SignedInfo><SignatureValue>cJ1oC6r7KRRj1kd9aOH7VlKkf81kGFe8fh7kGYYMWXu/ECE/+/1056AM3J41RwmID71qLggibY3vV2QJVuqeCh9OI0M4sjwV1cOCUeb2oyW+0UAxUdBa/fuWlijAeHAVPv7rzY4PguIAKqd/YyyrhvaJ9hSNaTAtLxzvDGBgzvk=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>w8NqzS6qwWVH4yW5rSkfz5LorIIqY7ryvFEBb/mat8bUBVFAgpwg6rt5FzjgNWajcl4cbTXhmFg8qOlAV+6H6nEry8X11ct+koXevjnzxLVIMIKZ6uSjGx+Ks+UghFYAcMz+MOLXhgTN7T6YtJEbJBBSnSKmUkB2ICocsiC7cDc=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="c42a4010d2ba01c1a8040dc71b9e778333dd4fac" Description="" Url=""><as:assemblyIdentity name="RoboFlash.exe" version="1.0.0.0" publicKeyToken="497156983615d51f" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=YOUR-447023AE6B\Compaq_Owner</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>OLZ6HMuGo/ndFZSqzoqHBTlNFhE=</DigestValue></Reference></SignedInfo><SignatureValue>uKwspNS0eDoGUxZ7YwDVzCt3zDd/xkGjjCu9iIRomYxlH0uU/BAgjbvDE1ePNSiQxqejb2pbhA98NBcAv5XDNmDIyT8yFwMA0PY7YM764MtvRnzBm8J1nGqvodSdcyHoTpcpiwm4pSeTQr4a0HZosaiSAEGNQLCj9PQI+JjvnaA=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>w8NqzS6qwWVH4yW5rSkfz5LorIIqY7ryvFEBb/mat8bUBVFAgpwg6rt5FzjgNWajcl4cbTXhmFg8qOlAV+6H6nEry8X11ct+koXevjnzxLVIMIKZ6uSjGx+Ks+UghFYAcMz+MOLXhgTN7T6YtJEbJBBSnSKmUkB2ICocsiC7cDc=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIICATCCAW6gAwIBAgIQ3dymU5TP4phAaozcBuz3ezAJBgUrDgMCHQUAMEMxQTA/BgNVBAMeOABZAE8AVQBSAC0ANAA0ADcAMAAyADMAQQBFADYAQgBcAEMAbwBtAHAAYQBxAF8ATwB3AG4AZQByMB4XDTA3MDgzMTA3MDc1MloXDTA4MDgzMDEzMDc1MlowQzFBMD8GA1UEAx44AFkATwBVAFIALQA0ADQANwAwADIAMwBBAEUANgBCAFwAQwBvAG0AcABhAHEAXwBPAHcAbgBlAHIwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMPDas0uqsFlR+Mlua0pH8+S6KyCKmO68rxRAW/5mrfG1AVRQIKcIOq7eRc44DVmo3JeHG014ZhYPKjpQFfuh+pxK8vF9dXLfpKF3r4588S1SDCCmerkoxsfirPlIIRWAHDM/jDi14YEze0+mLSRGyQQUp0iplJAdiAqHLIgu3A3AgMBAAEwCQYFKw4DAh0FAAOBgQCPsZ7jp1xRcn3vagMkHaVEtumWAWMkM6Hfyuol6kH524W3niS2ErJCslc/V3AXR7rRg+ZkPNuUchVgvj9ms17X7KPZrwOqypwsvxM018EgKW6pniyoXLRGbRkwVoH1GJyXOOcbgJqkq4B8Uw14tJKRjWFAA7Ly3bIX2KfmsEiFMA==</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>
