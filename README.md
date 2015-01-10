@@ -1,5 +1,5 @@
 # sc-robonova-archive
-A resource area for the Hitec Robonova humanoid robot
+A resource area for the Hitec Robonova RN-1 humanoid robot
 
 
 ## Index
@@ -10,7 +10,7 @@ A resource area for the Hitec Robonova humanoid robot
 
  - 03_roboBASIC+MF+v2.80K ..... I'll include this for completeness but I'm not sure if it has any advantages over v2.72. It is the version of RoboBASIC for a robot called Metal Fighter, but this appears to just be a reincarnation of Robonova.
 
- - 04_payload2.5 ..... the original C3024 firmware for Robonova.
+ - 04_images ..... some images and circuit diagrams.
 
  - 05_c3024i2c ..... this is a revised firmware from i-Bot that adds a second I2C port on the C3024 board. 
 
