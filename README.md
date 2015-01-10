@@ -48,9 +48,9 @@ A resource area for the Hitec Robonova humanoid robot
 
  - 20_sp03 ..... the code for the Devantech SP03 Speech Synthesizer module
 
- - 21_2.4ghz_wireless_controller_template ..... 2.4GHz Wireless Controller Template
+ - 21_wireless_controller ..... 2.4GHz Wireless Controller Template
 
  - 22_bluetooth ..... these are the files and documents to support the Robonova Bluetooth module. It includes a RoboBASIC template that should work with the Multiplex unit. Some modifications may be required for other brands.
 
- - 23_rc_template_and_notes ..... 4 Channel R/C Receiver and Transmitter - this is a RoboBASIC template and associated documentation that shows how to control Robonova with a four channel R/C receiver and transmitter
+ - 23_rc_template ..... 4 Channel R/C Receiver and Transmitter - this is a RoboBASIC template and associated documentation that shows how to control Robonova with a four channel R/C receiver and transmitter
 
